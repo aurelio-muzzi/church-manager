@@ -451,6 +451,146 @@ class DatabaseSeeder extends Seeder
                     'status' => 'published',
                 ]
             );
+
+            // ==========================================
+            // ETAPA 6: FINANCEIRO AVANÇADO
+            // ==========================================
+
+            // 1. Contas Financeiras
+            $contaBB = \App\Models\FinancialAccount::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Conta Corrente Principal (Banco do Brasil)'],
+                [
+                    'congregation_id' => $sede->id,
+                    'type' => 'checking',
+                    'bank_name' => 'Banco do Brasil',
+                    'agency' => '1234-5',
+                    'account_number' => '54321-0',
+                    'initial_balance' => 15000.00,
+                    'current_balance' => 15000.00,
+                    'status' => 'active',
+                ]
+            );
+
+            $caixaFisico = \App\Models\FinancialAccount::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Caixa Físico da Tesouraria'],
+                [
+                    'congregation_id' => $sede->id,
+                    'type' => 'cash',
+                    'initial_balance' => 1250.00,
+                    'current_balance' => 1250.00,
+                    'status' => 'active',
+                ]
+            );
+
+            // 2. Categorias de Receita
+            $catDizimos = \App\Models\FinancialCategory::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Dízimos Regulares'],
+                ['type' => 'income', 'color' => '#10b981', 'status' => 'active']
+            );
+
+            $catOfertas = \App\Models\FinancialCategory::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Ofertas de Celebração'],
+                ['type' => 'income', 'color' => '#34d399', 'status' => 'active']
+            );
+
+            // 3. Categorias de Despesa
+            $catEnergia = \App\Models\FinancialCategory::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Energia Elétrica & Utilidades'],
+                ['type' => 'expense', 'color' => '#ef4444', 'status' => 'active']
+            );
+
+            $catMissoes = \App\Models\FinancialCategory::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'name' => 'Sustento Missionário'],
+                ['type' => 'expense', 'color' => '#f87171', 'status' => 'active']
+            );
+
+            // 4. Lançamentos com Atualização de Saldo
+            \App\Models\FinancialTransaction::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'document_number' => 'DIZ-2026-001'],
+                [
+                    'congregation_id' => $sede->id,
+                    'account_id' => $contaBB->id,
+                    'category_id' => $catDizimos->id,
+                    'member_id' => $membroCarlos->id,
+                    'type' => 'income',
+                    'amount' => 850.00,
+                    'payment_method' => 'pix',
+                    'transaction_date' => now()->subDays(5)->toDateString(),
+                    'description' => 'Dízimo do mês de Outubro - Carlos Alberto',
+                    'status' => 'confirmed',
+                    'reconciled' => true,
+                    'reconciled_at' => now()->subDays(4),
+                    'reconciled_by_user_id' => $pastorTenant1->id,
+                ]
+            );
+            $contaBB->deposit(850.00);
+
+            \App\Models\FinancialTransaction::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'document_number' => 'OFT-2026-002'],
+                [
+                    'congregation_id' => $sede->id,
+                    'account_id' => $caixaFisico->id,
+                    'category_id' => $catOfertas->id,
+                    'type' => 'income',
+                    'amount' => 1420.00,
+                    'payment_method' => 'cash',
+                    'transaction_date' => now()->subDays(2)->toDateString(),
+                    'description' => 'Oferta coletada no culto de domingo',
+                    'status' => 'confirmed',
+                    'reconciled' => true,
+                    'reconciled_at' => now()->subDay(),
+                    'reconciled_by_user_id' => $pastorTenant1->id,
+                ]
+            );
+            $caixaFisico->deposit(1420.00);
+
+            \App\Models\FinancialTransaction::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'document_number' => 'DESP-2026-003'],
+                [
+                    'congregation_id' => $sede->id,
+                    'account_id' => $contaBB->id,
+                    'category_id' => $catEnergia->id,
+                    'type' => 'expense',
+                    'amount' => 680.00,
+                    'payment_method' => 'pix',
+                    'transaction_date' => now()->subDays(3)->toDateString(),
+                    'description' => 'Pagamento fatura de energia elétrica - Sede Central',
+                    'status' => 'confirmed',
+                    'reconciled' => true,
+                    'reconciled_at' => now()->subDays(2),
+                    'reconciled_by_user_id' => $pastorTenant1->id,
+                ]
+            );
+            $contaBB->withdraw(680.00);
+
+            // Lançamento pendente de conciliação
+            \App\Models\FinancialTransaction::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'document_number' => 'DESP-2026-004'],
+                [
+                    'congregation_id' => $sede->id,
+                    'account_id' => $contaBB->id,
+                    'category_id' => $catMissoes->id,
+                    'type' => 'expense',
+                    'amount' => 1200.00,
+                    'payment_method' => 'pix',
+                    'transaction_date' => now()->toDateString(),
+                    'description' => 'Envio de oferta de sustento para base missionária',
+                    'status' => 'confirmed',
+                    'reconciled' => false,
+                ]
+            );
+            $contaBB->withdraw(1200.00);
+
+            // 5. Orçamentos Anuais
+            \App\Models\FinancialBudget::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'category_id' => $catMissoes->id, 'year' => now()->year],
+                ['planned_amount' => 20000.00, 'notes' => 'Meta orçamentária anual de missões']
+            );
+
+            \App\Models\FinancialBudget::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'category_id' => $catEnergia->id, 'year' => now()->year],
+                ['planned_amount' => 10000.00, 'notes' => 'Projeção de custos de energia e utilidades']
+            );
         });
 
         // 3. Tenant 2 - Comunidade da Fé

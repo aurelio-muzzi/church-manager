@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\Event\EventController;
+use App\Http\Controllers\Api\v1\Financial\FinancialAccountController;
+use App\Http\Controllers\Api\v1\Financial\FinancialCategoryController;
+use App\Http\Controllers\Api\v1\Financial\FinancialReportController;
+use App\Http\Controllers\Api\v1\Financial\FinancialTransactionController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
 use App\Http\Controllers\Api\v1\Ministry\MinistryController;
 use App\Http\Controllers\Api\v1\Ministry\ScheduleController;
@@ -91,6 +95,17 @@ Route::prefix('v1')->group(function () {
             Route::post('/events/{event}/registrations', [EventController::class, 'register']);
             Route::post('/events/{event}/check-in', [EventController::class, 'checkIn']);
             Route::get('/events/{event}/stats', [EventController::class, 'stats']);
+
+            // Módulo Financeiro Avançado (Contas, Caixas, Plano de Contas, Lançamentos, Conciliação, Orçamentos)
+            Route::apiResource('financial-accounts', FinancialAccountController::class);
+            Route::apiResource('financial-categories', FinancialCategoryController::class);
+            Route::apiResource('financial-transactions', FinancialTransactionController::class);
+            Route::post('/financial-transactions/{financialTransaction}/reconcile', [FinancialTransactionController::class, 'reconcile']);
+
+            Route::get('/financial-reports/summary', [FinancialReportController::class, 'summary']);
+            Route::get('/financial-reports/member-contributions/{member}', [FinancialReportController::class, 'memberContributions']);
+            Route::get('/financial-budgets', [FinancialReportController::class, 'budgets']);
+            Route::post('/financial-budgets', [FinancialReportController::class, 'storeBudget']);
         });
     });
 });

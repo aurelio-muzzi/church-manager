@@ -13,8 +13,8 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **03** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-03-secretaria` | **Concluída** | `v0.3.0` |
 | **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | **Concluída** | `v0.4.0` |
 | **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | **Concluída** | `v0.5.0` |
-| **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | Próxima | `v0.6.0` |
-| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Pendente | `v0.7.0` |
+| **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | **Concluída** | `v0.6.0` |
+| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Próxima | `v0.7.0` |
 | **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Pendente | `v0.8.0` |
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Pendente | `v1.0.0` |
 
@@ -113,6 +113,35 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - Testes automatizados com PHPUnit: 35 testes, 161 assertions (100% aprovados), cobrindo criação de evento com limite de capacidade, geração de token de QR Code, lista de espera, check-in por token, proteção contra duplicidade, check-in manual, métricas do quórum e isolamento estrito entre tenants.
   - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
 
-
-
-
+### Etapa 06 — Financeiro Avançado
+- **Branch**: `feature/etapa-06-financeiro`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.6.0`
+- **Implementações**:
+  - Modelagem e migrations de `financial_accounts`, `financial_categories`, `financial_transactions` e `financial_budgets`.
+  - Isolamento multi-tenant estrito em todas as tabelas e modelos com `BelongsToTenant` e `TenantScope`.
+  - Contas bancárias e caixas com tipos: conta corrente, poupança, caixa físico e investimento.
+  - Plano de contas categorizado em receitas e despesas com código contábil, cor e hierarquia.
+  - Registro de transações com atualização atômica de `current_balance` usando `DB::transaction()` e bloqueio de concorrência com `lockForUpdate()`.
+  - Vinculação nominal opcional de dízimos e ofertas ao cadastro de membros da igreja.
+  - Inviolabilidade contábil: transações marcadas como reconciliadas (`reconciled = true`) são bloqueadas contra edição e exclusão (HTTP 422).
+  - Exclusão segura de lançamentos pendentes com reversão automática do saldo correspondente na conta.
+  - Proteção contra exclusão acidental de contas bancárias com transações vinculadas.
+  - Demonstrativo Financeiro Consolidado (`/api/v1/tenant/financial/reports/summary`) com saldos consolidados por conta, total de entradas, total de saídas, resultado líquido (superávit/déficit), e receitas/despesas agrupadas por categoria.
+  - Extrato Anual de Contribuições por Membro (`/api/v1/tenant/financial/reports/member/{member}`) para emissão de comprovantes de doação e declaração do IRPF.
+  - Gestão orçamentária (`/api/v1/tenant/financial/budgets`) com cálculo comparativo entre valor planejado e executado por categoria e alertas de estouro de teto.
+  - Seeders enriquecidos com contas bancárias reais (Banco do Brasil, Caixa de Culto), categorias contábeis e lançamentos de dízimos/ofertas e despesas fixas.
+  - Frontend completo com `FinancialModule.tsx`:
+    - KPIs de topo com Saldo Consolidado, Entradas, Saídas, Superávit Líquido e pendências de conciliação.
+    - Aba de Fluxo de Caixa & Lançamentos com filtros por tipo, conta, categoria e busca textual.
+    - Modal de Novo Lançamento com seletor de conta, categoria, forma de pagamento e membro nominal para dízimos.
+    - Aba de Contas Bancárias & Caixas com cards de saldos e modal de cadastro.
+    - Aba de Plano de Contas com visualização segregada de receitas vs despesas.
+    - Aba de Conciliação Bancária com botão de conciliação rápida em 1 clique.
+    - Aba de Orçamento vs Realizado com barras de progresso e alertas visuais de teto.
+    - Aba de Extrato Anual do Membro com demonstrativo detalhado de contribuições.
+- **Validação**:
+  - Testes automatizados com PHPUnit: 44 testes, 198 assertions (100% aprovados), cobrindo contas, plano de contas, transações de receitas e despesas com atualização de saldo, exclusão com reversão, bloqueio de exclusão/edição de transações conciliadas, relatório resumo consolidado, extrato de contribuições do membro, orçamentos e isolamento estrito entre tenants.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
