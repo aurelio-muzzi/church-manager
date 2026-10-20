@@ -207,6 +207,158 @@ class DatabaseSeeder extends Seeder
                     ],
                 ]
             );
+
+            // ==========================================
+            // ETAPA 4: MINISTÉRIOS, VOLUNTÁRIOS E ESCALAS
+            // ==========================================
+
+            // Membros adicionais para equipes ministeriais
+            $membroJuliana = Member::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'email' => 'juliana.musica@batistacentral.local'],
+                [
+                    'congregation_id' => $sede->id,
+                    'name' => 'Juliana Mendes',
+                    'phone' => '(92) 98222-3344',
+                    'gender' => 'female',
+                    'birth_date' => '1992-04-12',
+                    'membership_status' => 'active',
+                ]
+            );
+
+            $membroRoberto = Member::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'email' => 'roberto.kids@batistacentral.local'],
+                [
+                    'congregation_id' => $sede->id,
+                    'name' => 'Roberto Souza',
+                    'phone' => '(92) 98333-4455',
+                    'gender' => 'male',
+                    'birth_date' => '1988-11-23',
+                    'membership_status' => 'active',
+                ]
+            );
+
+            $membroAline = Member::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'email' => 'aline.recepcao@batistacentral.local'],
+                [
+                    'congregation_id' => $sede->id,
+                    'name' => 'Aline Castro',
+                    'phone' => '(92) 98444-5566',
+                    'gender' => 'female',
+                    'birth_date' => '1995-09-05',
+                    'membership_status' => 'active',
+                ]
+            );
+
+            $membroLucasMidia = Member::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'email' => 'lucas.midia@batistacentral.local'],
+                [
+                    'congregation_id' => $sede->id,
+                    'name' => 'Lucas Ferreira',
+                    'phone' => '(92) 98555-6677',
+                    'gender' => 'male',
+                    'birth_date' => '1997-03-30',
+                    'membership_status' => 'active',
+                ]
+            );
+
+            // 1. Ministério de Louvor & Adoração
+            $louvor = \App\Models\Ministry::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'slug' => 'louvor-adoracao'],
+                [
+                    'name' => 'Ministério de Louvor & Adoração',
+                    'description' => 'Responsável pela ministração do louvor, bandas e técnica instrumental.',
+                    'leader_member_id' => $membroJuliana->id,
+                    'color' => '#8b5cf6',
+                    'status' => 'active',
+                ]
+            );
+
+            $roleVocal = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $louvor->id, 'name' => 'Vocal Principal']
+            );
+            $roleViolao = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $louvor->id, 'name' => 'Violão / Guitarra']
+            );
+            $roleTeclado = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $louvor->id, 'name' => 'Teclado']
+            );
+
+            // 2. Ministério Infantil (Kids)
+            $kids = \App\Models\Ministry::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'slug' => 'ministerio-kids'],
+                [
+                    'name' => 'Ministério Infantil (Kids)',
+                    'description' => 'Cuidado, ensino bíblico e atividades para crianças de 0 a 11 anos.',
+                    'leader_member_id' => $membroRoberto->id,
+                    'color' => '#f59e0b',
+                    'status' => 'active',
+                ]
+            );
+
+            $roleProfMaternal = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $kids->id, 'name' => 'Professor(a) Maternal']
+            );
+            $roleProfPrimarios = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $kids->id, 'name' => 'Professor(a) Primários']
+            );
+
+            // 3. Ministério de Recepção e Boas-Vindas
+            $recepcao = \App\Models\Ministry::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'slug' => 'recepcao-boas-vindas'],
+                [
+                    'name' => 'Recepção e Boas-Vindas',
+                    'description' => 'Acolhimento de membros e visitantes na entrada da igreja.',
+                    'leader_member_id' => $membroAline->id,
+                    'color' => '#10b981',
+                    'status' => 'active',
+                ]
+            );
+
+            $rolePortaPrincipal = \App\Models\MinistryRole::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $recepcao->id, 'name' => 'Recepcionista Porta Principal']
+            );
+
+            // Voluntários dos Ministérios
+            \App\Models\MinistryVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $louvor->id, 'member_id' => $membroJuliana->id],
+                ['ministry_role_id' => $roleVocal->id, 'status' => 'active', 'joined_at' => '2023-01-15']
+            );
+            \App\Models\MinistryVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $louvor->id, 'member_id' => $membroCarlos->id],
+                ['ministry_role_id' => $roleViolao->id, 'status' => 'active', 'joined_at' => '2023-02-01']
+            );
+            \App\Models\MinistryVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $kids->id, 'member_id' => $membroRoberto->id],
+                ['ministry_role_id' => $roleProfPrimarios->id, 'status' => 'active', 'joined_at' => '2023-03-10']
+            );
+            \App\Models\MinistryVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'ministry_id' => $recepcao->id, 'member_id' => $membroAline->id],
+                ['ministry_role_id' => $rolePortaPrincipal->id, 'status' => 'active', 'joined_at' => '2023-04-05']
+            );
+
+            // Escala Próximo Domingo (Louvor)
+            $escalaDomingo = \App\Models\Schedule::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'title' => 'Culto de Celebração - Louvor'],
+                [
+                    'ministry_id' => $louvor->id,
+                    'congregation_id' => $sede->id,
+                    'date' => now()->next('Sunday')->toDateString(),
+                    'start_time' => '18:30',
+                    'end_time' => '20:30',
+                    'notes' => 'Chegar para ensaio e passagem de som às 17h30.',
+                    'status' => 'published',
+                ]
+            );
+
+            \App\Models\ScheduleVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'schedule_id' => $escalaDomingo->id, 'member_id' => $membroJuliana->id],
+                ['ministry_role_id' => $roleVocal->id, 'status' => 'confirmed', 'confirmed_at' => now()]
+            );
+
+            \App\Models\ScheduleVolunteer::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'schedule_id' => $escalaDomingo->id, 'member_id' => $membroCarlos->id],
+                ['ministry_role_id' => $roleViolao->id, 'status' => 'pending']
+            );
         });
 
         // 3. Tenant 2 - Comunidade da Fé
