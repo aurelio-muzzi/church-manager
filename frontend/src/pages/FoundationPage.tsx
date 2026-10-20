@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { checkApiHealth } from '../services/api';
-import type { ApiHealthResponse } from '../types';
+import { checkApiHealth, getTenantProfileApi } from '../services/api';
+import type { ApiHealthResponse, TenantInfo } from '../types';
 import { CardSkeleton } from '../components/ui/Skeleton';
+import { useAuth } from '../contexts/AuthContext';
+import { LoginForm } from '../components/auth/LoginForm';
+import { PlatformTenantManager } from '../components/tenants/PlatformTenantManager';
 import { 
   Server, 
   Database, 
@@ -12,9 +15,11 @@ import {
   RefreshCw,
   GitBranch,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Church,
+  Shield,
+  UserCheck
 } from 'lucide-react';
-
 
 interface Stage {
   number: string;
@@ -29,14 +34,14 @@ const STAGES: Stage[] = [
     number: '01',
     name: 'Fundação Técnica',
     branch: 'feature/etapa-01-fundacao',
-    status: 'in_progress',
+    status: 'concluded',
     desc: 'Laravel 11, React+TS, Docker, MySQL, Sanctum, Skeletons, Dark Mode padrão.'
   },
   {
     number: '02',
     name: 'Multi-tenancy e Segurança',
     branch: 'feature/etapa-02-multitenancy-seguranca',
-    status: 'pending',
+    status: 'in_progress',
     desc: 'Isolamento lógico estrito por tenant, autenticação Sanctum, roles e policies.'
   },
   {
@@ -91,30 +96,54 @@ const STAGES: Stage[] = [
 ];
 
 export const FoundationPage: React.FC = () => {
+  const { isAuthenticated, user, activeTenant, isPlatformAdmin } = useAuth();
   const [health, setHealth] = useState<ApiHealthResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingHealth, setLoadingHealth] = useState<boolean>(true);
+  const [errorHealth, setErrorHealth] = useState<string | null>(null);
+
+  // Tenant profile do usuário comum
+  const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(false);
 
   const fetchHealth = async () => {
-    setLoading(true);
-    setError(null);
+    setLoadingHealth(true);
+    setErrorHealth(null);
     try {
       const data = await checkApiHealth();
       setHealth(data);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+        setErrorHealth(err.message);
       } else {
-        setError('Não foi possível conectar à API.');
+        setErrorHealth('Não foi possível conectar à API.');
       }
     } finally {
-      setLoading(false);
+      setLoadingHealth(false);
+    }
+  };
+
+  const fetchTenantProfile = async () => {
+    if (!isAuthenticated || isPlatformAdmin) return;
+    setLoadingProfile(true);
+    try {
+      const data = await getTenantProfileApi();
+      setTenantProfile(data);
+    } catch {
+      setTenantProfile(null);
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
   useEffect(() => {
     fetchHealth();
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchTenantProfile();
+    }
+  }, [isAuthenticated, activeTenant]);
 
   return (
     <main className="container">
@@ -123,15 +152,92 @@ export const FoundationPage: React.FC = () => {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'var(--accent-glow)', padding: '0.4rem 1rem', borderRadius: '9999px', marginBottom: '1rem', border: '1px solid rgba(59, 130, 246, 0.3)' }}>
           <Sparkles size={16} color="var(--accent-primary)" />
           <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--accent-primary)' }}>
-            Etapa 1 — Fundação do Sistema
+            Etapa 2 — Multi-Tenancy & Segurança
           </span>
         </div>
         <h1 style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
           ChurchManager
         </h1>
         <p style={{ maxWidth: '680px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '1.05rem' }}>
-          Plataforma Multi-Tenant de Gestão de Igrejas Evangélicas. Arquitetura robusta com Laravel 11, React, TypeScript, MySQL e isolamento lógico seguro.
+          Gestão multi-tenant com isolamento lógico estrito por igreja, autenticação centralizada Sanctum e auditoria contínua.
         </p>
+      </section>
+
+      {/* ÁREA DE AUTENTICAÇÃO E CONTEXTO DE TENANT */}
+      <section style={{ marginBottom: '3rem' }}>
+        {!isAuthenticated ? (
+          <div>
+            <LoginForm />
+          </div>
+        ) : (
+          <div>
+            {/* Boas-vindas ao Usuário Logado */}
+            <div className="card" style={{ marginBottom: '1.5rem', borderLeft: '4px solid var(--accent-primary)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-glow)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <UserCheck size={26} />
+                  </div>
+                  <div>
+                    <h2 style={{ fontSize: '1.3rem', fontWeight: 700 }}>Olá, {user?.name}</h2>
+                    <p className="text-secondary" style={{ fontSize: '0.85rem' }}>
+                      {user?.email} • {isPlatformAdmin ? (
+                        <strong style={{ color: '#8b5cf6' }}>Administrador Global da Plataforma</strong>
+                      ) : (
+                        <span>Perfil: <strong>{activeTenant?.role}</strong> na <strong>{activeTenant?.name}</strong></span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className="status-pill status-online">Sessão Autenticada</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Se Platform Admin: Exibe o Gerenciador Global de Tenants */}
+            {isPlatformAdmin ? (
+              <PlatformTenantManager />
+            ) : (
+              /* Se Usuário de Igreja: Exibe Dados do Tenant Ativo com Prova de Isolamento */
+              <div className="card" style={{ marginTop: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+                  <Church size={22} color="var(--accent-primary)" />
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Ambiente da Sua Congregação</h3>
+                </div>
+
+                {loadingProfile ? (
+                  <CardSkeleton />
+                ) : tenantProfile ? (
+                  <div>
+                    <div className="grid-cols-3" style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '8px' }}>
+                        <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600 }}>NOME DA IGREJA</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 700 }}>{tenantProfile.name}</div>
+                      </div>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '8px' }}>
+                        <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600 }}>IDENTIFICADOR (SLUG)</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 700 }}><code>{tenantProfile.slug}</code></div>
+                      </div>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '8px' }}>
+                        <div className="text-muted" style={{ fontSize: '0.75rem', fontWeight: 600 }}>FUSO OFICIAL</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 700 }}>{tenantProfile.timezone || 'America/Manaus'}</div>
+                      </div>
+                    </div>
+
+                    <div style={{ background: 'var(--success-bg)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.85rem', borderRadius: '8px', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+                      <strong style={{ color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
+                        <Shield size={16} /> Isolamento Lógico Ativo
+                      </strong>
+                      Seu token e suas requisições estão restritos ao tenant <code>#{tenantProfile.id}</code> ({tenantProfile.name}). O backend bloqueia automaticamente qualquer tentativa de acesso aos dados de outras igrejas.
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* API Health Live Status */}
@@ -143,31 +249,28 @@ export const FoundationPage: React.FC = () => {
           </h2>
           <button 
             onClick={fetchHealth} 
-            disabled={loading}
+            disabled={loadingHealth}
             className="btn btn-secondary" 
             style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
           >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={14} className={loadingHealth ? 'animate-spin' : ''} />
             Recarregar Status
           </button>
         </div>
 
-        {loading ? (
+        {loadingHealth ? (
           <div className="grid-cols-3">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
           </div>
-        ) : error ? (
+        ) : errorHealth ? (
           <div className="card" style={{ borderLeft: '4px solid var(--danger)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
               <AlertCircle size={22} color="var(--danger)" />
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>API Desconectada no momento</h3>
             </div>
-            <p className="text-secondary mb-3">{error}</p>
-            <p className="text-muted" style={{ fontSize: '0.85rem' }}>
-              Inicie o backend com <code>php artisan serve --port=8000</code> ou via Docker para testar a comunicação em tempo real.
-            </p>
+            <p className="text-secondary mb-3">{errorHealth}</p>
           </div>
         ) : health ? (
           <div className="grid-cols-3">
@@ -208,59 +311,59 @@ export const FoundationPage: React.FC = () => {
         ) : null}
       </section>
 
-      {/* Technical Foundations Verified */}
+      {/* Critérios de Aceite da Etapa 2 */}
       <section style={{ marginBottom: '2.5rem' }}>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <ShieldCheck size={20} color="var(--accent-primary)" />
-          Critérios de Aceite da Etapa 1
+          Critérios de Aceite da Etapa 2: Multi-Tenancy & Segurança
         </h2>
 
         <div className="grid-cols-2">
           <div className="card">
             <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <CheckCircle2 size={18} color="var(--success)" />
-              Estrutura & Versionamento Git
+              Isolamento Lógico Obrigatório
             </h3>
             <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <li>✓ Fluxo rigoroso de branches: <code>main</code>, <code>develop</code> e <code>feature/etapa-01-fundacao</code></li>
-              <li>✓ Estrutura de monorepo organizada (<code>backend/</code>, <code>frontend/</code>, <code>docker/</code>, <code>docs/</code>)</li>
-              <li>✓ Arquivo de progresso e tracking contínuo em <code>docs/PROGRESS.md</code></li>
+              <li>✓ <code>TenantScope</code> global do Eloquent aplicado em models de domínio</li>
+              <li>✓ Injeção automática e segura do <code>tenant_id</code> via <code>BelongsToTenant</code></li>
+              <li>✓ Middleware <code>IdentifyTenant</code> com bloqueio 403 contra IDs forjados</li>
             </ul>
           </div>
 
           <div className="card">
             <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <CheckCircle2 size={18} color="var(--success)" />
-              Backend Laravel 11 & Autenticação
+              Autenticação & Roles
             </h3>
             <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <li>✓ API versionada sob prefixo <code>/api/v1</code></li>
-              <li>✓ Laravel Sanctum instalado para tokens e cookies seguros</li>
-              <li>✓ Testes automatizados executados com PHPUnit aprovados</li>
+              <li>✓ Autenticação centralizada com Laravel Sanctum (login, logout, me)</li>
+              <li>✓ Associação granular de papéis em <code>tenant_users</code></li>
+              <li>✓ Suporte à alternância entre múltiplas igrejas autorizadas</li>
             </ul>
           </div>
 
           <div className="card">
             <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <CheckCircle2 size={18} color="var(--success)" />
-              Frontend React + TypeScript + UX
+              Gestão da Plataforma & Suspensão
             </h3>
             <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <li>✓ Mobile-First responsivo testado em múltiplas resoluções</li>
-              <li>✓ Dark Mode como padrão inicial e Light Mode opcional persistido</li>
-              <li>✓ Skeletons fluidos para estados assíncronos de carregamento</li>
+              <li>✓ Cadastro de igrejas exclusivo para o Administrador da Plataforma</li>
+              <li>✓ Transação atômica criando Igreja + Administrador inicial</li>
+              <li>✓ Suspensão e reativação com motivo obrigatório e bloqueio operacional</li>
             </ul>
           </div>
 
           <div className="card">
             <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <CheckCircle2 size={18} color="var(--success)" />
-              Infraestrutura & Docker
+              Auditoria & Testes Negativos
             </h3>
             <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <li>✓ Docker Compose configurado para Backend, Frontend e MySQL 8.0</li>
-              <li>✓ Healthcheck configurado para o banco de dados MySQL</li>
-              <li>✓ Arquivo <code>.env.example</code> documentado sem segredos expostos</li>
+              <li>✓ Tabela <code>audit_logs</code> gravando ações com sanitização de senhas</li>
+              <li>✓ Testes de vazamento entre tenants executados e aprovados (56 assertions)</li>
+              <li>✓ Proteção contra rotas de plataforma para usuários comuns</li>
             </ul>
           </div>
         </div>
@@ -281,8 +384,8 @@ export const FoundationPage: React.FC = () => {
                   <span style={{ 
                     fontWeight: 700, 
                     fontSize: '0.85rem', 
-                    background: s.status === 'in_progress' ? 'var(--accent-glow)' : 'var(--bg-tertiary)',
-                    color: s.status === 'in_progress' ? 'var(--accent-primary)' : 'var(--text-muted)',
+                    background: s.status === 'concluded' ? 'var(--success-bg)' : s.status === 'in_progress' ? 'var(--accent-glow)' : 'var(--bg-tertiary)',
+                    color: s.status === 'concluded' ? 'var(--success)' : s.status === 'in_progress' ? 'var(--accent-primary)' : 'var(--text-muted)',
                     padding: '0.2rem 0.6rem', 
                     borderRadius: '6px' 
                   }}>
@@ -296,12 +399,12 @@ export const FoundationPage: React.FC = () => {
                     <GitBranch size={13} />
                     <code>{s.branch}</code>
                   </span>
-                  <span className={`status-pill ${s.status === 'in_progress' ? 'status-online' : ''}`} style={{
+                  <span className={`status-pill ${s.status === 'concluded' ? 'status-online' : s.status === 'in_progress' ? 'status-online' : ''}`} style={{
                     background: s.status === 'pending' ? 'var(--bg-tertiary)' : undefined,
                     color: s.status === 'pending' ? 'var(--text-muted)' : undefined,
                     border: s.status === 'pending' ? '1px solid var(--bg-card-border)' : undefined,
                   }}>
-                    {s.status === 'in_progress' ? 'Em Andamento' : 'Pendente'}
+                    {s.status === 'concluded' ? 'Concluída' : s.status === 'in_progress' ? 'Em Validação' : 'Pendente'}
                   </span>
                 </div>
               </div>

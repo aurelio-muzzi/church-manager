@@ -35,8 +35,9 @@ Acesse o sistema em `http://localhost:5173`.
 | Etapa | Módulo | Status |
 |---|---|---|
 | **01** | Fundação (Laravel, React+TS, Docker, MySQL, Testes) | **Concluída (`v0.1.0`)** |
-| **02** | Multi-Tenancy e Segurança | Próxima |
-| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações) | Pendente |
+| **02** | Multi-Tenancy e Segurança (Isolamento, Sanctum, Roles) | **Concluída (`v0.2.0`)** |
+| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações) | Próxima |
+
 | **04** | Ministérios e Voluntários | Pendente |
 | **05** | Eventos e Presença (Manual e QR Code) | Pendente |
 | **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | Pendente |

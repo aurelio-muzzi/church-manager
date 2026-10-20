@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\PlatformTenantController;
+use App\Http\Controllers\Api\v1\TenantProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+    // Health Check público
     Route::get('/health', function () {
         try {
             DB::connection()->getPdo();
@@ -24,11 +28,26 @@ Route::prefix('v1')->group(function () {
         ]);
     });
 
-    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return response()->json([
-            'status' => 'success',
-            'data' => $request->user(),
-        ]);
+    // Autenticação Pública
+    Route::post('/auth/login', [AuthController::class, 'login']);
+
+    // Rotas Autenticadas
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::get('/auth/me', [AuthController::class, 'me']);
+        Route::post('/auth/switch-tenant', [AuthController::class, 'switchTenant']);
+
+        // Rotas exclusivas do Administrador da Plataforma (Gerenciamento de Igrejas/Tenants)
+        Route::middleware('platform.admin')->prefix('platform')->group(function () {
+            Route::get('/tenants', [PlatformTenantController::class, 'index']);
+            Route::post('/tenants', [PlatformTenantController::class, 'store']);
+            Route::get('/tenants/{tenant}', [PlatformTenantController::class, 'show']);
+            Route::patch('/tenants/{tenant}/status', [PlatformTenantController::class, 'updateStatus']);
+        });
+
+        // Rotas de Tenant (com isolamento lógico estrito e verificação de suspensão)
+        Route::middleware('tenant.identify')->prefix('tenant')->group(function () {
+            Route::get('/profile', [TenantProfileController::class, 'show']);
+        });
     });
 });
-
