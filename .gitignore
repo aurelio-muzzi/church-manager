@@ -1,0 +1,17 @@
+# Root gitignore
+.env
+.env.local
+.env.*.local
+node_modules/
+vendor/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
