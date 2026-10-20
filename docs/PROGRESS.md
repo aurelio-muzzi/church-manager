@@ -17,6 +17,7 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | **Concluída** | `v0.7.0` |
 | **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | **Concluída** | `v0.8.0` |
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | **Concluída** | `v1.0.0` |
+| **UX** | Limpeza de UI SaaS (Sidebar profissional, login minimalista, remoção de termos técnicos) | `feature/ui-saas-layout-cleanup` | **Concluída** | `v1.0.1` |
 
 ---
 
@@ -237,9 +238,32 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
     - Aba de Checklist de Produção com 10 checagens categorizadas com status e detalhes.
     - Aba de Autoteste de Isolamento ao Vivo com execução sob demanda e emissão de certificado digital de isolamento lógico.
     - Aba de Guia de Deploy & Homologação com comandos de compilação de cache (`config:cache`, `route:cache`, `view:cache`).
+### Release v1.0.1 — Interface SaaS Profissional & Limpeza Visual de UX
+- **Branch**: `feature/ui-saas-layout-cleanup`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v1.0.1`
+- **Implementações**:
+  - **Login Minimalista & Profissional (`LoginPage.tsx` / `LoginForm.tsx`)**:
+    - Remoção de todos os termos técnicos (como "TenantScope", "JWT Sanctum", "Critérios de Aceite") da tela inicial.
+    - Foco total em conversão e experiência de usuário de igreja: campos de E-mail, Senha e botão de acesso claro.
+    - Credenciais de demonstração transformadas em um painel discreto e colapsável ("Ambiente de Testes / Contas Pré-configuradas"), mantendo a facilidade de avaliação sem poluir a interface.
+  - **SaaS Application Shell (`AppShell.tsx`)**:
+    - Estrutura completa de aplicação comercial com Sidebar vertical fixa e expansível/colapsável.
+    - Cabeçalho institucional exibindo o nome e ícone da Igreja ativa, distintivo do perfil do usuário e seletor rápido para igrejas com múltiplas congregações.
+    - Menu de navegação claro e categorizado por áreas de atuação:
+      - Visão Geral (Dashboard & BI)
+      - Administração (Secretaria & Membros, Ministérios & Escalas, Cultos & Eventos, Gestão Financeira)
+      - Espaço do Membro (Portal do Membro)
+      - Sistema (Segurança & Auditoria, e Gestão de Igrejas para Super Admin)
+    - Rodapé com dados do usuário logado, alternador de tema (Claro/Escuro) e botão de encerramento de sessão.
+  - **Workspace Focado (`AppPage.tsx`)**:
+    - Substituição do antigo harness de testes (`FoundationPage.tsx`) por uma área de trabalho limpa e focada no módulo selecionado.
 - **Validação**:
-  - Testes automatizados com PHPUnit: 67 testes, 392 assertions (100% aprovados), cobrindo headers de segurança HTTP, score de prontidão, autoteste de isolamento em tempo real, rate limiting contra força bruta e isolamento multi-tenant cruzado em todos os módulos da plataforma.
-  - Frontend: `tsc -b && vite build` aprovado com 0 erros (bundle de produção compilado em 328ms).
+  - Testes automatizados backend com PHPUnit: 67 testes, 392 assertions (100% aprovados).
+  - Frontend: `tsc -b && vite build` aprovado sem erros (dist final gerado em 264ms).
+  - Validação via navegador com subagente automatizado: login limpo e navegação interna inspecionados com sucesso.
 
 
 
