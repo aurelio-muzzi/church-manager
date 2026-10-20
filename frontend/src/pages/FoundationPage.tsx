@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { LoginForm } from '../components/auth/LoginForm';
 import { PlatformTenantManager } from '../components/tenants/PlatformTenantManager';
 import { SecretaryModule } from '../components/secretary/SecretaryModule';
+import { MinistryModule } from '../components/ministry/MinistryModule';
 import { 
   Server, 
   Database, 
@@ -56,7 +57,7 @@ const STAGES: Stage[] = [
     number: '04',
     name: 'Ministérios e Voluntários',
     branch: 'feature/etapa-04-ministerios-voluntarios',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Departamentos, equipes, escalas e detecção de conflitos de horários.'
   },
 
@@ -106,6 +107,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const [churchActiveModule, setChurchActiveModule] = useState<'ministries' | 'secretary'>('ministries');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -237,8 +239,55 @@ export const FoundationPage: React.FC = () => {
                   </div>
                 ) : null}
 
-                {/* Módulo de Secretaria Integrado */}
-                <SecretaryModule />
+                {/* Seletor de Módulos da Igreja */}
+                <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => setChurchActiveModule('ministries')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'ministries' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'ministries' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Layers size={18} />
+                    Ministérios & Escalas (Etapa 04)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('secretary')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'secretary' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'secretary' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Church size={18} />
+                    Secretaria & Membros (Etapa 03)
+                  </button>
+                </div>
+
+                {/* Renderização do Módulo Ativo */}
+                {churchActiveModule === 'ministries' ? (
+                  <MinistryModule />
+                ) : (
+                  <SecretaryModule />
+                )}
               </div>
             )}
           </div>

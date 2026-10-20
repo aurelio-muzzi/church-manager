@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
+use App\Http\Controllers\Api\v1\Ministry\MinistryController;
+use App\Http\Controllers\Api\v1\Ministry\ScheduleController;
 use App\Http\Controllers\Api\v1\Secretary\CongregationController;
 use App\Http\Controllers\Api\v1\Secretary\FamilyController;
 use App\Http\Controllers\Api\v1\Secretary\MemberChangeRequestController;
@@ -71,6 +73,16 @@ Route::prefix('v1')->group(function () {
             Route::post('/change-requests', [MemberChangeRequestController::class, 'store']);
             Route::post('/change-requests/{changeRequest}/review', [MemberChangeRequestController::class, 'review'])
                 ->middleware('tenant.role:church_admin,secretary');
+
+            // Módulo de Ministérios e Escalas de Voluntários
+            Route::apiResource('ministries', MinistryController::class);
+            Route::post('/ministries/{ministry}/volunteers', [MinistryController::class, 'addVolunteer']);
+            Route::delete('/ministries/{ministry}/volunteers/{ministryVolunteer}', [MinistryController::class, 'removeVolunteer']);
+
+            Route::post('/schedules/check-conflicts', [ScheduleController::class, 'checkConflicts']);
+            Route::apiResource('schedules', ScheduleController::class);
+            Route::post('/schedules/{schedule}/respond', [ScheduleController::class, 'respond']);
+            Route::post('/schedules/{schedule}/volunteers/{scheduleVolunteer}/respond', [ScheduleController::class, 'respond']);
         });
     });
 });
