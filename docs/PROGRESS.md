@@ -19,6 +19,7 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | **Concluída** | `v1.0.0` |
 | **UX** | Limpeza de UI SaaS (Sidebar profissional, login minimalista, remoção de termos técnicos) | `feature/ui-saas-layout-cleanup` | **Concluída** | `v1.0.1` |
 | **FIX** | Correção de Renderização do Dashboard e Módulos (Integração Tailwind CSS v4 no Vite) | `fix/dashboard-tailwind-styles` | **Concluída** | `v1.0.2` |
+| **PERF** | Otimização de Performance (OPcache CLI, Multi-workers PHP e Lazy Loading por Aba) | `fix/perf-opcache-lazyloading-workers` | **Concluída** | `v1.0.3` |
 
 ---
 
