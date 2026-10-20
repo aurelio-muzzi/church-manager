@@ -7,6 +7,7 @@ import { LoginForm } from '../components/auth/LoginForm';
 import { PlatformTenantManager } from '../components/tenants/PlatformTenantManager';
 import { SecretaryModule } from '../components/secretary/SecretaryModule';
 import { MinistryModule } from '../components/ministry/MinistryModule';
+import { EventModule } from '../components/event/EventModule';
 import { 
   Server, 
   Database, 
@@ -20,7 +21,8 @@ import {
   AlertCircle,
   Church,
   Shield,
-  UserCheck
+  UserCheck,
+  Calendar
 } from 'lucide-react';
 
 interface Stage {
@@ -65,7 +67,7 @@ const STAGES: Stage[] = [
     number: '05',
     name: 'Eventos e Presença',
     branch: 'feature/etapa-05-eventos-presenca',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Cultos, eventos, inscrições, presença manual e check-in seguro via QR Code.'
   },
   {
@@ -107,7 +109,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'ministries' | 'secretary'>('ministries');
+  const [churchActiveModule, setChurchActiveModule] = useState<'events' | 'ministries' | 'secretary'>('events');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -242,6 +244,26 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('events')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'events' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'events' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Calendar size={18} />
+                    Eventos & Presença (Etapa 05)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('ministries')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -283,7 +305,9 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'ministries' ? (
+                {churchActiveModule === 'events' ? (
+                  <EventModule />
+                ) : churchActiveModule === 'ministries' ? (
                   <MinistryModule />
                 ) : (
                   <SecretaryModule />

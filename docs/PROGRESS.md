@@ -12,8 +12,8 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **02** | Multi-tenancy e Segurança (Isolamento de tenants, Auth Sanctum, Roles/Policies) | `feature/etapa-02-multitenancy-seguranca` | **Concluída** | `v0.2.0` |
 | **03** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-03-secretaria` | **Concluída** | `v0.3.0` |
 | **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | **Concluída** | `v0.4.0` |
-| **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | Próxima | `v0.5.0` |
-| **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | Pendente | `v0.6.0` |
+| **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | **Concluída** | `v0.5.0` |
+| **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | Próxima | `v0.6.0` |
 | **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Pendente | `v0.7.0` |
 | **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Pendente | `v0.8.0` |
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Pendente | `v1.0.0` |
@@ -88,6 +88,31 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 - **Validação**:
   - Testes automatizados com PHPUnit: 27 testes, 124 assertions (100% aprovados), cobrindo criação de ministérios, escalas, **bloqueio de sobreposição de horário com 422**, confirmação, recusa, substituição e isolamento estrito entre tenants.
   - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 05 — Eventos e Presença
+- **Branch**: `feature/etapa-05-eventos-presenca`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.5.0`
+- **Implementações**:
+  - Modelagem e migrations de `events`, `event_registrations` e `event_attendances`.
+  - Isolamento de dados multi-tenant estrito com `BelongsToTenant` e `TenantScope`.
+  - Geração automática de `qr_code_token` exclusivo em cada inscrição.
+  - Gestão de capacidade máxima (`max_capacity`): quando as vagas confirmadas são preenchidas, novos inscritos são encaminhados automaticamente para a Lista de Espera (`waitlist`).
+  - Terminal de check-in com leitor e validador de QR Code Token e busca manual rápida de membros.
+  - Idempotência no check-in: detecção de duplicidade com aviso amigável (`already_checked_in`).
+  - Endpoint de métricas em tempo real (`/api/v1/tenant/events/{event}/stats`) calculando quórum total, taxa de comparecimento, taxa de ocupação da capacidade e divisão por tipo de check-in (QR Code vs Manual).
+  - Seeders enriquecidos com grande conferência de liderança, inscrições ativas e cultos dominicais.
+  - Frontend moderno com `EventModule.tsx`:
+    - Aba de Cultos & Eventos com cards informativos e modal de novo evento.
+    - Terminal de Check-in em tela dividida (Leitor de Token QR Code + Busca e Check-in Manual instantâneo).
+    - Aba de Inscrições & Participantes com listagem oficial e cópia de token.
+    - Painel de Quórum & Métricas com indicadores numéricos e agrupamento.
+- **Validação**:
+  - Testes automatizados com PHPUnit: 35 testes, 161 assertions (100% aprovados), cobrindo criação de evento com limite de capacidade, geração de token de QR Code, lista de espera, check-in por token, proteção contra duplicidade, check-in manual, métricas do quórum e isolamento estrito entre tenants.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
 
 
 
