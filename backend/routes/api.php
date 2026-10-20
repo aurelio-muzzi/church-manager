@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\Dashboard\DashboardController;
 use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Http\Controllers\Api\v1\Financial\FinancialAccountController;
 use App\Http\Controllers\Api\v1\Financial\FinancialCategoryController;
@@ -9,11 +10,13 @@ use App\Http\Controllers\Api\v1\Financial\FinancialTransactionController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
 use App\Http\Controllers\Api\v1\Ministry\MinistryController;
 use App\Http\Controllers\Api\v1\Ministry\ScheduleController;
+use App\Http\Controllers\Api\v1\Portal\MemberPortalController;
 use App\Http\Controllers\Api\v1\Secretary\CongregationController;
 use App\Http\Controllers\Api\v1\Secretary\FamilyController;
 use App\Http\Controllers\Api\v1\Secretary\MemberChangeRequestController;
 use App\Http\Controllers\Api\v1\Secretary\MemberController;
 use App\Http\Controllers\Api\v1\Secretary\VisitorController;
+use App\Http\Controllers\Api\v1\System\SystemAuditController;
 use App\Http\Controllers\Api\v1\TenantProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,8 +43,11 @@ Route::prefix('v1')->group(function () {
         ]);
     });
 
-    // Autenticação Pública
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    // Auditoria Global e Prontidão de Produção
+    Route::get('/system/readiness', [SystemAuditController::class, 'readiness']);
+
+    // Autenticação Pública (Protegida contra Brute-Force)
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth');
 
     // Rotas Autenticadas
     Route::middleware('auth:sanctum')->group(function () {
@@ -106,6 +112,36 @@ Route::prefix('v1')->group(function () {
             Route::get('/financial-reports/member-contributions/{member}', [FinancialReportController::class, 'memberContributions']);
             Route::get('/financial-budgets', [FinancialReportController::class, 'budgets']);
             Route::post('/financial-budgets', [FinancialReportController::class, 'storeBudget']);
+
+            // Portal do Membro (Área restrita de autoatendimento, escalas, eventos, oração e avisos)
+            Route::prefix('member-portal')->group(function () {
+                Route::get('/dashboard', [MemberPortalController::class, 'dashboard']);
+                Route::get('/profile', [MemberPortalController::class, 'profile']);
+                Route::post('/profile/update-request', [MemberPortalController::class, 'requestProfileUpdate']);
+                Route::get('/schedules', [MemberPortalController::class, 'schedules']);
+                Route::post('/schedules/{scheduleVolunteer}/respond', [MemberPortalController::class, 'respondSchedule']);
+                Route::get('/events', [MemberPortalController::class, 'events']);
+                Route::post('/events/{event}/register', [MemberPortalController::class, 'registerEvent']);
+                Route::get('/contributions', [MemberPortalController::class, 'contributions']);
+                Route::get('/prayer-requests', [MemberPortalController::class, 'prayerRequests']);
+                Route::post('/prayer-requests', [MemberPortalController::class, 'storePrayerRequest']);
+                Route::get('/notices', [MemberPortalController::class, 'notices']);
+            });
+
+            // Módulo de Dashboard Executivo, BI e Relatórios
+            Route::prefix('dashboard')->group(function () {
+                Route::get('/executive', [DashboardController::class, 'executive']);
+                Route::get('/demographics', [DashboardController::class, 'demographics']);
+                Route::get('/ministries', [DashboardController::class, 'ministries']);
+                Route::get('/financial-evolution', [DashboardController::class, 'financialEvolution']);
+                Route::get('/pastoral-alerts', [DashboardController::class, 'pastoralAlerts']);
+                Route::get('/export/members', [DashboardController::class, 'exportMembers']);
+                Route::get('/export/financial', [DashboardController::class, 'exportFinancial']);
+                Route::get('/export/attendance', [DashboardController::class, 'exportAttendance']);
+            });
+
+            // Auditoria e Teste de Isolamento em Tempo Real do Tenant
+            Route::get('/audit/simulate-isolation-test', [SystemAuditController::class, 'simulateIsolationTest']);
         });
     });
 });

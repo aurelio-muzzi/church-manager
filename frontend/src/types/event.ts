@@ -19,6 +19,7 @@ export interface EventRegistration {
     id: number;
     checked_in_at: string;
   } | null;
+  event?: Event | null;
 }
 
 export interface EventAttendance {

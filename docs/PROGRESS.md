@@ -14,9 +14,9 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | **Concluída** | `v0.4.0` |
 | **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | **Concluída** | `v0.5.0` |
 | **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | **Concluída** | `v0.6.0` |
-| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Próxima | `v0.7.0` |
-| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Pendente | `v0.8.0` |
-| **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Pendente | `v1.0.0` |
+| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | **Concluída** | `v0.7.0` |
+| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | **Concluída** | `v0.8.0` |
+| **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | **Concluída** | `v1.0.0` |
 
 ---
 
@@ -145,3 +145,101 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 - **Validação**:
   - Testes automatizados com PHPUnit: 44 testes, 198 assertions (100% aprovados), cobrindo contas, plano de contas, transações de receitas e despesas com atualização de saldo, exclusão com reversão, bloqueio de exclusão/edição de transações conciliadas, relatório resumo consolidado, extrato de contribuições do membro, orçamentos e isolamento estrito entre tenants.
   - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 07 — Portal do Membro
+- **Branch**: `feature/etapa-07-portal-membro`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.7.0`
+- **Implementações**:
+  - Modelagem e migrations de `prayer_requests` (pedidos de oração e atendimento pastoral com suporte a sigilo/confidencialidade) e `church_notices` (mural de comunicados com avisos fixados, categorias e datas de expiração).
+  - Isolamento multi-tenant estrito com `BelongsToTenant` e `TenantScope` em todas as novas entidades.
+  - `MemberPortalController` com 11 endpoints REST dedicados à experiência do membro:
+    - `/dashboard`: Resumo de escalas pendentes, próximas escalas, inscrições ativas com QR Code e avisos fixados.
+    - `/profile` & `/profile/update-request`: Consulta do perfil com família e congregação, e fluxo formal de solicitação de alteração cadastral enviado à secretaria.
+    - `/schedules` & `/schedules/{scheduleVolunteer}/respond`: Visualização exclusiva de escalas em que o membro está alocado, confirmação de presença e recusa com justificativa obrigatória (bloqueio 403 em escalas alheias).
+    - `/events` & `/events/{event}/register`: Inscrição direta em eventos futuros com geração automática de `qr_code_token` para check-in no culto.
+    - `/contributions`: Extrato pessoal de contribuições financeiras e dízimos nominais com total anual para conformidade do IRPF.
+    - `/prayer-requests`: Envio de pedidos de oração (gerais e confidenciais apenas para a equipe pastoral) com acompanhamento de status (`pending`, `praying`, `answered`).
+    - `/notices`: Mural oficial de avisos da igreja com destaques fixados e filtros por categoria.
+  - Seeders enriquecidos com membro modelo (`membro@batistacentral.local`), escalas pendentes, inscrição ativa na conferência com token de QR Code, pedidos de oração e avisos oficiais no mural.
+  - Frontend completo com `MemberPortalModule.tsx`:
+    - Saudação personalizada e Cartão Digital de Membro com dados oficiais e identificador.
+    - Aba de Minhas Escalas com botões de confirmação instantânea e modal de justificativa de recusa.
+    - Aba de Meus Eventos com Cartão do Participante, Token de Check-in em destaque e botão de cópia rápida.
+    - Aba de Pedidos de Oração com formulário interativo e opção de confidencialidade.
+    - Aba de Mural de Avisos com cards filtráveis por categoria e avisos fixados com badge dourada.
+    - Aba de Extrato de Dízimos com total anual consolidado e tabela transparente.
+    - Aba de Atualização Cadastral simplificada com resumo do perfil e envio para a secretaria.
+- **Validação**:
+  - Testes automatizados com PHPUnit: 53 testes, 238 assertions (100% aprovados), cobrindo dashboard do membro, perfil, envio de solicitação de alteração cadastral, consulta de escalas, confirmação de escala, recusa com motivo, bloqueio contra resposta em escala alheia (403), inscrição em evento com QR Code Token, consulta exclusiva de dízimos do próprio membro, pedidos de oração e mural de avisos.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 08 — Dashboard Executivo e Relatórios (BI)
+- **Branch**: `feature/etapa-08-dashboard-relatorios`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.8.0`
+- **Implementações**:
+  - Serviço analítico `DashboardAnalyticsService` com inteligência e métricas em tempo real isoladas por tenant:
+    - `getExecutiveOverview()`: total de membros ativos, novos membros no mês corrente e mês anterior, taxa percentual de crescimento líquido, contagem de voluntários ativos, taxa de engajamento ministerial %, presenças nos últimos 30 dias e consolidado financeiro (saldo em contas, receitas do mês, despesas do mês, resultado líquido e indicador de superávit/déficit).
+    - `getDemographics()`: distribuição por gênero (masculino, feminino, outro, não informado), faixas etárias agrupadas (<12, 12-17, 18-29, 30-59, 60+) e distribuição por congregação com identificação de Sede vs Filiais.
+    - `getMinistryStats()`: voluntários alocados por departamento com cores personalizadas e eficiência das escalas do mês (total, confirmadas, pendentes, recusadas e taxa % de confirmação).
+    - `getFinancialEvolution()`: timeline histórica de 6 meses com receitas arrecadadas vs despesas pagas e resultado líquido.
+    - `getPastoralAlerts()`: radar pastoral de retenção identificando membros ausentes há mais de 60 dias sem check-in registrado (com contatos de telefone e e-mail com botões diretos de ligação e mensagem) e pedidos de oração pendentes há mais de 7 dias sem atendimento.
+    - `exportMembersCsv()`, `exportFinancialCsv()`, `exportAttendanceCsv()`: exportações seguras em formato CSV com cabeçalhos padronizados, separador ponto-e-vírgula (`;`) e codificação UTF-8 com BOM (`\xEF\xBB\xBF`) para compatibilidade nativa com Microsoft Excel e Google Planilhas.
+  - `DashboardController` com 8 endpoints REST sob prefixo `/tenant/dashboard/*`:
+    - `GET /executive`
+    - `GET /demographics`
+    - `GET /ministries`
+    - `GET /financial-evolution`
+    - `GET /pastoral-alerts`
+    - `GET /export/members`
+    - `GET /export/financial`
+    - `GET /export/attendance`
+  - Frontend completo com `ExecutiveDashboardModule.tsx`:
+    - Aba Visão Geral & Finanças com 4 cards de KPIs com tendências e crescimento, quadro de resultado operacional e gráfico de barras semestral com tooltips e comparativos.
+    - Aba Demografia & Congregações com barras de progresso proporcionais para gênero e faixas etárias, e cards por congregação.
+    - Aba Ministérios & Voluntariado com eficiência de escalas e contagem de voluntários por equipe.
+    - Aba Cuidado Pastoral & Alertas com tabela de membros ausentes (>60 dias) com botões rápidos de ligação (`tel:`) e e-mail (`mailto:`), e pedidos de oração sem atendimento.
+    - Aba Central de Exportações com 3 cards de download direto em 1 clique (Membros, Movimentações Financeiras e Histórico de Presenças).
+- **Validação**:
+  - Testes automatizados com PHPUnit: 62 testes, 282 assertions (100% aprovados), cobrindo visão executiva, demografia, ministérios, evolução financeira, alertas pastorais, exportações em CSV de membros, financeiro e presenças, e isolamento estrito entre tenants.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 09 — Auditoria e Preparação para Produção (Certificação Final)
+- **Branch**: `feature/etapa-09-auditoria-producao`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v1.0.0`
+- **Implementações**:
+  - Middleware de Segurança `SecurityHeaders`:
+    - `X-Frame-Options: DENY` (prevenção contra Clickjacking).
+    - `X-Content-Type-Options: nosniff` (bloqueio de MIME sniffing).
+    - `X-XSS-Protection: 1; mode=block` e `Referrer-Policy: strict-origin-when-cross-origin`.
+    - `Permissions-Policy: camera=(), microphone=(), geolocation=()`.
+    - Remoção do header `X-Powered-By` para ocultação de tecnologia.
+    - Content Security Policy (CSP) segura para comunicação com SPA e API.
+  - Rate Limiting e Proteção contra Brute Force:
+    - Limitador estrito para `/api/v1/auth/login` (15 requisições/minuto por IP com retorno HTTP 429).
+    - Limitador para check-in e eventos (40 requisições/minuto).
+    - Limitador geral da API (120 requisições/minuto por usuário/IP).
+  - Otimizações de Query & Eloquent:
+    - `Model::preventLazyLoading` ativo em ambientes não produtivos para detecção de problemas de N+1.
+  - Endpoints de Auditoria e Prontidão:
+    - `GET /api/v1/system/readiness`: Verificação pública/operacional de 10 requisitos críticos com Score de Prontidão (100%).
+    - `GET /api/v1/tenant/audit/simulate-isolation-test`: Autoteste em tempo real executado pelo tenant ativo que audita 100% das entidades de domínio e registra evento no log de auditoria `audit_logs`.
+  - Frontend Completo com `ProductionAuditModule.tsx`:
+    - Cabeçalho com Score de Prontidão (100%) e especificações de runtime (Laravel 11, PHP 8.4, MySQL 8.0, America/Manaus).
+    - Aba de Checklist de Produção com 10 checagens categorizadas com status e detalhes.
+    - Aba de Autoteste de Isolamento ao Vivo com execução sob demanda e emissão de certificado digital de isolamento lógico.
+    - Aba de Guia de Deploy & Homologação com comandos de compilação de cache (`config:cache`, `route:cache`, `view:cache`).
+- **Validação**:
+  - Testes automatizados com PHPUnit: 67 testes, 392 assertions (100% aprovados), cobrindo headers de segurança HTTP, score de prontidão, autoteste de isolamento em tempo real, rate limiting contra força bruta e isolamento multi-tenant cruzado em todos os módulos da plataforma.
+  - Frontend: `tsc -b && vite build` aprovado com 0 erros (bundle de produção compilado em 328ms).
+
+
+

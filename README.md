@@ -40,9 +40,9 @@ Acesse o sistema em `http://localhost:5173`.
 | **04** | Ministérios e Voluntários | **Concluída (`v0.4.0`)** |
 | **05** | Eventos e Presença (Manual e QR Code) | **Concluída (`v0.5.0`)** |
 | **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
-| **07** | Portal do Membro | Próxima |
-| **08** | Dashboard e Relatórios | Pendente |
-| **09** | Auditoria e Preparação para Produção | Pendente |
+| **07** | Portal do Membro | **Concluída (`v0.7.0`)** |
+| **08** | Dashboard e Relatórios (BI, Métricas, Exportações CSV) | **Concluída (`v0.8.0`)** |
+| **09** | Auditoria e Preparação para Produção (Certificação Final) | **Concluída (`v1.0.0`)** |
 
 ---
 
@@ -51,3 +51,4 @@ Acesse o sistema em `http://localhost:5173`.
 - [Arquitetura do Sistema](docs/ARCHITECTURE.md)
 - [Guia de Instalação](docs/INSTALLATION.md)
 - [Registro de Progresso (PROGRESS.md)](docs/PROGRESS.md)
+- [Checklist de Homologação e Produção](docs/PRODUCTION_CHECKLIST.md)

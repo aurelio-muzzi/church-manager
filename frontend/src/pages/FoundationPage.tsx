@@ -9,6 +9,9 @@ import { SecretaryModule } from '../components/secretary/SecretaryModule';
 import { MinistryModule } from '../components/ministry/MinistryModule';
 import { EventModule } from '../components/event/EventModule';
 import { FinancialModule } from '../components/financial/FinancialModule';
+import { MemberPortalModule } from '../components/member-portal/MemberPortalModule';
+import { ExecutiveDashboardModule } from '../components/dashboard/ExecutiveDashboardModule';
+import { ProductionAuditModule } from '../components/audit/ProductionAuditModule';
 import { 
   Server, 
   Database, 
@@ -24,7 +27,9 @@ import {
   Shield,
   UserCheck,
   Calendar,
-  DollarSign
+  DollarSign,
+  HeartHandshake,
+  TrendingUp
 } from 'lucide-react';
 
 interface Stage {
@@ -83,22 +88,22 @@ const STAGES: Stage[] = [
     number: '07',
     name: 'Portal do Membro',
     branch: 'feature/etapa-07-portal-membro',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Área do membro para solicitações, escalas, eventos e perfil restrito.'
   },
   {
     number: '08',
     name: 'Dashboard e Relatórios',
     branch: 'feature/etapa-08-dashboard-relatorios',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Indicadores administrativos, financeiros e exportações seguras em CSV/PDF.'
   },
   {
     number: '09',
     name: 'Auditoria e Produção',
     branch: 'feature/etapa-09-auditoria-producao',
-    status: 'pending',
-    desc: 'Revisão geral, otimizações, testes de carga, isolamento final e checklist.'
+    status: 'concluded',
+    desc: 'Revisão geral, headers de segurança, rate limit, autoteste de isolamento e release v1.0.0.'
   }
 ];
 
@@ -111,7 +116,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'financial' | 'events' | 'ministries' | 'secretary'>('financial');
+  const [churchActiveModule, setChurchActiveModule] = useState<'audit' | 'dashboard' | 'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('audit');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -246,6 +251,66 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('audit')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'audit' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'audit' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <ShieldCheck size={18} />
+                    Auditoria & Produção (Etapa 09)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('dashboard')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'dashboard' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'dashboard' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <TrendingUp size={18} />
+                    Dashboard & BI (Etapa 08)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('portal')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'portal' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'portal' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <HeartHandshake size={18} />
+                    Portal do Membro (Etapa 07)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('financial')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -327,7 +392,13 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'financial' ? (
+                {churchActiveModule === 'audit' ? (
+                  <ProductionAuditModule />
+                ) : churchActiveModule === 'dashboard' ? (
+                  <ExecutiveDashboardModule />
+                ) : churchActiveModule === 'portal' ? (
+                  <MemberPortalModule />
+                ) : churchActiveModule === 'financial' ? (
                   <FinancialModule />
                 ) : churchActiveModule === 'events' ? (
                   <EventModule />
