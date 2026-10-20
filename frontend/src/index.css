@@ -284,3 +284,26 @@ body {
   }
 }
 
+/* Sidebar Responsiva e Layout SaaS */
+@media (max-width: 768px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.open {
+    transform: translateX(0);
+  }
+  .app-main-workspace {
+    margin-left: 0 !important;
+  }
+  .hidden-desktop {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+}
+
+

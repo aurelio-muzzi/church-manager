@@ -1,17 +1,20 @@
 import React from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { AuthProvider } from './contexts/AuthContext';
-import { Header } from './components/layout/Header';
-import { FoundationPage } from './pages/FoundationPage';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LoginPage } from './pages/LoginPage';
+import { AppPage } from './pages/AppPage';
+
+const AppContent: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
+  return isAuthenticated ? <AppPage /> : <LoginPage />;
+};
 
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div className="app-container">
-          <Header />
-          <FoundationPage />
-        </div>
+        <AppContent />
       </AuthProvider>
     </ThemeProvider>
   );
