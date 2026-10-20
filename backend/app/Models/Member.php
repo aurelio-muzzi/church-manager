@@ -87,6 +87,31 @@ class Member extends Model
         return $this->hasMany(MemberChangeRequest::class);
     }
 
+    public function prayerRequests(): HasMany
+    {
+        return $this->hasMany(PrayerRequest::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(ScheduleVolunteer::class);
+    }
+
+    public function ministryVolunteers(): HasMany
+    {
+        return $this->hasMany(MinistryVolunteer::class);
+    }
+
+    public function eventRegistrations(): HasMany
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(FinancialTransaction::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('membership_status', 'active');

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\Financial\FinancialTransactionController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
 use App\Http\Controllers\Api\v1\Ministry\MinistryController;
 use App\Http\Controllers\Api\v1\Ministry\ScheduleController;
+use App\Http\Controllers\Api\v1\Portal\MemberPortalController;
 use App\Http\Controllers\Api\v1\Secretary\CongregationController;
 use App\Http\Controllers\Api\v1\Secretary\FamilyController;
 use App\Http\Controllers\Api\v1\Secretary\MemberChangeRequestController;
@@ -106,6 +107,21 @@ Route::prefix('v1')->group(function () {
             Route::get('/financial-reports/member-contributions/{member}', [FinancialReportController::class, 'memberContributions']);
             Route::get('/financial-budgets', [FinancialReportController::class, 'budgets']);
             Route::post('/financial-budgets', [FinancialReportController::class, 'storeBudget']);
+
+            // Portal do Membro (Área restrita de autoatendimento, escalas, eventos, oração e avisos)
+            Route::prefix('member-portal')->group(function () {
+                Route::get('/dashboard', [MemberPortalController::class, 'dashboard']);
+                Route::get('/profile', [MemberPortalController::class, 'profile']);
+                Route::post('/profile/update-request', [MemberPortalController::class, 'requestProfileUpdate']);
+                Route::get('/schedules', [MemberPortalController::class, 'schedules']);
+                Route::post('/schedules/{scheduleVolunteer}/respond', [MemberPortalController::class, 'respondSchedule']);
+                Route::get('/events', [MemberPortalController::class, 'events']);
+                Route::post('/events/{event}/register', [MemberPortalController::class, 'registerEvent']);
+                Route::get('/contributions', [MemberPortalController::class, 'contributions']);
+                Route::get('/prayer-requests', [MemberPortalController::class, 'prayerRequests']);
+                Route::post('/prayer-requests', [MemberPortalController::class, 'storePrayerRequest']);
+                Route::get('/notices', [MemberPortalController::class, 'notices']);
+            });
         });
     });
 });
