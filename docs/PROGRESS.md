@@ -18,6 +18,7 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | **Concluída** | `v0.8.0` |
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | **Concluída** | `v1.0.0` |
 | **UX** | Limpeza de UI SaaS (Sidebar profissional, login minimalista, remoção de termos técnicos) | `feature/ui-saas-layout-cleanup` | **Concluída** | `v1.0.1` |
+| **FIX** | Correção de Renderização do Dashboard e Módulos (Integração Tailwind CSS v4 no Vite) | `fix/dashboard-tailwind-styles` | **Concluída** | `v1.0.2` |
 
 ---
 
