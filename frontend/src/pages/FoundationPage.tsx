@@ -8,6 +8,7 @@ import { PlatformTenantManager } from '../components/tenants/PlatformTenantManag
 import { SecretaryModule } from '../components/secretary/SecretaryModule';
 import { MinistryModule } from '../components/ministry/MinistryModule';
 import { EventModule } from '../components/event/EventModule';
+import { FinancialModule } from '../components/financial/FinancialModule';
 import { 
   Server, 
   Database, 
@@ -22,7 +23,8 @@ import {
   Church,
   Shield,
   UserCheck,
-  Calendar
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 
 interface Stage {
@@ -74,7 +76,7 @@ const STAGES: Stage[] = [
     number: '06',
     name: 'Financeiro Avançado',
     branch: 'feature/etapa-06-financeiro',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Dízimos/ofertas, despesas, contas, orçamentos, conciliação manual e auditoria.'
   },
   {
@@ -109,7 +111,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'events' | 'ministries' | 'secretary'>('events');
+  const [churchActiveModule, setChurchActiveModule] = useState<'financial' | 'events' | 'ministries' | 'secretary'>('financial');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -244,6 +246,26 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('financial')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'financial' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'financial' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <DollarSign size={18} />
+                    Financeiro Avançado (Etapa 06)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('events')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -305,7 +327,9 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'events' ? (
+                {churchActiveModule === 'financial' ? (
+                  <FinancialModule />
+                ) : churchActiveModule === 'events' ? (
                   <EventModule />
                 ) : churchActiveModule === 'ministries' ? (
                   <MinistryModule />

@@ -39,8 +39,8 @@ Acesse o sistema em `http://localhost:5173`.
 | **03** | Secretaria (Membros, Famílias, Visitantes, Congregações) | **Concluída (`v0.3.0`)** |
 | **04** | Ministérios e Voluntários | **Concluída (`v0.4.0`)** |
 | **05** | Eventos e Presença (Manual e QR Code) | **Concluída (`v0.5.0`)** |
-| **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | Próxima |
-| **07** | Portal do Membro | Pendente |
+| **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
+| **07** | Portal do Membro | Próxima |
 | **08** | Dashboard e Relatórios | Pendente |
 | **09** | Auditoria e Preparação para Produção | Pendente |
 
