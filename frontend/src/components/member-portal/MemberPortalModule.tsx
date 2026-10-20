@@ -274,18 +274,18 @@ export const MemberPortalModule: React.FC = () => {
       )}
 
       {/* Header do Portal do Membro */}
-      <div className="bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-indigo-950/80 p-6 rounded-2xl border border-blue-900/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="dash-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-300 border border-blue-500/20">
               Portal do Membro
             </span>
-            <span className="text-xs text-slate-400">Ambiente de Autoatendimento</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Ambiente de Autoatendimento</span>
           </div>
-          <h1 className="text-2xl font-bold text-white mt-1.5 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mt-1.5 flex items-center gap-2">
             Olá, {dashboard?.member.name || 'Irmão(ã)'}!
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Acompanhe suas escalas ministeriais, inscrições em cultos, pedidos de oração e comunicados da liderança.
           </p>
         </div>
@@ -294,7 +294,7 @@ export const MemberPortalModule: React.FC = () => {
           <button
             onClick={loadAll}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-2 transition"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs flex items-center gap-2 font-medium transition shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Atualizar
@@ -303,14 +303,10 @@ export const MemberPortalModule: React.FC = () => {
       </div>
 
       {/* Navegação de Abas */}
-      <div className="border-b border-slate-800 flex items-center gap-2 overflow-x-auto pb-1">
+      <div className="border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 overflow-x-auto pb-2">
         <button
           onClick={() => setActiveTab('dashboard')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'dashboard'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
         >
           <User className="w-4 h-4" />
           Visão Geral & Cartão
@@ -318,16 +314,12 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('schedules')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'schedules'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'schedules' ? 'active' : ''}`}
         >
           <Layers className="w-4 h-4" />
           Minhas Escalas
           {(dashboard?.pending_schedules_count ?? 0) > 0 && (
-            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30">
               {dashboard?.pending_schedules_count}
             </span>
           )}
@@ -335,11 +327,7 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('events')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'events'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
         >
           <QrCode className="w-4 h-4" />
           Meus Eventos & QR Code
@@ -347,11 +335,7 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('prayers')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'prayers'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'prayers' ? 'active' : ''}`}
         >
           <HeartHandshake className="w-4 h-4" />
           Pedidos de Oração
@@ -359,11 +343,7 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('notices')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'notices'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'notices' ? 'active' : ''}`}
         >
           <Bell className="w-4 h-4" />
           Mural de Avisos
@@ -371,11 +351,7 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('contributions')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'contributions'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'contributions' ? 'active' : ''}`}
         >
           <DollarSign className="w-4 h-4" />
           Meu Extrato de Dízimos
@@ -383,11 +359,7 @@ export const MemberPortalModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('profile')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'profile'
-              ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
         >
           <UserCheck className="w-4 h-4" />
           Atualização Cadastral
@@ -399,13 +371,13 @@ export const MemberPortalModule: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Cartão Digital do Membro */}
-            <div className="bg-gradient-to-br from-slate-900 via-indigo-950/70 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 relative overflow-hidden shadow-2xl flex flex-col justify-between">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 border border-indigo-400/30 rounded-2xl p-6 relative overflow-hidden shadow-xl flex flex-col justify-between text-white">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
               <div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-blue-400" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
+                    <Shield className="w-5 h-5 text-blue-300" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-200">
                       Cartão Digital de Membro
                     </span>
                   </div>
@@ -416,34 +388,34 @@ export const MemberPortalModule: React.FC = () => {
 
                 <div className="mt-6">
                   <h2 className="text-xl font-bold text-white tracking-wide">{dashboard?.member.name}</h2>
-                  <p className="text-xs text-slate-400 mt-1">{dashboard?.member.email || 'Email não informado'}</p>
-                  <p className="text-xs text-slate-400">{dashboard?.member.phone || 'Telefone não informado'}</p>
+                  <p className="text-xs text-blue-200/80 mt-1">{dashboard?.member.email || 'Email não informado'}</p>
+                  <p className="text-xs text-blue-200/80">{dashboard?.member.phone || 'Telefone não informado'}</p>
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+              <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-blue-200/80">
                 <div>
-                  <span className="text-[10px] text-slate-500 block uppercase">Membro Desde</span>
-                  <span className="text-slate-200 font-medium">{dashboard?.member.admission_date || '-'}</span>
+                  <span className="text-[10px] text-blue-300/70 block uppercase">Membro Desde</span>
+                  <span className="text-white font-medium">{dashboard?.member.admission_date || '-'}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 block uppercase">ID do Membro</span>
-                  <span className="text-slate-200 font-mono font-bold">#{dashboard?.member.id}</span>
+                  <span className="text-[10px] text-blue-300/70 block uppercase">ID do Membro</span>
+                  <span className="text-white font-mono font-bold">#{dashboard?.member.id}</span>
                 </div>
               </div>
             </div>
 
             {/* Próximas Escalas */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3 flex flex-col justify-between">
+            <div className="dash-card p-5 space-y-3 flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-amber-400" />
-                    <h3 className="font-bold text-white text-sm">Próximas Escalas</h3>
+                    <Layers className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+                    <h3 className="font-bold text-slate-900 dark:text-white text-sm">Próximas Escalas</h3>
                   </div>
                   <button
                     onClick={() => setActiveTab('schedules')}
-                    className="text-xs text-blue-400 hover:underline"
+                    className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
                   >
                     Ver todas
                   </button>
@@ -451,28 +423,28 @@ export const MemberPortalModule: React.FC = () => {
 
                 <div className="mt-3 space-y-2.5">
                   {dashboard?.upcoming_schedules.length === 0 ? (
-                    <p className="text-xs text-slate-500 py-4 text-center">Nenhuma escala agendada para os próximos dias.</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 py-4 text-center">Nenhuma escala agendada para os próximos dias.</p>
                   ) : (
                     dashboard?.upcoming_schedules.map((sc) => (
                       <div
                         key={sc.id}
-                        className="p-3 bg-slate-800/40 border border-slate-800 rounded-xl flex items-center justify-between"
+                        className="p-3 dash-subcard flex items-center justify-between"
                       >
                         <div>
-                          <span className="text-xs font-semibold text-white block">
+                          <span className="text-xs font-semibold text-slate-900 dark:text-white block">
                             {sc.schedule.title}
                           </span>
-                          <span className="text-[11px] text-slate-400 block mt-0.5">
+                          <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">
                             {formatDate(sc.schedule.date)} às {sc.schedule.start_time.substring(0, 5)} - {sc.role?.name || 'Voluntário'}
                           </span>
                         </div>
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                             sc.status === 'confirmed'
-                              ? 'bg-emerald-500/20 text-emerald-400'
+                              ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
                               : sc.status === 'declined'
-                              ? 'bg-rose-500/20 text-rose-400'
-                              : 'bg-amber-500/20 text-amber-400'
+                              ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400'
+                              : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
                           }`}
                         >
                           {sc.status === 'confirmed' ? 'Confirmada' : sc.status === 'declined' ? 'Recusada' : 'Aguardando'}
@@ -484,11 +456,11 @@ export const MemberPortalModule: React.FC = () => {
               </div>
 
               {dashboard?.pending_schedules_count ? (
-                <div className="mt-3 bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between text-xs text-amber-300">
+                <div className="mt-3 bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between text-xs text-amber-700 dark:text-amber-300 font-medium">
                   <span>Você tem escalas pendentes de confirmação!</span>
                   <button
                     onClick={() => setActiveTab('schedules')}
-                    className="font-bold underline text-amber-200"
+                    className="font-bold underline text-amber-800 dark:text-amber-200"
                   >
                     Responder
                   </button>
@@ -497,15 +469,15 @@ export const MemberPortalModule: React.FC = () => {
             </div>
 
             {/* Avisos Fixados em Destaque */}
-            <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="dash-card p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <Pin className="w-4 h-4 text-rose-400" />
-                  <h3 className="font-bold text-white text-sm">Mural de Avisos da Igreja</h3>
+                  <Pin className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm">Mural de Avisos da Igreja</h3>
                 </div>
                 <button
                   onClick={() => setActiveTab('notices')}
-                  className="text-xs text-blue-400 hover:underline"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
                 >
                   Ver todos
                 </button>
@@ -513,18 +485,18 @@ export const MemberPortalModule: React.FC = () => {
 
               <div className="space-y-2.5">
                 {dashboard?.pinned_notices.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-4 text-center">Nenhum aviso em destaque no momento.</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 py-4 text-center">Nenhum aviso em destaque no momento.</p>
                 ) : (
                   dashboard?.pinned_notices.map((n) => (
                     <div
                       key={n.id}
-                      className="p-3 bg-slate-800/40 border border-slate-800 rounded-xl space-y-1"
+                      className="p-3 dash-subcard space-y-1"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white">{n.title}</span>
-                        <span className="text-[10px] text-slate-500">{formatDate(n.published_at)}</span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">{n.title}</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">{formatDate(n.published_at)}</span>
                       </div>
-                      <p className="text-xs text-slate-400 line-clamp-2">{n.content}</p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{n.content}</p>
                     </div>
                   ))
                 )}
@@ -537,12 +509,12 @@ export const MemberPortalModule: React.FC = () => {
       {/* ABA 2: Minhas Escalas de Serviço */}
       {activeTab === 'schedules' && (
         <div className="space-y-4">
-          <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-            <h3 className="font-bold text-white text-base flex items-center gap-2">
-              <Layers className="w-5 h-5 text-amber-400" />
+          <div className="dash-card p-4">
+            <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+              <Layers className="w-5 h-5 text-amber-500 dark:text-amber-400" />
               Minhas Escalas de Serviço
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
               Confirme sua presença com antecedência para que sua liderança possa organizar o culto, ou informe seu
               impedimento com justificativa para que possamos providenciar um substituto.
             </p>
@@ -550,14 +522,14 @@ export const MemberPortalModule: React.FC = () => {
 
           <div className="space-y-3">
             {schedules.length === 0 ? (
-              <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-2xl text-center text-slate-500 text-sm">
+              <div className="dash-card p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
                 Você não está escalado em nenhum departamento no momento.
               </div>
             ) : (
               schedules.map((sc) => (
                 <div
                   key={sc.id}
-                  className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-slate-700 transition"
+                  className="dash-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -571,30 +543,30 @@ export const MemberPortalModule: React.FC = () => {
                       >
                         {sc.schedule.ministry?.name || 'Ministério'}
                       </span>
-                      <h4 className="font-bold text-white text-base">{sc.schedule.title}</h4>
+                      <h4 className="font-bold text-slate-900 dark:text-white text-base">{sc.schedule.title}</h4>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
-                      <span className="flex items-center gap-1 text-slate-300">
-                        <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                    <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+                      <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                        <Calendar className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                         {formatDate(sc.schedule.date)}
                       </span>
-                      <span className="flex items-center gap-1 text-slate-300">
-                        <Clock className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                        <Clock className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                         {sc.schedule.start_time.substring(0, 5)} às {sc.schedule.end_time.substring(0, 5)}
                       </span>
-                      <span className="flex items-center gap-1 text-slate-300">
-                        <Tag className="w-3.5 h-3.5 text-blue-400" />
-                        Função: <strong>{sc.role?.name || 'Voluntário'}</strong>
+                      <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                        <Tag className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
+                        Função: <strong className="text-slate-900 dark:text-white">{sc.role?.name || 'Voluntário'}</strong>
                       </span>
                     </div>
 
                     {sc.schedule.notes && (
-                      <p className="text-xs text-slate-500 italic mt-1">Obs: {sc.schedule.notes}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 italic mt-1">Obs: {sc.schedule.notes}</p>
                     )}
 
                     {sc.decline_reason && (
-                      <p className="text-xs text-rose-400 mt-1">
+                      <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">
                         <strong>Motivo da Recusa:</strong> {sc.decline_reason}
                       </p>
                     )}
@@ -602,11 +574,11 @@ export const MemberPortalModule: React.FC = () => {
 
                   <div className="flex items-center gap-2.5 flex-wrap">
                     {sc.status === 'confirmed' ? (
-                      <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                      <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                         <CheckCircle2 className="w-4 h-4" /> Presença Confirmada
                       </span>
                     ) : sc.status === 'declined' ? (
-                      <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1.5">
+                      <span className="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30 flex items-center gap-1.5">
                         <XCircle className="w-4 h-4" /> Escala Recusada
                       </span>
                     ) : (
@@ -623,7 +595,7 @@ export const MemberPortalModule: React.FC = () => {
                             setSelectedScheduleId(sc.id);
                             setShowDeclineModal(true);
                           }}
-                          className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/40 text-slate-300 hover:text-rose-300 border border-slate-700 hover:border-rose-500/40 font-medium text-xs flex items-center gap-1.5 transition"
+                          className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-700 dark:text-slate-300 hover:text-rose-700 dark:hover:text-rose-300 border border-slate-200 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500/40 font-medium text-xs flex items-center gap-1.5 transition"
                         >
                           <XCircle className="w-3.5 h-3.5" />
                           Não Poderei
@@ -643,16 +615,16 @@ export const MemberPortalModule: React.FC = () => {
         <div className="space-y-6">
           {/* Minhas Inscrições com QR Code */}
           <div className="space-y-3">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <QrCode className="w-5 h-5 text-blue-400" />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <QrCode className="w-5 h-5 text-blue-500 dark:text-blue-400" />
               Minhas Inscrições & Cartões de Acesso (QR Code)
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               Apresente o QR Code ou informe o código alfanumérico no terminal de check-in na entrada da igreja.
             </p>
 
             {eventsData?.my_registrations.length === 0 ? (
-              <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-2xl text-center text-slate-500 text-sm">
+              <div className="dash-card p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
                 Você ainda não se inscreveu em nenhum evento ou conferência.
               </div>
             ) : (
@@ -660,50 +632,50 @@ export const MemberPortalModule: React.FC = () => {
                 {eventsData?.my_registrations.map((reg) => (
                   <div
                     key={reg.id}
-                    className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl"
+                    className="dash-card p-5 space-y-4"
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
                           {reg.event?.type || 'Evento'}
                         </span>
-                        <h4 className="font-bold text-white text-base mt-1.5">{reg.event?.title}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-white text-base mt-1.5">{reg.event?.title}</h4>
                       </div>
                       <span
                         className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                           reg.status === 'confirmed'
-                            ? 'bg-emerald-500/20 text-emerald-400'
-                            : 'bg-amber-500/20 text-amber-400'
+                            ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+                            : 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
                         }`}
                       >
                         {reg.status === 'confirmed' ? 'Confirmado' : 'Lista de Espera'}
                       </span>
                     </div>
 
-                    <div className="space-y-1 text-xs text-slate-400">
+                    <div className="space-y-1 text-xs text-slate-600 dark:text-slate-400">
                       <p className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-blue-400" />
+                        <Calendar className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                         {formatDate(reg.event?.start_date)} às {reg.event?.start_time.substring(0, 5)}
                       </p>
                       {reg.event?.location && (
                         <p className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5 text-blue-400" />
+                          <MapPin className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                           {reg.event.location}
                         </p>
                       )}
                     </div>
 
                     {/* QR Code Token Badge */}
-                    <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div className="p-4 rounded-xl dash-subcard flex items-center justify-between">
                       <div>
-                        <span className="text-[10px] text-slate-500 uppercase font-semibold block">Código de Check-in</span>
-                        <span className="text-lg font-mono font-bold text-blue-400 tracking-wider">
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Código de Check-in</span>
+                        <span className="text-lg font-mono font-bold text-blue-600 dark:text-blue-400 tracking-wider">
                           {reg.qr_code_token}
                         </span>
                       </div>
                       <button
                         onClick={() => copyToClipboard(reg.qr_code_token)}
-                        className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1.5 transition"
+                        className="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs flex items-center gap-1.5 transition"
                       >
                         <Copy className="w-3.5 h-3.5" />
                         {copiedToken === reg.qr_code_token ? 'Copiado!' : 'Copiar'}
@@ -716,36 +688,36 @@ export const MemberPortalModule: React.FC = () => {
           </div>
 
           {/* Eventos Disponíveis para Inscrição */}
-          <div className="space-y-3 pt-4 border-t border-slate-800">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-emerald-400" />
+          <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
               Eventos Disponíveis para Inscrição
             </h3>
 
             {eventsData?.available_events.length === 0 ? (
-              <p className="text-xs text-slate-500">Nenhum novo evento aberto no momento.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Nenhum novo evento aberto no momento.</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {eventsData?.available_events.map((ev) => (
                   <div
                     key={ev.id}
-                    className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-slate-700 transition"
+                    className="dash-card p-5 flex flex-col justify-between space-y-4 transition"
                   >
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">
                         {ev.type}
                       </span>
-                      <h4 className="font-bold text-white text-base">{ev.title}</h4>
-                      <p className="text-xs text-slate-400 mt-1 line-clamp-2">{ev.description}</p>
+                      <h4 className="font-bold text-slate-900 dark:text-white text-base">{ev.title}</h4>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">{ev.description}</p>
 
-                      <div className="mt-3 space-y-1 text-xs text-slate-400">
+                      <div className="mt-3 space-y-1 text-xs text-slate-600 dark:text-slate-400">
                         <p className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                          <Calendar className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                           {formatDate(ev.start_date)} às {ev.start_time.substring(0, 5)}
                         </p>
                         {ev.location && (
                           <p className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                            <MapPin className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                             {ev.location}
                           </p>
                         )}
@@ -771,11 +743,11 @@ export const MemberPortalModule: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
-                <HeartHandshake className="w-5 h-5 text-rose-400" />
+              <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                <HeartHandshake className="w-5 h-5 text-rose-500 dark:text-rose-400" />
                 Intercessão & Pedidos de Oração
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Compartilhe suas necessidades e motivos de gratidão. Nossa equipe pastoral e grupo de intercessão oram por cada pedido.
               </p>
             </div>
@@ -790,35 +762,35 @@ export const MemberPortalModule: React.FC = () => {
 
           <div className="space-y-3">
             {prayers.length === 0 ? (
-              <div className="bg-slate-900/80 border border-slate-800 p-8 rounded-2xl text-center text-slate-500 text-sm">
+              <div className="dash-card p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
                 Você ainda não enviou nenhum pedido de oração.
               </div>
             ) : (
               prayers.map((p) => (
                 <div
                   key={p.id}
-                  className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl space-y-2 hover:border-slate-700 transition"
+                  className="dash-card p-5 space-y-2 transition"
                 >
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-white text-base">{p.title}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-white text-base">{p.title}</h4>
                         {p.is_confidential && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                             Confidencial (Apenas Pastores)
                           </span>
                         )}
                       </div>
-                      <span className="text-[11px] text-slate-500">{formatDate(p.created_at)}</span>
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400">{formatDate(p.created_at)}</span>
                     </div>
 
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
                         p.status === 'answered'
-                          ? 'bg-emerald-500/20 text-emerald-400'
+                          ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
                           : p.status === 'praying'
-                          ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-slate-700 text-slate-300'
+                          ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       {p.status === 'answered' && '✓ Oração Respondida'}
@@ -828,10 +800,10 @@ export const MemberPortalModule: React.FC = () => {
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-300">{p.description}</p>
+                  <p className="text-xs text-slate-700 dark:text-slate-300">{p.description}</p>
 
                   {p.pastoral_notes && (
-                    <div className="mt-3 bg-blue-950/30 border border-blue-800/30 p-3 rounded-xl text-xs text-blue-300">
+                    <div className="mt-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/30 p-3 rounded-xl text-xs text-blue-800 dark:text-blue-300">
                       <strong>Palavra Pastoral:</strong> {p.pastoral_notes}
                     </div>
                   )}
@@ -847,21 +819,21 @@ export const MemberPortalModule: React.FC = () => {
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
-                <Bell className="w-5 h-5 text-amber-400" />
+              <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                <Bell className="w-5 h-5 text-amber-500 dark:text-amber-400" />
                 Mural de Avisos da Igreja
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Comunicados oficiais, avisos de cultos, ministérios e convocações da liderança.
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Filtrar:</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Filtrar:</span>
               <select
                 value={selectedNoticeCategory}
                 onChange={(e) => setSelectedNoticeCategory(e.target.value)}
-                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500"
+                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               >
                 <option value="all">Todas as Categorias</option>
                 <option value="general">Geral</option>
@@ -877,21 +849,21 @@ export const MemberPortalModule: React.FC = () => {
             {filteredNotices.map((n) => (
               <div
                 key={n.id}
-                className={`bg-slate-900/80 border p-5 rounded-2xl space-y-2 relative transition ${
-                  n.is_pinned ? 'border-amber-500/40 bg-gradient-to-br from-slate-900 to-amber-950/10' : 'border-slate-800'
+                className={`dash-card p-5 space-y-2 relative transition ${
+                  n.is_pinned ? 'border-amber-500/40' : ''
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    {n.is_pinned && <Pin className="w-4 h-4 text-amber-400" />}
-                    <h4 className="font-bold text-white text-base">{n.title}</h4>
+                    {n.is_pinned && <Pin className="w-4 h-4 text-amber-500 dark:text-amber-400" />}
+                    <h4 className="font-bold text-slate-900 dark:text-white text-base">{n.title}</h4>
                   </div>
-                  <span className="text-[10px] text-slate-500">{formatDate(n.published_at)}</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">{formatDate(n.published_at)}</span>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">{n.content}</p>
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{n.content}</p>
 
-                <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500">
+                <div className="pt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                   <span className="capitalize">Categoria: {n.category}</span>
                   {n.congregation && <span>{n.congregation.name}</span>}
                 </div>
@@ -904,30 +876,30 @@ export const MemberPortalModule: React.FC = () => {
       {/* ABA 6: Meu Extrato de Dízimos */}
       {activeTab === 'contributions' && (
         <div className="space-y-4">
-          <div className="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="dash-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
+              <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                 Histórico Pessoal de Dízimos e Ofertas
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Transparência e registro de suas contribuições para acompanhamento e informe de rendimentos.
               </p>
             </div>
             <div className="bg-emerald-500/10 border border-emerald-500/30 px-5 py-3 rounded-2xl text-right">
-              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+              <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider block">
                 Total Contribuído no Exercício
               </span>
-              <span className="text-2xl font-bold text-emerald-400">
+              <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                 {formatBRL(contributions?.total_contributed ?? 0)}
               </span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="dash-card overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-300">
-                <thead className="bg-slate-950/60 text-xs uppercase text-slate-400 font-semibold border-b border-slate-800">
+              <table className="w-full text-left text-sm text-slate-700 dark:text-slate-300">
+                <thead className="bg-slate-50 dark:bg-slate-950/60 text-xs uppercase text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="px-4 py-3">Data</th>
                     <th className="px-4 py-3">Descrição</th>
@@ -936,21 +908,21 @@ export const MemberPortalModule: React.FC = () => {
                     <th className="px-4 py-3 text-right">Valor</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {contributions?.contributions.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-4 py-8 text-center text-slate-500 text-xs">
+                      <td colSpan={5} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400 text-xs">
                         Nenhuma contribuição nominal registrada para este membro no exercício.
                       </td>
                     </tr>
                   ) : (
                     contributions?.contributions.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-800/40">
-                        <td className="px-4 py-2.5 text-xs text-slate-400">{formatDate(c.transaction_date)}</td>
-                        <td className="px-4 py-2.5 font-medium text-white">{c.description}</td>
-                        <td className="px-4 py-2.5 text-xs text-slate-300">{c.category?.name || '-'}</td>
-                        <td className="px-4 py-2.5 text-xs uppercase text-slate-400">{c.payment_method}</td>
-                        <td className="px-4 py-2.5 text-right font-bold text-emerald-400">{formatBRL(c.amount)}</td>
+                      <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                        <td className="px-4 py-2.5 text-xs text-slate-500 dark:text-slate-400">{formatDate(c.transaction_date)}</td>
+                        <td className="px-4 py-2.5 font-medium text-slate-900 dark:text-white">{c.description}</td>
+                        <td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-300">{c.category?.name || '-'}</td>
+                        <td className="px-4 py-2.5 text-xs uppercase text-slate-500 dark:text-slate-400">{c.payment_method}</td>
+                        <td className="px-4 py-2.5 text-right font-bold text-emerald-600 dark:text-emerald-400">{formatBRL(c.amount)}</td>
                       </tr>
                     ))
                   )}
@@ -963,34 +935,34 @@ export const MemberPortalModule: React.FC = () => {
 
       {/* ABA 7: Atualização Cadastral */}
       {activeTab === 'profile' && (
-        <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-6">
+        <div className="dash-card p-6 space-y-6">
           <div>
-            <h3 className="font-bold text-white text-base flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-blue-400" />
+            <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+              <UserCheck className="w-5 h-5 text-blue-500 dark:text-blue-400" />
               Solicitação de Atualização Cadastral
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
               Mantenha seus dados de contato e endereço em dia. Para preservar a integridade cadastral da igreja, as
               alterações solicitadas são revisadas pela Secretaria antes de entrarem em vigor.
             </p>
           </div>
 
           {profile && (
-            <div className="p-4 bg-slate-800/40 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+            <div className="p-4 dash-subcard flex flex-wrap items-center justify-between gap-3 text-xs text-slate-700 dark:text-slate-300">
               <div>
-                <span className="text-slate-500 block uppercase text-[10px]">Congregação</span>
-                <strong className="text-white">{profile.congregation?.name || 'Sede Central'}</strong>
+                <span className="text-slate-500 dark:text-slate-400 block uppercase text-[10px]">Congregação</span>
+                <strong className="text-slate-900 dark:text-white">{profile.congregation?.name || 'Sede Central'}</strong>
               </div>
               {profile.family && (
                 <div>
-                  <span className="text-slate-500 block uppercase text-[10px]">Família</span>
-                  <strong className="text-white">{profile.family.name}</strong>
+                  <span className="text-slate-500 dark:text-slate-400 block uppercase text-[10px]">Família</span>
+                  <strong className="text-slate-900 dark:text-white">{profile.family.name}</strong>
                 </div>
               )}
               {profile.ministryVolunteers && profile.ministryVolunteers.length > 0 && (
                 <div>
-                  <span className="text-slate-500 block uppercase text-[10px]">Ministérios em Atuação</span>
-                  <strong className="text-white">
+                  <span className="text-slate-500 dark:text-slate-400 block uppercase text-[10px]">Ministérios em Atuação</span>
+                  <strong className="text-slate-900 dark:text-white">
                     {profile.ministryVolunteers.map((mv) => mv.ministry?.name).filter(Boolean).join(', ')}
                   </strong>
                 </div>
@@ -1001,22 +973,22 @@ export const MemberPortalModule: React.FC = () => {
           <form onSubmit={handleUpdateProfile} className="space-y-4 max-w-2xl">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Telefone / WhatsApp</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Telefone / WhatsApp</label>
                 <input
                   type="text"
                   value={profileForm.phone}
                   onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
                   placeholder="(92) 99999-9999"
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Estado Civil</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Estado Civil</label>
                 <select
                   value={profileForm.marital_status}
                   onChange={(e) => setProfileForm({ ...profileForm, marital_status: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 >
                   <option value="">Selecione...</option>
                   <option value="single">Solteiro(a)</option>
@@ -1028,67 +1000,67 @@ export const MemberPortalModule: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Endereço Residencial</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Endereço Residencial</label>
               <input
                 type="text"
                 value={profileForm.address}
                 onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
                 placeholder="Rua, número, complemento"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Bairro</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Bairro</label>
                 <input
                   type="text"
                   value={profileForm.neighborhood}
                   onChange={(e) => setProfileForm({ ...profileForm, neighborhood: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Cidade</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Cidade</label>
                 <input
                   type="text"
                   value={profileForm.city}
                   onChange={(e) => setProfileForm({ ...profileForm, city: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">CEP</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">CEP</label>
                 <input
                   type="text"
                   value={profileForm.postal_code}
                   onChange={(e) => setProfileForm({ ...profileForm, postal_code: e.target.value })}
                   placeholder="69000-000"
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200 dark:border-slate-800">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Contato de Emergência (Nome)</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Contato de Emergência (Nome)</label>
                 <input
                   type="text"
                   value={profileForm.emergency_contact_name}
                   onChange={(e) => setProfileForm({ ...profileForm, emergency_contact_name: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Contato de Emergência (Telefone)</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Contato de Emergência (Telefone)</label>
                 <input
                   type="text"
                   value={profileForm.emergency_contact_phone}
                   onChange={(e) => setProfileForm({ ...profileForm, emergency_contact_phone: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -1108,44 +1080,44 @@ export const MemberPortalModule: React.FC = () => {
 
       {/* MODAL: Novo Pedido de Oração */}
       {showPrayerModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <HeartHandshake className="w-5 h-5 text-rose-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <HeartHandshake className="w-5 h-5 text-rose-500 dark:text-rose-400" />
                 Enviar Pedido de Oração
               </h3>
-              <button onClick={() => setShowPrayerModal(false)} className="text-slate-400 hover:text-white text-lg">
+              <button onClick={() => setShowPrayerModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg">
                 &times;
               </button>
             </div>
 
             <form onSubmit={handleCreatePrayer} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Título do Pedido *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Título do Pedido *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: Restauração da saúde, Direção profissional..."
                   value={newPrayer.title}
                   onChange={(e) => setNewPrayer({ ...newPrayer, title: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Detalhes e Motivo *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Detalhes e Motivo *</label>
                 <textarea
                   rows={4}
                   required
                   placeholder="Descreva seu motivo de oração ou gratidão com sinceridade..."
                   value={newPrayer.description}
                   onChange={(e) => setNewPrayer({ ...newPrayer, description: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500 resize-none"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 resize-none"
                 />
               </div>
 
-              <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 flex items-start gap-2.5">
+              <div className="dash-subcard p-3 rounded-xl flex items-start gap-2.5">
                 <input
                   type="checkbox"
                   id="confidentialCheck"
@@ -1153,23 +1125,23 @@ export const MemberPortalModule: React.FC = () => {
                   onChange={(e) => setNewPrayer({ ...newPrayer, is_confidential: e.target.checked })}
                   className="mt-0.5 rounded text-rose-500 focus:ring-0"
                 />
-                <label htmlFor="confidentialCheck" className="text-xs text-slate-300 cursor-pointer">
+                <label htmlFor="confidentialCheck" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                   <strong>Confidencial:</strong> Visível apenas para o Pastor Titular e liderança pastoral
                   (não compartilhar com o grupo geral de intercessão).
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowPrayerModal(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs"
+                  className="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-medium"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-medium text-xs transition"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white font-medium text-xs transition shadow"
                 >
                   Enviar Pedido
                 </button>
@@ -1181,47 +1153,47 @@ export const MemberPortalModule: React.FC = () => {
 
       {/* MODAL: Recusa de Escala com Justificativa */}
       {showDeclineModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <XCircle className="w-5 h-5 text-rose-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <XCircle className="w-5 h-5 text-rose-500 dark:text-rose-400" />
                 Informar Impedimento na Escala
               </h3>
-              <button onClick={() => setShowDeclineModal(false)} className="text-slate-400 hover:text-white text-lg">
+              <button onClick={() => setShowDeclineModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg">
                 &times;
               </button>
             </div>
 
             <form onSubmit={handleDeclineSchedule} className="space-y-4">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Entendemos que imprevistos acontecem. Por favor, descreva o motivo do seu impedimento para que seu líder
                 ministerial possa providenciar a substituição.
               </p>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">Motivo do Impedimento *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Motivo do Impedimento *</label>
                 <textarea
                   rows={3}
                   required
                   placeholder="Ex: Viagem de trabalho inadiável, escala médica, problema de saúde..."
                   value={declineReason}
                   onChange={(e) => setDeclineReason(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500 resize-none"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-rose-500 resize-none"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowDeclineModal(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white text-xs"
+                  className="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-medium"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs transition"
+                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs transition shadow"
                 >
                   Confirmar Recusa
                 </button>

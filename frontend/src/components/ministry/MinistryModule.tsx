@@ -271,19 +271,19 @@ export const MinistryModule: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Cabeçalho do Módulo */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+      <div className="dash-header flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 text-violet-400 border border-violet-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20">
               Etapa 04
             </span>
-            <span className="text-slate-400 text-xs">Gestão Ministerial & Escalas</span>
+            <span className="text-slate-500 dark:text-slate-400 text-xs">Gestão Ministerial & Escalas</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <Layers className="w-7 h-7 text-violet-400" />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <Layers className="w-7 h-7 text-violet-600 dark:text-violet-400" />
             Ministérios e Voluntários
           </h2>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
             Gestão de departamentos, equipes de servos, escalas inteligentes e prevenção de sobreposição de horários.
           </p>
         </div>
@@ -291,14 +291,14 @@ export const MinistryModule: React.FC = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setShowScheduleModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-violet-600/20"
+            className="flex items-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-violet-600/20"
           >
             <Plus className="w-4 h-4" />
             Nova Escala
           </button>
           <button
             onClick={() => setShowMinistryModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-sm font-semibold transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold transition-all"
           >
             <Plus className="w-4 h-4" />
             Novo Ministério
@@ -306,7 +306,7 @@ export const MinistryModule: React.FC = () => {
           <button
             onClick={loadData}
             title="Sincronizar dados"
-            className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 rounded-xl transition-all"
+            className="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -315,27 +315,23 @@ export const MinistryModule: React.FC = () => {
 
       {/* Alertas de Ação */}
       {actionSuccess && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-400 text-sm">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-700 dark:text-emerald-400 text-sm">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span>{actionSuccess}</span>
         </div>
       )}
       {actionError && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3 text-rose-400 text-sm">
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3 text-rose-700 dark:text-rose-400 text-sm">
           <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{actionError}</span>
         </div>
       )}
 
       {/* Navegação por Abas */}
-      <div className="flex border-b border-slate-800 overflow-x-auto gap-2">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto gap-2 pb-2">
         <button
           onClick={() => setActiveTab('schedules')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'schedules'
-              ? 'border-violet-500 text-violet-400 bg-violet-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'schedules' ? 'active' : ''}`}
         >
           <Calendar className="w-4 h-4" />
           Escalas de Serviço ({schedules.length})
@@ -343,11 +339,7 @@ export const MinistryModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('ministries')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'ministries'
-              ? 'border-violet-500 text-violet-400 bg-violet-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'ministries' ? 'active' : ''}`}
         >
           <Layers className="w-4 h-4" />
           Ministérios ({ministries.length})
@@ -355,11 +347,7 @@ export const MinistryModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('volunteers')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'volunteers'
-              ? 'border-violet-500 text-violet-400 bg-violet-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'volunteers' ? 'active' : ''}`}
         >
           <Users className="w-4 h-4" />
           Equipes & Voluntários
@@ -367,11 +355,7 @@ export const MinistryModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('confirmations')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'confirmations'
-              ? 'border-violet-500 text-violet-400 bg-violet-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'confirmations' ? 'active' : ''}`}
         >
           <UserCheck className="w-4 h-4" />
           Confirmações de Presença
@@ -387,10 +371,10 @@ export const MinistryModule: React.FC = () => {
               <CardSkeleton />
             </div>
           ) : schedules.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-2xl">
-              <Calendar className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-300 font-semibold text-lg">Nenhuma escala cadastrada</p>
-              <p className="text-slate-500 text-sm mt-1 max-w-md mx-auto">
+            <div className="text-center py-16 dash-card">
+              <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <p className="text-slate-900 dark:text-slate-200 font-semibold text-lg">Nenhuma escala cadastrada</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 max-w-md mx-auto">
                 Crie a primeira escala clicando em "Nova Escala" acima. O sistema alertará automaticamente se houver voluntários com conflito de horário.
               </p>
             </div>
@@ -399,7 +383,7 @@ export const MinistryModule: React.FC = () => {
               {schedules.map(sch => (
                 <div
                   key={sch.id}
-                  className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-md flex flex-col justify-between"
+                  className="dash-card p-5 transition-all flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-start justify-between gap-3 mb-3">
@@ -409,43 +393,43 @@ export const MinistryModule: React.FC = () => {
                             className="w-3 h-3 rounded-full"
                             style={{ backgroundColor: sch.ministry?.color || '#3b82f6' }}
                           />
-                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             {sch.ministry?.name || 'Ministério'}
                           </span>
                         </div>
-                        <h3 className="text-lg font-bold text-slate-100">{sch.title}</h3>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{sch.title}</h3>
                       </div>
 
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                        sch.status === 'published' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        sch.status === 'completed' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                        'bg-slate-800 text-slate-400 border border-slate-700'
+                        sch.status === 'published' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20' :
+                        sch.status === 'completed' ? 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20' :
+                        'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
                       }`}>
                         {sch.status === 'published' ? 'Publicada' : sch.status}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-400 mb-4 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-slate-400 mb-4 dash-subcard p-2.5 rounded-xl">
                       <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-violet-400" />
+                        <Calendar className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                         <span>{sch.date}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-amber-400" />
+                        <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>{sch.start_time} às {sch.end_time}</span>
                       </div>
                     </div>
 
                     {sch.notes && (
-                      <p className="text-xs text-slate-400 italic mb-4 bg-slate-950/30 p-2 rounded-lg border border-slate-800/50">
+                      <p className="text-xs text-slate-600 dark:text-slate-400 italic mb-4 dash-subcard p-2 rounded-lg">
                         "{sch.notes}"
                       </p>
                     )}
 
                     {/* Voluntários Escalados */}
                     <div>
-                      <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-violet-400" />
+                      <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <Users className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                         Voluntários Escalados ({sch.volunteers?.length || 0})
                       </h4>
                       <div className="space-y-2">
@@ -453,23 +437,23 @@ export const MinistryModule: React.FC = () => {
                           sch.volunteers.map(vol => (
                             <div
                               key={vol.id}
-                              className="flex items-center justify-between p-2.5 bg-slate-950/40 rounded-xl border border-slate-800/70 text-sm"
+                              className="flex items-center justify-between p-2.5 dash-subcard rounded-xl text-sm"
                             >
                               <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-300 text-xs">
+                                <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300 text-xs">
                                   {vol.member?.name.charAt(0)}
                                 </div>
                                 <div>
-                                  <p className="text-slate-200 font-medium text-xs">{vol.member?.name}</p>
-                                  <p className="text-[11px] text-slate-500">{vol.role?.name || 'Voluntário'}</p>
+                                  <p className="text-slate-900 dark:text-slate-200 font-medium text-xs">{vol.member?.name}</p>
+                                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{vol.role?.name || 'Voluntário'}</p>
                                 </div>
                               </div>
 
                               <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                                vol.status === 'confirmed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                vol.status === 'declined' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                                vol.status === 'substituted' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                                'bg-slate-800 text-slate-400 border border-slate-700'
+                                vol.status === 'confirmed' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20' :
+                                vol.status === 'declined' ? 'bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20' :
+                                vol.status === 'substituted' ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20' :
+                                'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
                               }`}>
                                 {vol.status === 'confirmed' ? 'Confirmado' :
                                  vol.status === 'declined' ? 'Recusou' :
@@ -478,7 +462,7 @@ export const MinistryModule: React.FC = () => {
                             </div>
                           ))
                         ) : (
-                          <p className="text-xs text-slate-500">Nenhum voluntário escalado ainda.</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500">Nenhum voluntário escalado ainda.</p>
                         )}
                       </div>
                     </div>
@@ -503,7 +487,7 @@ export const MinistryModule: React.FC = () => {
             {ministries.map(min => (
             <div
               key={min.id}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-all shadow-md flex flex-col justify-between"
+              className="dash-card p-5 transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -512,21 +496,21 @@ export const MinistryModule: React.FC = () => {
                       className="w-4 h-4 rounded-full shadow-sm"
                       style={{ backgroundColor: min.color }}
                     />
-                    <h3 className="text-base font-bold text-slate-100">{min.name}</h3>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">{min.name}</h3>
                   </div>
-                  <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-xs rounded-full border border-emerald-500/20">
+                  <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs rounded-full border border-emerald-500/20 font-medium">
                     Ativo
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-400 line-clamp-2 mb-4">
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">
                   {min.description || 'Sem descrição cadastrada.'}
                 </p>
 
                 {/* Líder */}
-                <div className="mb-4 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-                  <span className="text-[11px] text-slate-500 block uppercase font-semibold">Líder</span>
-                  <p className="text-xs font-medium text-slate-200">
+                <div className="mb-4 dash-subcard p-2.5 rounded-xl">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 block uppercase font-semibold">Líder</span>
+                  <p className="text-xs font-medium text-slate-900 dark:text-slate-200">
                     {min.leader?.name || 'Não atribuído'}
                   </p>
                 </div>
@@ -534,10 +518,10 @@ export const MinistryModule: React.FC = () => {
                 {/* Funções do Ministério */}
                 {min.roles && min.roles.length > 0 && (
                   <div className="mb-4">
-                    <span className="text-[11px] text-slate-500 block uppercase font-semibold mb-1.5">Funções Cadastradas</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block uppercase font-semibold mb-1.5">Funções Cadastradas</span>
                     <div className="flex flex-wrap gap-1.5">
                       {min.roles.map(r => (
-                        <span key={r.id} className="px-2 py-0.5 bg-slate-800/80 text-slate-300 rounded text-[11px] border border-slate-700/60">
+                        <span key={r.id} className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded text-[11px] border border-slate-200 dark:border-slate-700">
                           {r.name}
                         </span>
                       ))}
@@ -546,14 +530,14 @@ export const MinistryModule: React.FC = () => {
                 )}
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>{min.volunteers_count || 0} voluntários associados</span>
                 <button
                   onClick={() => {
                     setSelectedMinistryId(String(min.id));
                     setShowVolunteerModal(true);
                   }}
-                  className="text-violet-400 hover:text-violet-300 font-medium flex items-center gap-1"
+                  className="text-violet-600 dark:text-violet-400 hover:underline font-medium flex items-center gap-1"
                 >
                   + Adicionar Voluntário
                 </button>
@@ -566,11 +550,11 @@ export const MinistryModule: React.FC = () => {
 
       {/* ABA 3: EQUIPES & VOLUNTÁRIOS */}
       {activeTab === 'volunteers' && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <div className="dash-card p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg font-bold text-slate-100">Quadro de Servos e Voluntários</h3>
-              <p className="text-slate-400 text-xs">Membros cadastrados aptos a servir nos departamentos da igreja</p>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Quadro de Servos e Voluntários</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-xs">Membros cadastrados aptos a servir nos departamentos da igreja</p>
             </div>
             <button
               onClick={() => setShowVolunteerModal(true)}
@@ -581,21 +565,21 @@ export const MinistryModule: React.FC = () => {
             </button>
           </div>
 
-          <div className="divide-y divide-slate-800">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {members.slice(0, 10).map(m => (
               <div key={m.id} className="py-3.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-violet-400 text-sm">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-violet-600 dark:text-violet-400 text-sm">
                     {m.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-200">{m.name}</p>
-                    <p className="text-xs text-slate-500">{m.email || m.phone || 'Sem contato direto'}</p>
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{m.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{m.email || m.phone || 'Sem contato direto'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-medium">
+                  <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-medium">
                     Membro Ativo
                   </span>
                 </div>
@@ -608,35 +592,35 @@ export const MinistryModule: React.FC = () => {
       {/* ABA 4: CONFIRMAÇÕES DE ESCALA (PORTAL DO VOLUNTÁRIO) */}
       {activeTab === 'confirmations' && (
         <div className="space-y-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-            <h3 className="text-lg font-bold text-slate-100 mb-1">Central de Confirmação de Escalas</h3>
-            <p className="text-slate-400 text-xs mb-6">
+          <div className="dash-card p-6">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Central de Confirmação de Escalas</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-xs mb-6">
               Simule a resposta dos voluntários escalados: confirme presença ou recuse informando justificativa formal.
             </p>
 
             <div className="space-y-4">
               {schedules.map(sch => (
-                <div key={sch.id} className="bg-slate-950/60 border border-slate-800 rounded-xl p-4">
+                <div key={sch.id} className="dash-subcard rounded-xl p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <h4 className="text-sm font-bold text-slate-200">{sch.title}</h4>
-                      <p className="text-xs text-slate-400">{sch.date} • {sch.start_time} às {sch.end_time}</p>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">{sch.title}</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{sch.date} • {sch.start_time} às {sch.end_time}</p>
                     </div>
-                    <span className="text-xs text-slate-400 bg-slate-900 px-2 py-1 rounded border border-slate-800">
+                    <span className="text-xs text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-900 px-2 py-1 rounded border border-slate-200 dark:border-slate-800">
                       {sch.ministry?.name}
                     </span>
                   </div>
 
-                  <div className="space-y-2.5 pt-2 border-t border-slate-800/80">
+                  <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-slate-800/80">
                     {sch.volunteers?.map(vol => (
-                      <div key={vol.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-900 rounded-lg border border-slate-800">
+                      <div key={vol.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-2.5">
-                          <UserCheck className="w-4 h-4 text-violet-400" />
+                          <UserCheck className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                           <div>
-                            <span className="text-xs font-semibold text-slate-200">{vol.member?.name}</span>
-                            <span className="text-[11px] text-slate-500 block">Status: {vol.status}</span>
+                            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">{vol.member?.name}</span>
+                            <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Status: {vol.status}</span>
                             {vol.decline_reason && (
-                              <span className="text-[11px] text-rose-400 italic block">Motivo: "{vol.decline_reason}"</span>
+                              <span className="text-[11px] text-rose-600 dark:text-rose-400 italic block">Motivo: "{vol.decline_reason}"</span>
                             )}
                           </div>
                         </div>
@@ -658,7 +642,7 @@ export const MinistryModule: React.FC = () => {
                                   placeholder="Motivo da recusa..."
                                   value={declineReason}
                                   onChange={e => setDeclineReason(e.target.value)}
-                                  className="px-2 py-1 bg-slate-950 border border-slate-700 rounded text-xs text-slate-200"
+                                  className="px-2 py-1 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded text-xs text-slate-900 dark:text-slate-200"
                                 />
                                 <button
                                   onClick={() => handleRespondSchedule(sch.id, vol.id, 'decline')}
@@ -668,7 +652,7 @@ export const MinistryModule: React.FC = () => {
                                 </button>
                                 <button
                                   onClick={() => setSelectedVolunteerForAction(null)}
-                                  className="px-2 py-1 text-slate-400 text-xs"
+                                  className="px-2 py-1 text-slate-500 dark:text-slate-400 text-xs"
                                 >
                                   Cancelar
                                 </button>
@@ -676,7 +660,7 @@ export const MinistryModule: React.FC = () => {
                             ) : (
                               <button
                                 onClick={() => setSelectedVolunteerForAction(vol.id)}
-                                className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-rose-400 border border-slate-700 rounded text-xs font-medium flex items-center gap-1 transition-all"
+                                className="px-3 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 rounded text-xs font-medium flex items-center gap-1 transition-all"
                               >
                                 <XCircle className="w-3.5 h-3.5" />
                                 Recusar
@@ -685,7 +669,7 @@ export const MinistryModule: React.FC = () => {
                           </div>
                         ) : (
                           <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                            vol.status === 'confirmed' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
+                            vol.status === 'confirmed' ? 'text-emerald-700 dark:text-emerald-400 bg-emerald-500/10' : 'text-rose-700 dark:text-rose-400 bg-rose-500/10'
                           }`}>
                             Respondido ({vol.status})
                           </span>
@@ -702,11 +686,11 @@ export const MinistryModule: React.FC = () => {
 
       {/* MODAL: NOVA ESCALA COM DETECTOR DE CONFLITOS */}
       {showScheduleModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-violet-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
                 Nova Escala de Serviço
               </h3>
               <button
@@ -714,7 +698,7 @@ export const MinistryModule: React.FC = () => {
                   setShowScheduleModal(false);
                   setConflictWarning(null);
                 }}
-                className="text-slate-400 hover:text-slate-200"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
               >
                 ✕
               </button>
@@ -723,23 +707,23 @@ export const MinistryModule: React.FC = () => {
             {/* Aviso Chamativo de Conflito de Horário */}
             {conflictWarning?.has_conflict && conflictWarning.conflict && (
               <div className="p-4 bg-amber-500/10 border-2 border-amber-500/30 rounded-xl space-y-2">
-                <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
+                <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-semibold text-sm">
                   <AlertTriangle className="w-5 h-5 shrink-0 animate-bounce" />
                   <span>CONFLITO DE ESCALA DETECTADO!</span>
                 </div>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-700 dark:text-slate-300">
                   {conflictWarning.conflict.message}
                 </p>
-                <div className="bg-slate-950/60 p-2.5 rounded-lg border border-amber-500/20 text-xs text-slate-400">
-                  <p><strong className="text-slate-200">Escala em conflito:</strong> {conflictWarning.conflict.schedule_title}</p>
-                  <p><strong className="text-slate-200">Ministério:</strong> {conflictWarning.conflict.ministry_name}</p>
-                  <p><strong className="text-slate-200">Horário:</strong> {conflictWarning.conflict.start_time} às {conflictWarning.conflict.end_time}</p>
+                <div className="dash-subcard p-2.5 rounded-lg text-xs text-slate-600 dark:text-slate-400">
+                  <p><strong className="text-slate-800 dark:text-slate-200">Escala em conflito:</strong> {conflictWarning.conflict.schedule_title}</p>
+                  <p><strong className="text-slate-800 dark:text-slate-200">Ministério:</strong> {conflictWarning.conflict.ministry_name}</p>
+                  <p><strong className="text-slate-800 dark:text-slate-200">Horário:</strong> {conflictWarning.conflict.start_time} às {conflictWarning.conflict.end_time}</p>
                 </div>
                 <div className="pt-2 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setConflictWarning(null)}
-                    className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs"
+                    className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs"
                   >
                     Ajustar Voluntários
                   </button>
@@ -756,11 +740,11 @@ export const MinistryModule: React.FC = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Ministério *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Ministério *</label>
                 <select
                   value={newSchedule.ministry_id}
                   onChange={e => setNewSchedule(prev => ({ ...prev, ministry_id: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 >
                   <option value="">Selecione o ministério...</option>
                   {ministries.map(m => (
@@ -770,49 +754,49 @@ export const MinistryModule: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Título do Evento / Culto *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Título do Evento / Culto *</label>
                 <input
                   type="text"
                   placeholder="Ex: Culto de Celebração Noturno"
                   value={newSchedule.title}
                   onChange={e => setNewSchedule(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Data *</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Data *</label>
                   <input
                     type="date"
                     value={newSchedule.date}
                     onChange={e => setNewSchedule(prev => ({ ...prev, date: e.target.value }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Início *</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Início *</label>
                   <input
                     type="time"
                     value={newSchedule.start_time}
                     onChange={e => setNewSchedule(prev => ({ ...prev, start_time: e.target.value }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Término *</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Término *</label>
                   <input
                     type="time"
                     value={newSchedule.end_time}
                     onChange={e => setNewSchedule(prev => ({ ...prev, end_time: e.target.value }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                   />
                 </div>
               </div>
 
               {/* Seletor de Voluntários com verificação de conflito */}
-              <div className="border border-slate-800 bg-slate-950/40 p-3.5 rounded-xl space-y-3">
-                <label className="block text-xs font-semibold text-slate-300">Adicionar Voluntários na Escala</label>
+              <div className="dash-subcard p-3.5 rounded-xl space-y-3">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">Adicionar Voluntários na Escala</label>
                 <div className="flex gap-2">
                   <select
                     value={newSchedule.selectedMemberId}
@@ -821,7 +805,7 @@ export const MinistryModule: React.FC = () => {
                       setNewSchedule(prev => ({ ...prev, selectedMemberId: id }));
                       if (id) handleCheckVolunteerConflict(Number(id));
                     }}
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                    className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                   >
                     <option value="">Selecione um membro...</option>
                     {members.map(m => (
@@ -832,7 +816,7 @@ export const MinistryModule: React.FC = () => {
                     type="button"
                     onClick={handleAddVolunteerToStage}
                     disabled={!newSchedule.selectedMemberId || checkingConflict}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-200 rounded-xl text-xs font-semibold"
+                    className="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 disabled:opacity-50 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold"
                   >
                     {checkingConflict ? 'Verificando...' : 'Adicionar'}
                   </button>
@@ -841,18 +825,18 @@ export const MinistryModule: React.FC = () => {
                 {/* Lista de Voluntários Estagiados */}
                 {stagedVolunteers.length > 0 && (
                   <div className="space-y-1.5 pt-2">
-                    <span className="text-[11px] text-slate-500 block">Voluntários escalados:</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">Voluntários escalados:</span>
                     <div className="flex flex-wrap gap-2">
                       {stagedVolunteers.map(v => (
                         <span
                           key={v.member_id}
-                          className="flex items-center gap-1.5 px-2.5 py-1 bg-violet-500/10 text-violet-300 border border-violet-500/20 rounded-lg text-xs"
+                          className="flex items-center gap-1.5 px-2.5 py-1 bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/20 rounded-lg text-xs"
                         >
                           {v.name}
                           <button
                             type="button"
                             onClick={() => setStagedVolunteers(prev => prev.filter(x => x.member_id !== v.member_id))}
-                            className="text-violet-400 hover:text-rose-400 font-bold ml-1"
+                            className="text-violet-600 dark:text-violet-400 hover:text-rose-500 font-bold ml-1"
                           >
                             ×
                           </button>
@@ -864,21 +848,21 @@ export const MinistryModule: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Orientações / Notas</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Orientações / Notas</label>
                 <textarea
                   rows={2}
                   placeholder="Ex: Chegar com 30min de antecedência para ensaio..."
                   value={newSchedule.notes}
                   onChange={e => setNewSchedule(prev => ({ ...prev, notes: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowScheduleModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-all"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold transition-all"
                 >
                   Cancelar
                 </button>
@@ -886,7 +870,7 @@ export const MinistryModule: React.FC = () => {
                   type="button"
                   onClick={() => handleCreateSchedule(false)}
                   disabled={submittingSchedule}
-                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-violet-600/20"
+                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-violet-600/20"
                 >
                   {submittingSchedule ? 'Salvando...' : 'Publicar Escala'}
                 </button>
@@ -898,55 +882,55 @@ export const MinistryModule: React.FC = () => {
 
       {/* MODAL: NOVO MINISTÉRIO */}
       {showMinistryModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Layers className="w-5 h-5 text-violet-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Layers className="w-5 h-5 text-violet-600 dark:text-violet-400" />
                 Cadastrar Ministério
               </h3>
-              <button onClick={() => setShowMinistryModal(false)} className="text-slate-400 hover:text-slate-200">
+              <button onClick={() => setShowMinistryModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
                 ✕
               </button>
             </div>
 
             <form onSubmit={handleCreateMinistry} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Nome do Ministério *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Nome do Ministério *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: Louvor & Adoração"
                   value={newMinistry.name}
                   onChange={e => setNewMinistry(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Descrição</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Descrição</label>
                 <textarea
                   rows={2}
                   placeholder="Objetivo e atribuições do ministério..."
                   value={newMinistry.description}
                   onChange={e => setNewMinistry(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Funções Iniciais (separadas por vírgula)</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Funções Iniciais (separadas por vírgula)</label>
                 <input
                   type="text"
                   placeholder="Ex: Vocal, Guitarra, Bateria, Teclado"
                   value={newMinistry.roles}
                   onChange={e => setNewMinistry(prev => ({ ...prev, roles: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Cor de Destaque</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cor de Destaque</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
@@ -954,21 +938,21 @@ export const MinistryModule: React.FC = () => {
                     onChange={e => setNewMinistry(prev => ({ ...prev, color: e.target.value }))}
                     className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-0"
                   />
-                  <span className="text-xs text-slate-400">{newMinistry.color}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">{newMinistry.color}</span>
                 </div>
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowMinistryModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-all"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-violet-600/20"
+                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-violet-600/20"
                 >
                   Salvar Ministério
                 </button>
@@ -980,26 +964,26 @@ export const MinistryModule: React.FC = () => {
 
       {/* MODAL: ASSOCIAR VOLUNTÁRIO AO MINISTÉRIO */}
       {showVolunteerModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Users className="w-5 h-5 text-violet-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-violet-600 dark:text-violet-400" />
                 Associar Voluntário
               </h3>
-              <button onClick={() => setShowVolunteerModal(false)} className="text-slate-400 hover:text-slate-200">
+              <button onClick={() => setShowVolunteerModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
                 ✕
               </button>
             </div>
 
             <form onSubmit={handleAddVolunteerToMinistry} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Ministério *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Ministério *</label>
                 <select
                   required
                   value={selectedMinistryId}
                   onChange={e => setSelectedMinistryId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 >
                   <option value="">Selecione o ministério...</option>
                   {ministries.map(m => (
@@ -1009,12 +993,12 @@ export const MinistryModule: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Membro *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Membro *</label>
                 <select
                   required
                   value={volunteerMemberId}
                   onChange={e => setVolunteerMemberId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 >
                   <option value="">Selecione o membro...</option>
                   {members.map(m => (
@@ -1023,17 +1007,17 @@ export const MinistryModule: React.FC = () => {
                 </select>
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowVolunteerModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-all"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-violet-600/20"
+                  className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-violet-600/20"
                 >
                   Confirmar Associação
                 </button>
@@ -1045,3 +1029,5 @@ export const MinistryModule: React.FC = () => {
     </div>
   );
 };
+
+export default MinistryModule;

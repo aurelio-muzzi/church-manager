@@ -268,19 +268,19 @@ export const EventModule: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Cabeçalho do Módulo */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+      <div className="dash-header flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               Etapa 05
             </span>
-            <span className="text-slate-400 text-xs">Eventos, Inscrições & Quórum</span>
+            <span className="text-slate-500 dark:text-slate-400 text-xs">Eventos, Inscrições & Quórum</span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
-            <Calendar className="w-7 h-7 text-emerald-400" />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <Calendar className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
             Eventos e Presença
           </h2>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
             Gestão de cultos e conferências, controle de vagas, check-in seguro com leitor QR Code e quórum em tempo real.
           </p>
         </div>
@@ -288,7 +288,7 @@ export const EventModule: React.FC = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setShowEventModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-emerald-600/20"
+            className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-emerald-600/20"
           >
             <Plus className="w-4 h-4" />
             Novo Evento
@@ -296,7 +296,7 @@ export const EventModule: React.FC = () => {
           <button
             onClick={loadEvents}
             title="Sincronizar eventos"
-            className="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 rounded-xl transition-all"
+            className="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl transition-all"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -305,13 +305,13 @@ export const EventModule: React.FC = () => {
 
       {/* Alertas */}
       {actionSuccess && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-400 text-sm">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3 text-emerald-700 dark:text-emerald-400 text-sm">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span>{actionSuccess}</span>
         </div>
       )}
       {actionError && (
-        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3 text-rose-400 text-sm">
+        <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3 text-rose-700 dark:text-rose-400 text-sm">
           <AlertTriangle className="w-5 h-5 shrink-0" />
           <span>{actionError}</span>
         </div>
@@ -319,16 +319,16 @@ export const EventModule: React.FC = () => {
 
       {/* Seletor de Evento Ativo no Módulo */}
       {events.length > 0 && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/70 border border-slate-800/80 p-3.5 rounded-xl">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Ticket className="w-4 h-4 text-emerald-400" />
-            <span>Evento em Foco:</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 dash-subcard p-3.5 rounded-xl">
+          <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+            <Ticket className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="font-medium">Evento em Foco:</span>
           </div>
 
           <select
             value={selectedEventId || ''}
             onChange={e => setSelectedEventId(Number(e.target.value))}
-            className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
+            className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-900 dark:text-slate-200 font-medium focus:outline-none focus:border-emerald-500"
           >
             {events.map(ev => (
               <option key={ev.id} value={ev.id}>
@@ -340,14 +340,10 @@ export const EventModule: React.FC = () => {
       )}
 
       {/* Navegação por Abas */}
-      <div className="flex border-b border-slate-800 overflow-x-auto gap-2">
+      <div className="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto gap-2 pb-2">
         <button
           onClick={() => setActiveTab('events')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'events'
-              ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
         >
           <Calendar className="w-4 h-4" />
           Cultos & Eventos ({events.length})
@@ -355,11 +351,7 @@ export const EventModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('checkin')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'checkin'
-              ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'checkin' ? 'active' : ''}`}
         >
           <QrCode className="w-4 h-4" />
           Terminal de Check-in (QR Code)
@@ -367,11 +359,7 @@ export const EventModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('registrations')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'registrations'
-              ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'registrations' ? 'active' : ''}`}
         >
           <Users className="w-4 h-4" />
           Inscrições & Participantes
@@ -379,11 +367,7 @@ export const EventModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('stats')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-all whitespace-nowrap ${
-            activeTab === 'stats'
-              ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'stats' ? 'active' : ''}`}
         >
           <BarChart3 className="w-4 h-4" />
           Quórum & Métricas
@@ -399,10 +383,10 @@ export const EventModule: React.FC = () => {
               <CardSkeleton />
             </div>
           ) : events.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900 border border-slate-800 rounded-2xl">
-              <Calendar className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-300 font-semibold text-lg">Nenhum evento agendado</p>
-              <p className="text-slate-500 text-sm mt-1 max-w-md mx-auto">
+            <div className="text-center py-16 dash-card">
+              <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <p className="text-slate-900 dark:text-slate-200 font-semibold text-lg">Nenhum evento agendado</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1 max-w-md mx-auto">
                 Cadastre o primeiro culto, conferência ou retiro no botão "Novo Evento" acima.
               </p>
             </div>
@@ -411,51 +395,51 @@ export const EventModule: React.FC = () => {
               {events.map(ev => (
                 <div
                   key={ev.id}
-                  className={`bg-slate-900 border rounded-2xl p-5 hover:border-slate-700 transition-all shadow-md flex flex-col justify-between ${
-                    selectedEventId === ev.id ? 'border-emerald-500/50 shadow-emerald-500/5' : 'border-slate-800'
+                  className={`dash-card p-5 transition-all flex flex-col justify-between ${
+                    selectedEventId === ev.id ? 'ring-2 ring-emerald-500/40' : ''
                   }`}
                 >
                   <div>
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div>
-                        <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider block mb-1">
+                        <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">
                           {ev.type === 'conference' ? 'Conferência' :
                            ev.type === 'service' ? 'Culto Regular' :
                            ev.type === 'workshop' ? 'Workshop' : 'Evento Especial'}
                         </span>
-                        <h3 className="text-lg font-bold text-slate-100">{ev.title}</h3>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{ev.title}</h3>
                       </div>
 
-                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs rounded-full font-medium">
+                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-xs rounded-full font-medium">
                         Publicado
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-400 mb-4 line-clamp-2">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">
                       {ev.description || 'Sem descrição cadastrada.'}
                     </p>
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 mb-4 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 mb-4 dash-subcard p-3 rounded-xl">
                       <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                        <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                         <span>{ev.start_date}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-amber-400" />
+                        <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>{ev.start_time}</span>
                       </div>
                       <div className="flex items-center gap-1.5 col-span-2">
-                        <MapPin className="w-3.5 h-3.5 text-violet-400" />
+                        <MapPin className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                         <span>{ev.location || 'Sede Principal'}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                  <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-3">
                       <span>{ev.registrations_count || 0} inscritos</span>
                       <span>•</span>
-                      <span className="text-emerald-400 font-medium">{ev.attendances_count || 0} presenças</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-medium">{ev.attendances_count || 0} presenças</span>
                     </div>
 
                     <button
@@ -463,7 +447,7 @@ export const EventModule: React.FC = () => {
                         setSelectedEventId(ev.id);
                         setActiveTab('checkin');
                       }}
-                      className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
+                      className="text-emerald-600 dark:text-emerald-400 hover:underline font-semibold flex items-center gap-1"
                     >
                       <ScanLine className="w-3.5 h-3.5" />
                       Fazer Check-in
@@ -480,20 +464,20 @@ export const EventModule: React.FC = () => {
       {activeTab === 'checkin' && activeEventObj && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Validador de QR Code Token */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="dash-card p-6 space-y-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <QrCode className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-100">Leitor de QR Code</h3>
-                <p className="text-xs text-slate-400">Valide o token do crachá/ingresso digital do participante</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Leitor de QR Code</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Valide o token do crachá/ingresso digital do participante</p>
               </div>
             </div>
 
             <form onSubmit={handleCheckInByToken} className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Token do QR Code (Ex: EVT-CARLOS2026)
                 </label>
                 <div className="flex gap-2">
@@ -503,12 +487,12 @@ export const EventModule: React.FC = () => {
                     placeholder="Cole ou digite o código do QR Code..."
                     value={qrTokenInput}
                     onChange={e => setQrTokenInput(e.target.value)}
-                    className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 uppercase tracking-wider focus:outline-none focus:border-emerald-500 font-mono"
+                    className="flex-1 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 uppercase tracking-wider focus:outline-none focus:border-emerald-500 font-mono"
                   />
                   <button
                     type="submit"
                     disabled={processingCheckIn || !qrTokenInput.trim()}
-                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-emerald-600/20"
+                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-emerald-600/20"
                   >
                     {processingCheckIn ? 'Validando...' : 'Confirmar'}
                   </button>
@@ -520,15 +504,13 @@ export const EventModule: React.FC = () => {
             {checkInResult && (
               <div className={`p-4 rounded-xl border text-sm flex items-start gap-3 transition-all ${
                 checkInResult.status === 'success'
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
                   : checkInResult.status === 'already_checked_in'
-                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                  : 'bg-rose-500/10 border-rose-500/30 text-rose-400'
+                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400'
+                  : 'bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-400'
               }`}>
                 {checkInResult.status === 'success' ? (
                   <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
-                ) : checkInResult.status === 'already_checked_in' ? (
-                  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                 ) : (
                   <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                 )}
@@ -544,44 +526,44 @@ export const EventModule: React.FC = () => {
           </div>
 
           {/* Check-in Manual por Busca de Membros */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="dash-card p-6 space-y-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center">
                 <UserCheck className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-100">Check-in Manual</h3>
-                <p className="text-xs text-slate-400">Localize o membro pelo nome para registrar presença</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Check-in Manual</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Localize o membro pelo nome para registrar presença</p>
               </div>
             </div>
 
             <div>
               <div className="relative mb-3">
-                <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                 <input
                   type="text"
                   placeholder="Buscar pelo nome do membro..."
                   value={manualMemberSearch}
                   onChange={e => setManualMemberSearch(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-violet-500"
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-violet-500"
                 />
               </div>
 
-              <div className="max-h-60 overflow-y-auto divide-y divide-slate-800 border border-slate-800 rounded-xl">
+              <div className="max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl">
                 {members
                   .filter(m => !manualMemberSearch || m.name.toLowerCase().includes(manualMemberSearch.toLowerCase()))
                   .slice(0, 5)
                   .map(m => (
-                    <div key={m.id} className="p-3 flex items-center justify-between hover:bg-slate-950/40 transition-all">
+                    <div key={m.id} className="p-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all">
                       <div>
-                        <p className="text-xs font-semibold text-slate-200">{m.name}</p>
-                        <p className="text-[11px] text-slate-500">{m.email || m.phone || 'Sem contato'}</p>
+                        <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">{m.name}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">{m.email || m.phone || 'Sem contato'}</p>
                       </div>
 
                       <button
                         onClick={() => handleManualCheckIn(m)}
                         disabled={processingCheckIn}
-                        className="px-3 py-1 bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 border border-violet-500/30 rounded-lg text-xs font-medium transition-all"
+                        className="px-3 py-1 bg-violet-500/15 hover:bg-violet-500/25 text-violet-700 dark:text-violet-300 border border-violet-500/30 rounded-lg text-xs font-medium transition-all"
                       >
                         Check-in
                       </button>
@@ -595,11 +577,11 @@ export const EventModule: React.FC = () => {
 
       {/* ABA 3: INSCRIÇÕES E PARTICIPANTES */}
       {activeTab === 'registrations' && activeEventObj && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div className="dash-card p-6 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
             <div>
-              <h3 className="text-lg font-bold text-slate-100">{activeEventObj.title}</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">{activeEventObj.title}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Lista oficial de inscritos ({registrations.length} participantes registrados)
               </p>
             </div>
@@ -616,14 +598,14 @@ export const EventModule: React.FC = () => {
           {loadingRegistrations ? (
             <CardSkeleton />
           ) : registrations.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 text-sm">
+            <div className="text-center py-12 text-slate-500 dark:text-slate-400 text-sm">
               Nenhuma inscrição realizada para este evento ainda.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">
                     <th className="pb-3">Participante</th>
                     <th className="pb-3">Contato</th>
                     <th className="pb-3">Token QR Code</th>
@@ -631,35 +613,35 @@ export const EventModule: React.FC = () => {
                     <th className="pb-3">Presença</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {registrations.map(reg => (
-                    <tr key={reg.id} className="hover:bg-slate-950/30 transition-all">
-                      <td className="py-3 font-medium text-slate-200">
+                    <tr key={reg.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all">
+                      <td className="py-3 font-medium text-slate-800 dark:text-slate-200">
                         {reg.name}
                         {reg.member_id && (
-                          <span className="ml-1.5 px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded text-[10px]">
+                          <span className="ml-1.5 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px]">
                             Membro
                           </span>
                         )}
                       </td>
-                      <td className="py-3 text-slate-400">{reg.email || reg.phone || '-'}</td>
-                      <td className="py-3 font-mono font-bold text-emerald-400">
+                      <td className="py-3 text-slate-500 dark:text-slate-400">{reg.email || reg.phone || '-'}</td>
+                      <td className="py-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">
                         <span
                           onClick={() => {
                             navigator.clipboard.writeText(reg.qr_code_token);
                             setActionSuccess(`Token ${reg.qr_code_token} copiado!`);
                           }}
                           title="Clique para copiar token"
-                          className="cursor-pointer bg-slate-950 px-2 py-1 rounded border border-slate-800 hover:border-emerald-500"
+                          className="cursor-pointer bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded border border-slate-200 dark:border-slate-800 hover:border-emerald-500"
                         >
                           {reg.qr_code_token}
                         </span>
                       </td>
                       <td className="py-3">
                         <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
-                          reg.status === 'confirmed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                          reg.status === 'waitlist' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                          'bg-slate-800 text-slate-400'
+                          reg.status === 'confirmed' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20' :
+                          reg.status === 'waitlist' ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20' :
+                          'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                         }`}>
                           {reg.status === 'confirmed' ? 'Confirmado' :
                            reg.status === 'waitlist' ? 'Lista de Espera' : reg.status}
@@ -667,12 +649,12 @@ export const EventModule: React.FC = () => {
                       </td>
                       <td className="py-3">
                         {reg.attendance ? (
-                          <span className="flex items-center gap-1 text-emerald-400 font-semibold text-[11px]">
+                          <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             Presente
                           </span>
                         ) : (
-                          <span className="text-slate-500 text-[11px]">Não compareceu</span>
+                          <span className="text-slate-400 dark:text-slate-500 text-[11px]">Não compareceu</span>
                         )}
                       </td>
                     </tr>
@@ -693,91 +675,91 @@ export const EventModule: React.FC = () => {
             <div className="space-y-6">
               {/* Indicadores Principais */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md">
-                  <span className="text-xs text-slate-400 block font-medium">Inscritos Confirmados</span>
-                  <p className="text-2xl font-bold text-slate-100 mt-1">{stats.total_confirmed_registrations}</p>
+                <div className="dash-kpi">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Inscritos Confirmados</span>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">{stats.total_confirmed_registrations}</p>
                 </div>
 
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md">
-                  <span className="text-xs text-slate-400 block font-medium">Presenças (Check-in)</span>
-                  <p className="text-2xl font-bold text-emerald-400 mt-1">{stats.total_attendances}</p>
+                <div className="dash-kpi">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Presenças (Check-in)</span>
+                  <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{stats.total_attendances}</p>
                 </div>
 
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md">
-                  <span className="text-xs text-slate-400 block font-medium">Taxa de Presença</span>
-                  <p className="text-2xl font-bold text-violet-400 mt-1">{stats.attendance_rate}%</p>
+                <div className="dash-kpi">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Taxa de Presença</span>
+                  <p className="text-2xl font-bold text-violet-600 dark:text-violet-400 mt-1">{stats.attendance_rate}%</p>
                 </div>
 
-                <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md">
-                  <span className="text-xs text-slate-400 block font-medium">Capacidade Máxima</span>
-                  <p className="text-2xl font-bold text-amber-400 mt-1">
+                <div className="dash-kpi">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">Capacidade Máxima</span>
+                  <p className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
                     {stats.max_capacity ? `${stats.max_capacity} vagas` : 'Ilimitada'}
                   </p>
                 </div>
               </div>
 
               {/* Detalhes de Tipo de Check-in */}
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
-                <h4 className="text-sm font-bold text-slate-200 mb-3">Método de Check-in Utilizado</h4>
+              <div className="dash-card p-6">
+                <h4 className="text-sm font-bold text-slate-900 dark:text-slate-200 mb-3">Método de Check-in Utilizado</h4>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <QrCode className="w-4 h-4 text-emerald-400" />
+                  <div className="dash-subcard p-4 rounded-xl">
+                    <span className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                      <QrCode className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       Check-in via QR Code Token
                     </span>
-                    <p className="text-xl font-bold text-slate-200 mt-1">{stats.check_in_by_type.qr_code}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white mt-1">{stats.check_in_by_type.qr_code}</p>
                   </div>
 
-                  <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                      <UserCheck className="w-4 h-4 text-violet-400" />
+                  <div className="dash-subcard p-4 rounded-xl">
+                    <span className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                      <UserCheck className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                       Check-in Manual por Operador
                     </span>
-                    <p className="text-xl font-bold text-slate-200 mt-1">{stats.check_in_by_type.manual}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white mt-1">{stats.check_in_by_type.manual}</p>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-slate-500 text-sm text-center py-8">Nenhum dado estatístico disponível.</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm text-center py-8">Nenhum dado estatístico disponível.</p>
           )}
         </div>
       )}
 
       {/* MODAL: NOVO EVENTO */}
       {showEventModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 Cadastrar Evento / Culto
               </h3>
-              <button onClick={() => setShowEventModal(false)} className="text-slate-400 hover:text-slate-200">
+              <button onClick={() => setShowEventModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
                 ✕
               </button>
             </div>
 
             <form onSubmit={handleCreateEvent} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Título do Evento *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Título do Evento *</label>
                 <input
                   type="text"
                   required
                   placeholder="Ex: Conferência da Família 2026"
                   value={newEvent.title}
                   onChange={e => setNewEvent(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Tipo de Evento</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo de Evento</label>
                   <select
                     value={newEvent.type}
                     onChange={e => setNewEvent(prev => ({ ...prev, type: e.target.value as any }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                   >
                     <option value="service">Culto Regular</option>
                     <option value="conference">Conferência</option>
@@ -789,61 +771,61 @@ export const EventModule: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Capacidade de Vagas</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Capacidade de Vagas</label>
                   <input
                     type="number"
                     min="1"
                     placeholder="Ex: 150 (opcional)"
                     value={newEvent.max_capacity}
                     onChange={e => setNewEvent(prev => ({ ...prev, max_capacity: Number(e.target.value) }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Data *</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Data *</label>
                   <input
                     type="date"
                     required
                     value={newEvent.start_date}
                     onChange={e => setNewEvent(prev => ({ ...prev, start_date: e.target.value }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Horário de Início *</label>
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Horário de Início *</label>
                   <input
                     type="time"
                     required
                     value={newEvent.start_time}
                     onChange={e => setNewEvent(prev => ({ ...prev, start_time: e.target.value }))}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Local</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Local</label>
                 <input
                   type="text"
                   placeholder="Ex: Templo Sede - Auditório Principal"
                   value={newEvent.location}
                   onChange={e => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Descrição</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Descrição</label>
                 <textarea
                   rows={2}
                   placeholder="Detalhes sobre preletores, programações ou temas..."
                   value={newEvent.description}
                   onChange={e => setNewEvent(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -853,24 +835,24 @@ export const EventModule: React.FC = () => {
                   id="req_reg"
                   checked={newEvent.requires_registration}
                   onChange={e => setNewEvent(prev => ({ ...prev, requires_registration: e.target.checked }))}
-                  className="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4 bg-slate-950 border-slate-800"
+                  className="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4 bg-slate-50 dark:bg-slate-950 border-slate-300 dark:border-slate-800"
                 />
-                <label htmlFor="req_reg" className="text-xs text-slate-300 cursor-pointer">
+                <label htmlFor="req_reg" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                   Exige inscrição prévia com emissão de QR Code
                 </label>
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowEventModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-all"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-emerald-600/20"
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-emerald-600/20"
                 >
                   Salvar Evento
                 </button>
@@ -882,21 +864,21 @@ export const EventModule: React.FC = () => {
 
       {/* MODAL: NOVA INSCRIÇÃO */}
       {showRegModal && activeEventObj && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Ticket className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 Inscrever no Evento
               </h3>
-              <button onClick={() => setShowRegModal(false)} className="text-slate-400 hover:text-slate-200">
+              <button onClick={() => setShowRegModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">
                 ✕
               </button>
             </div>
 
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Selecione um Membro (opcional)</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Selecione um Membro (opcional)</label>
                 <select
                   value={newReg.member_id}
                   onChange={e => {
@@ -910,7 +892,7 @@ export const EventModule: React.FC = () => {
                       phone: found?.phone || prev.phone,
                     }));
                   }}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 >
                   <option value="">Inscrever participante avulso/visitante...</option>
                   {members.map(m => (
@@ -920,50 +902,50 @@ export const EventModule: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Nome Completo *</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Nome Completo *</label>
                 <input
                   type="text"
                   required
                   placeholder="Nome do participante..."
                   value={newReg.name}
                   onChange={e => setNewReg(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">E-mail</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">E-mail</label>
                 <input
                   type="email"
                   placeholder="email@participante.com"
                   value={newReg.email}
                   onChange={e => setNewReg(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Telefone / WhatsApp</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Telefone / WhatsApp</label>
                 <input
                   type="text"
                   placeholder="(92) 99999-9999"
                   value={newReg.phone}
                   onChange={e => setNewReg(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowRegModal(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-all"
+                  className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold transition-all"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-emerald-600/20"
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md shadow-emerald-600/20"
                 >
                   Confirmar Inscrição
                 </button>

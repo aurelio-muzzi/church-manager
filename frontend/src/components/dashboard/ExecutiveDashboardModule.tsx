@@ -185,19 +185,19 @@ export const ExecutiveDashboardModule: React.FC = () => {
       )}
 
       {/* Cabeçalho do Dashboard */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950/80 to-slate-900 p-6 rounded-2xl border border-indigo-900/40 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="dash-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border border-indigo-500/20 flex items-center gap-1.5">
               <BarChart3 className="w-3.5 h-3.5" />
               Business Intelligence & Analytics
             </span>
-            <span className="text-xs text-slate-400">Etapa 08</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Etapa 08</span>
           </div>
-          <h1 className="text-2xl font-bold text-white mt-1.5 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mt-1.5 flex items-center gap-2">
             Dashboard Executivo da Liderança
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Métricas estratégicas consolidadas, saúde financeira, engajamento ministerial e retenção pastoral em tempo real.
           </p>
         </div>
@@ -206,7 +206,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-2 transition"
+            className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-xs flex items-center gap-2 font-medium transition shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Atualizar Indicadores
@@ -215,14 +215,10 @@ export const ExecutiveDashboardModule: React.FC = () => {
       </div>
 
       {/* Navegação de Abas */}
-      <div className="border-b border-slate-800 flex items-center gap-2 overflow-x-auto pb-1">
+      <div className="border-b border-slate-200 dark:border-slate-800 flex items-center gap-2 overflow-x-auto pb-2">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'overview'
-              ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
         >
           <TrendingUp className="w-4 h-4" />
           Visão Geral & Finanças
@@ -230,11 +226,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('demographics')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'demographics'
-              ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'demographics' ? 'active' : ''}`}
         >
           <PieChart className="w-4 h-4" />
           Demografia & Congregações
@@ -242,11 +234,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('ministries')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'ministries'
-              ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'ministries' ? 'active' : ''}`}
         >
           <HeartHandshake className="w-4 h-4" />
           Ministérios & Voluntariado
@@ -254,16 +242,12 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('pastoral')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'pastoral'
-              ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'pastoral' ? 'active' : ''}`}
         >
           <AlertTriangle className="w-4 h-4" />
           Cuidado Pastoral & Alertas
           {(pastoralAlerts?.members_absent_60_days.length ?? 0) > 0 && (
-            <span className="px-1.5 py-0.2 rounded-full text-xs font-bold bg-amber-500/30 text-amber-300 border border-amber-500/40">
+            <span className="px-1.5 py-0.2 rounded-full text-xs font-bold bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30">
               {pastoralAlerts?.members_absent_60_days.length}
             </span>
           )}
@@ -271,11 +255,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('exports')}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'exports'
-              ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-          }`}
+          className={`dash-tab-btn ${activeTab === 'exports' ? 'active' : ''}`}
         >
           <FileSpreadsheet className="w-4 h-4" />
           Central de Exportações CSV
@@ -288,151 +268,167 @@ export const ExecutiveDashboardModule: React.FC = () => {
           {/* Grade de 4 KPIs Principais */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* KPI 1: Membros Totais */}
-            <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider">Membros Ativos</span>
-                <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
-                  <Users className="w-5 h-5" />
+            <div className="dash-kpi">
+              <div>
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider">Membros Ativos</span>
+                  <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
+                    <Users className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  {overview?.total_members ?? 0}
                 </div>
               </div>
-              <div className="text-3xl font-extrabold text-white">
-                {overview?.total_members ?? 0}
-              </div>
-              <div className="mt-2 flex items-center gap-2 text-xs">
+              <div className="mt-3 flex items-center gap-2 text-xs">
                 {(overview?.growth_rate_percentage ?? 0) >= 0 ? (
-                  <span className="flex items-center text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                  <span className="flex items-center text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-md">
                     <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" />
                     +{overview?.growth_rate_percentage}%
                   </span>
                 ) : (
-                  <span className="flex items-center text-rose-400 font-semibold bg-rose-500/10 px-2 py-0.5 rounded-md">
+                  <span className="flex items-center text-rose-600 dark:text-rose-400 font-semibold bg-rose-500/10 px-2 py-0.5 rounded-md">
                     <ArrowDownRight className="w-3.5 h-3.5 mr-0.5" />
                     {overview?.growth_rate_percentage}%
                   </span>
                 )}
-                <span className="text-slate-400">
+                <span className="text-slate-500 dark:text-slate-400">
                   +{overview?.new_members_this_month ?? 0} novos neste mês
                 </span>
               </div>
             </div>
 
             {/* KPI 2: Engajamento Voluntário */}
-            <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider">Voluntários Ativos</span>
-                <div className="p-2 rounded-xl bg-purple-500/10 text-purple-400">
-                  <HeartHandshake className="w-5 h-5" />
+            <div className="dash-kpi">
+              <div>
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider">Voluntários Ativos</span>
+                  <div className="p-2 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 shrink-0">
+                    <HeartHandshake className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  {overview?.active_volunteers_count ?? 0}
                 </div>
               </div>
-              <div className="text-3xl font-extrabold text-white">
-                {overview?.active_volunteers_count ?? 0}
-              </div>
-              <div className="mt-2 flex items-center gap-2 text-xs">
-                <span className="text-purple-400 font-semibold bg-purple-500/10 px-2 py-0.5 rounded-md">
+              <div className="mt-3 flex items-center gap-2 text-xs">
+                <span className="text-purple-600 dark:text-purple-400 font-semibold bg-purple-500/10 px-2 py-0.5 rounded-md">
                   {overview?.volunteer_engagement_rate ?? 0}%
                 </span>
-                <span className="text-slate-400">dos membros servem em equipes</span>
+                <span className="text-slate-500 dark:text-slate-400">dos membros servem em equipes</span>
               </div>
             </div>
 
             {/* KPI 3: Frequência Geral (30 dias) */}
-            <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider">Presenças (30 dias)</span>
-                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-                  <Calendar className="w-5 h-5" />
+            <div className="dash-kpi">
+              <div>
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider">Presenças (30 dias)</span>
+                  <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
+                    <Calendar className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+                  {overview?.attendance_last_30_days ?? 0}
                 </div>
               </div>
-              <div className="text-3xl font-extrabold text-white">
-                {overview?.attendance_last_30_days ?? 0}
-              </div>
-              <div className="mt-2 text-xs text-slate-400">
+              <div className="mt-3 text-xs text-slate-500 dark:text-slate-400">
                 Check-ins registrados em cultos e celebrações
               </div>
             </div>
 
             {/* KPI 4: Saldo Consolidado */}
-            <div className="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider">Saldo em Caixa / Bancos</span>
-                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
-                  <DollarSign className="w-5 h-5" />
+            <div className="dash-kpi">
+              <div>
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider">Saldo em Caixa / Bancos</span>
+                  <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
+                    <DollarSign className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+                  {formatCurrency(overview?.financial.total_balance ?? 0)}
                 </div>
               </div>
-              <div className="text-2xl font-extrabold text-white">
-                {formatCurrency(overview?.financial.total_balance ?? 0)}
-              </div>
-              <div className="mt-2 text-xs text-slate-400">
+              <div className="mt-3 text-xs text-slate-500 dark:text-slate-400">
                 Soma de todas as contas ativas do tenant
               </div>
             </div>
           </div>
 
           {/* Destaque Financeiro do Mês Corrente */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-emerald-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
               Resultado Operacional do Mês Corrente
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl">
-                <span className="text-xs text-slate-400 font-medium">Receitas Arrecadadas</span>
-                <div className="text-xl font-bold text-emerald-400 mt-1">
-                  {formatCurrency(overview?.financial.income_this_month ?? 0)}
+              <div className="dash-subcard p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Receitas Arrecadadas</span>
+                  <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+                    {formatCurrency(overview?.financial.income_this_month ?? 0)}
+                  </div>
                 </div>
-                <span className="text-xs text-slate-500">Dízimos, ofertas e doações</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-2 block">Dízimos, ofertas e doações</span>
               </div>
 
-              <div className="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl">
-                <span className="text-xs text-slate-400 font-medium">Despesas Pagas</span>
-                <div className="text-xl font-bold text-rose-400 mt-1">
-                  {formatCurrency(overview?.financial.expense_this_month ?? 0)}
+              <div className="dash-subcard p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Despesas Pagas</span>
+                  <div className="text-xl font-bold text-rose-600 dark:text-rose-400 mt-1">
+                    {formatCurrency(overview?.financial.expense_this_month ?? 0)}
+                  </div>
                 </div>
-                <span className="text-xs text-slate-500">Manutenção, ministérios e custos</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-2 block">Manutenção, ministérios e custos</span>
               </div>
 
-              <div className="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl">
-                <span className="text-xs text-slate-400 font-medium">Resultado Líquido</span>
-                <div
-                  className={`text-xl font-bold mt-1 ${
-                    (overview?.financial.is_surplus ?? true) ? 'text-emerald-400' : 'text-rose-400'
-                  }`}
-                >
-                  {formatCurrency(overview?.financial.net_result_this_month ?? 0)}
+              <div className="dash-subcard p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Resultado Líquido</span>
+                  <div
+                    className={`text-xl font-bold mt-1 ${
+                      (overview?.financial.is_surplus ?? true) ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+                    }`}
+                  >
+                    {formatCurrency(overview?.financial.net_result_this_month ?? 0)}
+                  </div>
                 </div>
-                <span
-                  className={`text-xs font-semibold px-2 py-0.5 rounded-full inline-block mt-1 ${
-                    (overview?.financial.is_surplus ?? true)
-                      ? 'bg-emerald-500/20 text-emerald-300'
-                      : 'bg-rose-500/20 text-rose-300'
-                  }`}
-                >
-                  {(overview?.financial.is_surplus ?? true) ? 'Superávit no período' : 'Déficit no período'}
-                </span>
+                <div>
+                  <span
+                    className={`text-xs font-semibold px-2 py-0.5 rounded-full inline-block mt-2 ${
+                      (overview?.financial.is_surplus ?? true)
+                        ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                        : 'bg-rose-500/15 text-rose-700 dark:text-rose-300'
+                    }`}
+                  >
+                    {(overview?.financial.is_surplus ?? true) ? 'Superávit no período' : 'Déficit no período'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Gráfico de Barras: Evolução Financeira Semestral */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+          <div className="dash-card p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-indigo-400" />
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
                   Evolução Histórica das Finanças (Últimos 6 Meses)
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Comparativo mensal entre receitas recebidas e despesas liquidadas.
                 </p>
               </div>
 
               <div className="flex items-center gap-4 text-xs">
-                <div className="flex items-center gap-1.5 text-emerald-400">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
                   <div className="w-3 h-3 rounded-sm bg-emerald-500" />
                   <span>Receitas</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-rose-400">
+                <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-medium">
                   <div className="w-3 h-3 rounded-sm bg-rose-500" />
                   <span>Despesas</span>
                 </div>
@@ -440,7 +436,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
             </div>
 
             {financialEvolution.length === 0 ? (
-              <div className="text-center py-8 text-slate-500 text-sm">
+              <div className="text-center py-8 text-slate-500 dark:text-slate-400 text-sm">
                 Nenhum histórico financeiro registrado para os últimos meses.
               </div>
             ) : (
@@ -452,14 +448,14 @@ export const ExecutiveDashboardModule: React.FC = () => {
                   return (
                     <div
                       key={m.month}
-                      className="bg-slate-800/30 border border-slate-800/60 rounded-xl p-3 flex flex-col items-center justify-between text-center hover:border-slate-700 transition"
+                      className="dash-subcard p-3 flex flex-col items-center justify-between text-center hover:border-indigo-400/40 transition shadow-sm"
                     >
-                      <span className="text-xs font-semibold text-slate-300 capitalize mb-3">
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 capitalize mb-3">
                         {m.label}
                       </span>
 
                       {/* Visual Bars Container */}
-                      <div className="h-32 w-full flex items-end justify-center gap-2 px-2 pb-1 border-b border-slate-800">
+                      <div className="h-32 w-full flex items-end justify-center gap-2 px-2 pb-1 border-b border-slate-200 dark:border-slate-800">
                         {/* Income Bar */}
                         <div
                           className="w-1/2 bg-emerald-500 rounded-t transition-all hover:bg-emerald-400"
@@ -476,18 +472,18 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
                       <div className="mt-3 w-full text-left space-y-1">
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Rec:</span>
-                          <span className="font-semibold text-emerald-400">{formatCurrency(m.income)}</span>
+                          <span className="text-slate-500 dark:text-slate-400">Rec:</span>
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">{formatCurrency(m.income)}</span>
                         </div>
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="text-slate-400">Desp:</span>
-                          <span className="font-semibold text-rose-400">{formatCurrency(m.expense)}</span>
+                          <span className="text-slate-500 dark:text-slate-400">Desp:</span>
+                          <span className="font-semibold text-rose-600 dark:text-rose-400">{formatCurrency(m.expense)}</span>
                         </div>
-                        <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800">
-                          <span className="text-slate-400">Saldo:</span>
+                        <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200 dark:border-slate-800">
+                          <span className="text-slate-500 dark:text-slate-400">Saldo:</span>
                           <span
                             className={`font-bold ${
-                              m.net >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                              m.net >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                             }`}
                           >
                             {formatCurrency(m.net)}
@@ -508,9 +504,9 @@ export const ExecutiveDashboardModule: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Gênero */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-400" />
+            <div className="dash-card p-6">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
                 Distribuição por Gênero
               </h3>
 
@@ -527,7 +523,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                 return (
                   <div className="space-y-4">
                     {/* Visual Progress Bar */}
-                    <div className="h-4 w-full bg-slate-800 rounded-full overflow-hidden flex">
+                    <div className="h-4 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex border border-slate-200 dark:border-slate-700/50">
                       <div
                         style={{ width: `${malePct}%` }}
                         className="bg-blue-500 h-full"
@@ -541,25 +537,25 @@ export const ExecutiveDashboardModule: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-800">
-                        <div className="flex items-center gap-2 text-xs text-blue-400 font-semibold">
+                      <div className="dash-subcard p-3">
+                        <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-semibold">
                           <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                           Masculino
                         </div>
-                        <div className="text-xl font-bold text-white mt-1">
+                        <div className="text-xl font-bold text-slate-900 dark:text-white mt-1">
                           {demographics?.by_gender.male ?? 0}
-                          <span className="text-xs text-slate-400 font-normal ml-2">({malePct}%)</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 font-normal ml-2">({malePct}%)</span>
                         </div>
                       </div>
 
-                      <div className="bg-slate-800/40 p-3 rounded-xl border border-slate-800">
-                        <div className="flex items-center gap-2 text-xs text-pink-400 font-semibold">
+                      <div className="dash-subcard p-3">
+                        <div className="flex items-center gap-2 text-xs text-pink-600 dark:text-pink-400 font-semibold">
                           <div className="w-2.5 h-2.5 rounded-full bg-pink-500" />
                           Feminino
                         </div>
-                        <div className="text-xl font-bold text-white mt-1">
+                        <div className="text-xl font-bold text-slate-900 dark:text-white mt-1">
                           {demographics?.by_gender.female ?? 0}
-                          <span className="text-xs text-slate-400 font-normal ml-2">({femalePct}%)</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 font-normal ml-2">({femalePct}%)</span>
                         </div>
                       </div>
                     </div>
@@ -569,9 +565,9 @@ export const ExecutiveDashboardModule: React.FC = () => {
             </div>
 
             {/* Faixa Etária */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-                <PieChart className="w-5 h-5 text-indigo-400" />
+            <div className="dash-card p-6">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <PieChart className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
                 Composição por Faixa Etária
               </h3>
 
@@ -593,12 +589,12 @@ export const ExecutiveDashboardModule: React.FC = () => {
                       return (
                         <div key={group.label}>
                           <div className="flex justify-between text-xs mb-1">
-                            <span className="text-slate-300">{group.label}</span>
-                            <span className="text-slate-400 font-semibold">
+                            <span className="text-slate-700 dark:text-slate-300">{group.label}</span>
+                            <span className="text-slate-500 dark:text-slate-400 font-semibold">
                               {group.count} ({pct}%)
                             </span>
                           </div>
-                          <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                          <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                             <div
                               className={`${group.color} h-full rounded-full transition-all`}
                               style={{ width: `${pct}%` }}
@@ -614,40 +610,40 @@ export const ExecutiveDashboardModule: React.FC = () => {
           </div>
 
           {/* Congregações: Sede vs Filiais */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <Layers className="w-5 h-5 text-indigo-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <Layers className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               Membros por Congregação / Unidade
             </h3>
 
             {demographics?.by_congregation.length === 0 ? (
-              <p className="text-slate-400 text-xs">Nenhuma congregação vinculada.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-xs">Nenhuma congregação vinculada.</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {demographics?.by_congregation.map((cong) => (
                   <div
                     key={cong.id}
-                    className="bg-slate-800/40 border border-slate-800 p-4 rounded-xl flex items-center justify-between"
+                    className="dash-subcard p-4 flex items-center justify-between"
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white">{cong.name}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{cong.name}</span>
                         {cong.is_main && (
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                             Sede
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-slate-400 mt-0.5 block">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 block">
                         Unidade #{cong.id}
                       </span>
                     </div>
 
                     <div className="text-right">
-                      <div className="text-2xl font-black text-indigo-400">
+                      <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400">
                         {cong.members_count}
                       </div>
-                      <span className="text-[11px] text-slate-400">membros</span>
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400">membros</span>
                     </div>
                   </div>
                 ))}
@@ -661,37 +657,37 @@ export const ExecutiveDashboardModule: React.FC = () => {
       {activeTab === 'ministries' && (
         <div className="space-y-6">
           {/* Card de Eficiência de Escalas */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-indigo-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               Eficiência e Confirmação de Escalas (Mês Atual)
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-              <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400">Total de Alocações</span>
-                <div className="text-2xl font-extrabold text-white mt-1">
+              <div className="dash-subcard p-4">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Total de Alocações</span>
+                <div className="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
                   {ministryStats?.schedules_this_month.total_allocations ?? 0}
                 </div>
               </div>
 
-              <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400">Confirmadas</span>
-                <div className="text-2xl font-extrabold text-emerald-400 mt-1">
+              <div className="dash-subcard p-4">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Confirmadas</span>
+                <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">
                   {ministryStats?.schedules_this_month.confirmed ?? 0}
                 </div>
               </div>
 
-              <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400">Pendentes</span>
-                <div className="text-2xl font-extrabold text-amber-400 mt-1">
+              <div className="dash-subcard p-4">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Pendentes</span>
+                <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">
                   {ministryStats?.schedules_this_month.pending ?? 0}
                 </div>
               </div>
 
-              <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-800">
-                <span className="text-xs text-slate-400">Taxa de Confirmação</span>
-                <div className="text-2xl font-extrabold text-indigo-400 mt-1">
+              <div className="dash-subcard p-4">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Taxa de Confirmação</span>
+                <div className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-1">
                   {ministryStats?.schedules_this_month.confirmation_rate ?? 0}%
                 </div>
               </div>
@@ -699,35 +695,35 @@ export const ExecutiveDashboardModule: React.FC = () => {
           </div>
 
           {/* Voluntários por Ministério */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <HeartHandshake className="w-5 h-5 text-indigo-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+              <HeartHandshake className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               Voluntários Cadastrados por Departamento Ministerial
             </h3>
 
             {ministryStats?.ministries.length === 0 ? (
-              <p className="text-slate-400 text-xs">Nenhum ministério cadastrado.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-xs">Nenhum ministério cadastrado.</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {ministryStats?.ministries.map((min) => (
                   <div
                     key={min.id}
-                    className="bg-slate-800/40 border border-slate-800 p-4 rounded-xl flex items-center justify-between"
+                    className="dash-subcard p-4 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className="w-3.5 h-3.5 rounded-full"
+                        className="w-3.5 h-3.5 rounded-full shrink-0"
                         style={{ backgroundColor: min.color || '#6366f1' }}
                       />
                       <div>
-                        <span className="text-sm font-bold text-white block">{min.name}</span>
-                        <span className="text-xs text-slate-400">Equipe ativa</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white block">{min.name}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">Equipe ativa</span>
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <span className="text-xl font-bold text-white">{min.volunteers_count}</span>
-                      <span className="text-[11px] text-slate-400 block">voluntários</span>
+                      <span className="text-xl font-bold text-slate-900 dark:text-white">{min.volunteers_count}</span>
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400 block">voluntários</span>
                     </div>
                   </div>
                 ))}
@@ -741,32 +737,32 @@ export const ExecutiveDashboardModule: React.FC = () => {
       {activeTab === 'pastoral' && (
         <div className="space-y-6">
           {/* Alerta 1: Membros Ausentes há mais de 60 dias */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="dash-card p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500 dark:text-amber-400" />
                   Membros sem Frequência Registrada há mais de 60 dias
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Lista de retenção pastoral para contato fraterno, visitação ou oração.
                 </p>
               </div>
 
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 self-start sm:self-auto">
                 {pastoralAlerts?.members_absent_60_days.length ?? 0} membros
               </span>
             </div>
 
             {pastoralAlerts?.members_absent_60_days.length === 0 ? (
-              <div className="bg-slate-800/30 border border-slate-800 p-6 rounded-xl text-center text-slate-400 text-sm">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
+              <div className="dash-subcard p-6 text-center text-slate-500 dark:text-slate-400 text-sm">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400 mx-auto mb-2" />
                 Excelente! Nenhum membro ativo está afastado há mais de 60 dias.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-800/60 text-slate-400 uppercase font-semibold">
+                  <thead className="bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 uppercase font-semibold">
                     <tr>
                       <th className="p-3 rounded-l-lg">Membro</th>
                       <th className="p-3">Congregação</th>
@@ -774,26 +770,26 @@ export const ExecutiveDashboardModule: React.FC = () => {
                       <th className="p-3 rounded-r-lg text-right">Ação Pastoral</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                     {pastoralAlerts?.members_absent_60_days.map((member) => (
-                      <tr key={member.id} className="hover:bg-slate-800/30 transition">
-                        <td className="p-3 font-medium text-white flex items-center gap-2">
+                      <tr key={member.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+                        <td className="p-3 font-medium text-slate-900 dark:text-white flex items-center gap-2">
                           <UserCheck className="w-4 h-4 text-slate-400" />
                           {member.name}
                         </td>
-                        <td className="p-3 text-slate-300">
+                        <td className="p-3 text-slate-600 dark:text-slate-300">
                           {member.congregation?.name || 'Sede'}
                         </td>
-                        <td className="p-3 text-slate-400 space-y-0.5">
+                        <td className="p-3 text-slate-500 dark:text-slate-400 space-y-0.5">
                           {member.phone && (
                             <div className="flex items-center gap-1.5">
-                              <Phone className="w-3.5 h-3.5 text-slate-500" />
+                              <Phone className="w-3.5 h-3.5 text-slate-400" />
                               <span>{member.phone}</span>
                             </div>
                           )}
                           {member.email && (
                             <div className="flex items-center gap-1.5">
-                              <Mail className="w-3.5 h-3.5 text-slate-500" />
+                              <Mail className="w-3.5 h-3.5 text-slate-400" />
                               <span>{member.email}</span>
                             </div>
                           )}
@@ -803,7 +799,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                             {member.phone && (
                               <a
                                 href={`tel:${member.phone}`}
-                                className="px-2.5 py-1 rounded bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/30 transition inline-flex items-center gap-1"
+                                className="px-2.5 py-1 rounded bg-indigo-50 dark:bg-indigo-600/20 hover:bg-indigo-100 dark:hover:bg-indigo-600/40 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 transition inline-flex items-center gap-1 font-medium"
                               >
                                 <Phone className="w-3 h-3" />
                                 Ligar
@@ -812,7 +808,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                             {member.email && (
                               <a
                                 href={`mailto:${member.email}`}
-                                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition inline-flex items-center gap-1"
+                                className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition inline-flex items-center gap-1 font-medium"
                               >
                                 <Mail className="w-3 h-3" />
                                 E-mail
@@ -829,18 +825,18 @@ export const ExecutiveDashboardModule: React.FC = () => {
           </div>
 
           {/* Alerta 2: Pedidos de Oração Pendentes há mais de 7 dias */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-indigo-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               Pedidos de Oração sem Atendimento há mais de 7 dias
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
               Motivos apresentados pelos membros que aguardam retorno ou intercessão da liderança.
             </p>
 
             {pastoralAlerts?.pending_prayer_alerts.length === 0 ? (
-              <div className="bg-slate-800/30 border border-slate-800 p-6 rounded-xl text-center text-slate-400 text-sm">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
+              <div className="dash-subcard p-6 text-center text-slate-500 dark:text-slate-400 text-sm">
+                <CheckCircle2 className="w-8 h-8 text-emerald-500 dark:text-emerald-400 mx-auto mb-2" />
                 Todos os pedidos de oração recentes foram acolhidos e atendidos.
               </div>
             ) : (
@@ -848,17 +844,17 @@ export const ExecutiveDashboardModule: React.FC = () => {
                 {pastoralAlerts?.pending_prayer_alerts.map((prayer) => (
                   <div
                     key={prayer.id}
-                    className="bg-slate-800/40 border border-slate-800 p-4 rounded-xl flex items-center justify-between"
+                    className="dash-subcard p-4 flex items-center justify-between"
                   >
                     <div>
-                      <span className="text-sm font-semibold text-white block">{prayer.title}</span>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-sm font-semibold text-slate-900 dark:text-white block">{prayer.title}</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
                         Por {prayer.member?.name || 'Membro anônimo'} •{' '}
                         {new Date(prayer.created_at).toLocaleDateString('pt-BR')}
                       </span>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
                       Pendente de Acolhimento
                     </span>
                   </div>
@@ -872,24 +868,24 @@ export const ExecutiveDashboardModule: React.FC = () => {
       {/* ABA 5: CENTRAL DE EXPORTAÇÕES CSV */}
       {activeTab === 'exports' && (
         <div className="space-y-6">
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-indigo-400" />
+          <div className="dash-card p-6">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <FileSpreadsheet className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
               Exportações Seguras de Dados em CSV (Excel UTF-8 BOM)
             </h3>
-            <p className="text-xs text-slate-400 mb-6">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
               Todos os arquivos exportados contêm cabeçalhos padronizados, separador ponto-e-vírgula (;) e codificação UTF-8 com BOM para abertura perfeita no Microsoft Excel e Google Planilhas.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Card 1: Membros */}
-              <div className="bg-slate-800/40 border border-slate-800 p-5 rounded-xl flex flex-col justify-between hover:border-slate-700 transition">
+              <div className="dash-subcard p-5 flex flex-col justify-between hover:shadow-md transition">
                 <div>
-                  <div className="p-3 rounded-xl bg-blue-500/10 text-blue-400 inline-block mb-3">
+                  <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 inline-block mb-3">
                     <Users className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-bold text-white">Rol Geral de Membros</h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Rol Geral de Membros</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Exporta a relação completa de membros da congregação com CPF, e-mail, telefone, data de nascimento, congregação e status.
                   </p>
                 </div>
@@ -897,7 +893,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                 <button
                   onClick={() => handleExport('members', 'Membros')}
                   disabled={downloading !== null}
-                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50"
+                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50 shadow-sm"
                 >
                   <Download className={`w-4 h-4 ${downloading === 'members' ? 'animate-bounce' : ''}`} />
                   {downloading === 'members' ? 'Gerando CSV...' : 'Baixar Lista de Membros'}
@@ -905,13 +901,13 @@ export const ExecutiveDashboardModule: React.FC = () => {
               </div>
 
               {/* Card 2: Lançamentos Financeiros */}
-              <div className="bg-slate-800/40 border border-slate-800 p-5 rounded-xl flex flex-col justify-between hover:border-slate-700 transition">
+              <div className="dash-subcard p-5 flex flex-col justify-between hover:shadow-md transition">
                 <div>
-                  <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-400 inline-block mb-3">
+                  <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 inline-block mb-3">
                     <DollarSign className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-bold text-white">Livro Caixa & Movimentações</h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Livro Caixa & Movimentações</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Exporta todos os lançamentos de receitas e despesas com conta bancária/caixa, plano de contas, valores e status de conciliação.
                   </p>
                 </div>
@@ -919,7 +915,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                 <button
                   onClick={() => handleExport('financial', 'Financeiro')}
                   disabled={downloading !== null}
-                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50"
+                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50 shadow-sm"
                 >
                   <Download className={`w-4 h-4 ${downloading === 'financial' ? 'animate-bounce' : ''}`} />
                   {downloading === 'financial' ? 'Gerando CSV...' : 'Baixar Livro Financeiro'}
@@ -927,13 +923,13 @@ export const ExecutiveDashboardModule: React.FC = () => {
               </div>
 
               {/* Card 3: Presenças e Check-in */}
-              <div className="bg-slate-800/40 border border-slate-800 p-5 rounded-xl flex flex-col justify-between hover:border-slate-700 transition">
+              <div className="dash-subcard p-5 flex flex-col justify-between hover:shadow-md transition">
                 <div>
-                  <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 inline-block mb-3">
+                  <div className="p-3 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 inline-block mb-3">
                     <Calendar className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-bold text-white">Histórico de Frequência</h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">Histórico de Frequência</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Exporta o histórico de presenças em cultos e eventos com nome do participante, data e hora do check-in efetuado.
                   </p>
                 </div>
@@ -941,7 +937,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
                 <button
                   onClick={() => handleExport('attendance', 'Presenças')}
                   disabled={downloading !== null}
-                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50"
+                  className="mt-5 w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50 shadow-sm"
                 >
                   <Download className={`w-4 h-4 ${downloading === 'attendance' ? 'animate-bounce' : ''}`} />
                   {downloading === 'attendance' ? 'Gerando CSV...' : 'Baixar Histórico de Presenças'}
