@@ -29,15 +29,28 @@ class IdentifyTenant
         if ($user->isPlatformAdmin()) {
             // Platform admin pode especificar um tenant para suporte ou visualização autorizada
             if ($requestedTenantId) {
-                $tenant = Tenant::find($requestedTenantId);
+                $tenant = is_numeric($requestedTenantId)
+                    ? Tenant::find($requestedTenantId)
+                    : Tenant::where('slug', $requestedTenantId)->orWhere('uuid', $requestedTenantId)->first();
             } else {
                 $tenant = $user->defaultTenant() ?? Tenant::first();
             }
         } else {
             // Usuário normal: validação estrita da associação
             if ($requestedTenantId) {
+                $tenant = is_numeric($requestedTenantId)
+                    ? Tenant::find($requestedTenantId)
+                    : Tenant::where('slug', $requestedTenantId)->orWhere('uuid', $requestedTenantId)->first();
+
+                if (!$tenant) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Igreja informada não encontrada.',
+                    ], 404);
+                }
+
                 $hasAssociation = $user->tenantUsers()
-                    ->where('tenant_id', $requestedTenantId)
+                    ->where('tenant_id', $tenant->id)
                     ->where('status', 'active')
                     ->exists();
 
@@ -47,8 +60,6 @@ class IdentifyTenant
                         'message' => 'Você não possui permissão para acessar esta igreja.',
                     ], 403);
                 }
-
-                $tenant = Tenant::find($requestedTenantId);
             } else {
                 $tenant = $user->defaultTenant();
             }

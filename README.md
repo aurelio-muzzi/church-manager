@@ -36,12 +36,11 @@ Acesse o sistema em `http://localhost:5173`.
 |---|---|---|
 | **01** | Fundação (Laravel, React+TS, Docker, MySQL, Testes) | **Concluída (`v0.1.0`)** |
 | **02** | Multi-Tenancy e Segurança (Isolamento, Sanctum, Roles) | **Concluída (`v0.2.0`)** |
-| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações) | Próxima |
-
-| **04** | Ministérios e Voluntários | Pendente |
-| **05** | Eventos e Presença (Manual e QR Code) | Pendente |
-| **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | Pendente |
-| **07** | Portal do Membro | Pendente |
+| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações) | **Concluída (`v0.3.0`)** |
+| **04** | Ministérios e Voluntários | **Concluída (`v0.4.0`)** |
+| **05** | Eventos e Presença (Manual e QR Code) | **Concluída (`v0.5.0`)** |
+| **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
+| **07** | Portal do Membro | Próxima |
 | **08** | Dashboard e Relatórios | Pendente |
 | **09** | Auditoria e Preparação para Produção | Pendente |
 

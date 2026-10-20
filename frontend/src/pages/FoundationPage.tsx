@@ -5,6 +5,10 @@ import { CardSkeleton } from '../components/ui/Skeleton';
 import { useAuth } from '../contexts/AuthContext';
 import { LoginForm } from '../components/auth/LoginForm';
 import { PlatformTenantManager } from '../components/tenants/PlatformTenantManager';
+import { SecretaryModule } from '../components/secretary/SecretaryModule';
+import { MinistryModule } from '../components/ministry/MinistryModule';
+import { EventModule } from '../components/event/EventModule';
+import { FinancialModule } from '../components/financial/FinancialModule';
 import { 
   Server, 
   Database, 
@@ -18,7 +22,9 @@ import {
   AlertCircle,
   Church,
   Shield,
-  UserCheck
+  UserCheck,
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 
 interface Stage {
@@ -41,35 +47,36 @@ const STAGES: Stage[] = [
     number: '02',
     name: 'Multi-tenancy e Segurança',
     branch: 'feature/etapa-02-multitenancy-seguranca',
-    status: 'in_progress',
+    status: 'concluded',
     desc: 'Isolamento lógico estrito por tenant, autenticação Sanctum, roles e policies.'
   },
   {
     number: '03',
     name: 'Secretaria e Membros',
     branch: 'feature/etapa-03-secretaria',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Membros, famílias, visitantes, congregações e fluxo de aprovação cadastral.'
   },
   {
     number: '04',
     name: 'Ministérios e Voluntários',
     branch: 'feature/etapa-04-ministerios-voluntarios',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Departamentos, equipes, escalas e detecção de conflitos de horários.'
   },
+
   {
     number: '05',
     name: 'Eventos e Presença',
     branch: 'feature/etapa-05-eventos-presenca',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Cultos, eventos, inscrições, presença manual e check-in seguro via QR Code.'
   },
   {
     number: '06',
     name: 'Financeiro Avançado',
     branch: 'feature/etapa-06-financeiro',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Dízimos/ofertas, despesas, contas, orçamentos, conciliação manual e auditoria.'
   },
   {
@@ -104,6 +111,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
+  const [churchActiveModule, setChurchActiveModule] = useState<'financial' | 'events' | 'ministries' | 'secretary'>('financial');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -234,10 +242,105 @@ export const FoundationPage: React.FC = () => {
                     </div>
                   </div>
                 ) : null}
+
+                {/* Seletor de Módulos da Igreja */}
+                <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => setChurchActiveModule('financial')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'financial' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'financial' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <DollarSign size={18} />
+                    Financeiro Avançado (Etapa 06)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('events')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'events' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'events' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Calendar size={18} />
+                    Eventos & Presença (Etapa 05)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('ministries')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'ministries' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'ministries' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Layers size={18} />
+                    Ministérios & Escalas (Etapa 04)
+                  </button>
+
+                  <button
+                    onClick={() => setChurchActiveModule('secretary')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'secretary' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'secretary' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <Church size={18} />
+                    Secretaria & Membros (Etapa 03)
+                  </button>
+                </div>
+
+                {/* Renderização do Módulo Ativo */}
+                {churchActiveModule === 'financial' ? (
+                  <FinancialModule />
+                ) : churchActiveModule === 'events' ? (
+                  <EventModule />
+                ) : churchActiveModule === 'ministries' ? (
+                  <MinistryModule />
+                ) : (
+                  <SecretaryModule />
+                )}
               </div>
             )}
           </div>
         )}
+
       </section>
 
       {/* API Health Live Status */}
