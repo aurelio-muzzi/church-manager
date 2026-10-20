@@ -22,8 +22,10 @@ services:
       DB_PASSWORD: church_password
       SESSION_DRIVER: cookie
       QUEUE_CONNECTION: sync
+      PHP_CLI_SERVER_WORKERS: 6
     volumes:
       - ./backend:/var/www/html
+      - ./docker/backend/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
     ports:
       - "8000:8000"
     depends_on:
