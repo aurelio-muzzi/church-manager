@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\Dashboard\DashboardController;
 use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Http\Controllers\Api\v1\Financial\FinancialAccountController;
 use App\Http\Controllers\Api\v1\Financial\FinancialCategoryController;
@@ -121,6 +122,18 @@ Route::prefix('v1')->group(function () {
                 Route::get('/prayer-requests', [MemberPortalController::class, 'prayerRequests']);
                 Route::post('/prayer-requests', [MemberPortalController::class, 'storePrayerRequest']);
                 Route::get('/notices', [MemberPortalController::class, 'notices']);
+            });
+
+            // Módulo de Dashboard Executivo, BI e Relatórios
+            Route::prefix('dashboard')->group(function () {
+                Route::get('/executive', [DashboardController::class, 'executive']);
+                Route::get('/demographics', [DashboardController::class, 'demographics']);
+                Route::get('/ministries', [DashboardController::class, 'ministries']);
+                Route::get('/financial-evolution', [DashboardController::class, 'financialEvolution']);
+                Route::get('/pastoral-alerts', [DashboardController::class, 'pastoralAlerts']);
+                Route::get('/export/members', [DashboardController::class, 'exportMembers']);
+                Route::get('/export/financial', [DashboardController::class, 'exportFinancial']);
+                Route::get('/export/attendance', [DashboardController::class, 'exportAttendance']);
             });
         });
     });

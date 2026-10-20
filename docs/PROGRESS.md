@@ -15,8 +15,8 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | **Concluída** | `v0.5.0` |
 | **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | **Concluída** | `v0.6.0` |
 | **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | **Concluída** | `v0.7.0` |
-| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Próxima | `v0.8.0` |
-| **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Pendente | `v1.0.0` |
+| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | **Concluída** | `v0.8.0` |
+| **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Próxima | `v1.0.0` |
 
 ---
 
@@ -175,4 +175,38 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 - **Validação**:
   - Testes automatizados com PHPUnit: 53 testes, 238 assertions (100% aprovados), cobrindo dashboard do membro, perfil, envio de solicitação de alteração cadastral, consulta de escalas, confirmação de escala, recusa com motivo, bloqueio contra resposta em escala alheia (403), inscrição em evento com QR Code Token, consulta exclusiva de dízimos do próprio membro, pedidos de oração e mural de avisos.
   - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 08 — Dashboard Executivo e Relatórios (BI)
+- **Branch**: `feature/etapa-08-dashboard-relatorios`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.8.0`
+- **Implementações**:
+  - Serviço analítico `DashboardAnalyticsService` com inteligência e métricas em tempo real isoladas por tenant:
+    - `getExecutiveOverview()`: total de membros ativos, novos membros no mês corrente e mês anterior, taxa percentual de crescimento líquido, contagem de voluntários ativos, taxa de engajamento ministerial %, presenças nos últimos 30 dias e consolidado financeiro (saldo em contas, receitas do mês, despesas do mês, resultado líquido e indicador de superávit/déficit).
+    - `getDemographics()`: distribuição por gênero (masculino, feminino, outro, não informado), faixas etárias agrupadas (<12, 12-17, 18-29, 30-59, 60+) e distribuição por congregação com identificação de Sede vs Filiais.
+    - `getMinistryStats()`: voluntários alocados por departamento com cores personalizadas e eficiência das escalas do mês (total, confirmadas, pendentes, recusadas e taxa % de confirmação).
+    - `getFinancialEvolution()`: timeline histórica de 6 meses com receitas arrecadadas vs despesas pagas e resultado líquido.
+    - `getPastoralAlerts()`: radar pastoral de retenção identificando membros ausentes há mais de 60 dias sem check-in registrado (com contatos de telefone e e-mail com botões diretos de ligação e mensagem) e pedidos de oração pendentes há mais de 7 dias sem atendimento.
+    - `exportMembersCsv()`, `exportFinancialCsv()`, `exportAttendanceCsv()`: exportações seguras em formato CSV com cabeçalhos padronizados, separador ponto-e-vírgula (`;`) e codificação UTF-8 com BOM (`\xEF\xBB\xBF`) para compatibilidade nativa com Microsoft Excel e Google Planilhas.
+  - `DashboardController` com 8 endpoints REST sob prefixo `/tenant/dashboard/*`:
+    - `GET /executive`
+    - `GET /demographics`
+    - `GET /ministries`
+    - `GET /financial-evolution`
+    - `GET /pastoral-alerts`
+    - `GET /export/members`
+    - `GET /export/financial`
+    - `GET /export/attendance`
+  - Frontend completo com `ExecutiveDashboardModule.tsx`:
+    - Aba Visão Geral & Finanças com 4 cards de KPIs com tendências e crescimento, quadro de resultado operacional e gráfico de barras semestral com tooltips e comparativos.
+    - Aba Demografia & Congregações com barras de progresso proporcionais para gênero e faixas etárias, e cards por congregação.
+    - Aba Ministérios & Voluntariado com eficiência de escalas e contagem de voluntários por equipe.
+    - Aba Cuidado Pastoral & Alertas com tabela de membros ausentes (>60 dias) com botões rápidos de ligação (`tel:`) e e-mail (`mailto:`), e pedidos de oração sem atendimento.
+    - Aba Central de Exportações com 3 cards de download direto em 1 clique (Membros, Movimentações Financeiras e Histórico de Presenças).
+- **Validação**:
+  - Testes automatizados com PHPUnit: 62 testes, 282 assertions (100% aprovados), cobrindo visão executiva, demografia, ministérios, evolução financeira, alertas pastorais, exportações em CSV de membros, financeiro e presenças, e isolamento estrito entre tenants.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
 

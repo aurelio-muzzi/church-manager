@@ -41,8 +41,8 @@ Acesse o sistema em `http://localhost:5173`.
 | **05** | Eventos e Presença (Manual e QR Code) | **Concluída (`v0.5.0`)** |
 | **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
 | **07** | Portal do Membro | **Concluída (`v0.7.0`)** |
-| **08** | Dashboard e Relatórios | Próxima |
-| **09** | Auditoria e Preparação para Produção | Pendente |
+| **08** | Dashboard e Relatórios (BI, Métricas, Exportações CSV) | **Concluída (`v0.8.0`)** |
+| **09** | Auditoria e Preparação para Produção | Próxima |
 
 ---
 
