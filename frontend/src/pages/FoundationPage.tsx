@@ -5,6 +5,7 @@ import { CardSkeleton } from '../components/ui/Skeleton';
 import { useAuth } from '../contexts/AuthContext';
 import { LoginForm } from '../components/auth/LoginForm';
 import { PlatformTenantManager } from '../components/tenants/PlatformTenantManager';
+import { SecretaryModule } from '../components/secretary/SecretaryModule';
 import { 
   Server, 
   Database, 
@@ -41,14 +42,14 @@ const STAGES: Stage[] = [
     number: '02',
     name: 'Multi-tenancy e Segurança',
     branch: 'feature/etapa-02-multitenancy-seguranca',
-    status: 'in_progress',
+    status: 'concluded',
     desc: 'Isolamento lógico estrito por tenant, autenticação Sanctum, roles e policies.'
   },
   {
     number: '03',
     name: 'Secretaria e Membros',
     branch: 'feature/etapa-03-secretaria',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Membros, famílias, visitantes, congregações e fluxo de aprovação cadastral.'
   },
   {
@@ -58,6 +59,7 @@ const STAGES: Stage[] = [
     status: 'pending',
     desc: 'Departamentos, equipes, escalas e detecção de conflitos de horários.'
   },
+
   {
     number: '05',
     name: 'Eventos e Presença',
@@ -234,10 +236,14 @@ export const FoundationPage: React.FC = () => {
                     </div>
                   </div>
                 ) : null}
+
+                {/* Módulo de Secretaria Integrado */}
+                <SecretaryModule />
               </div>
             )}
           </div>
         )}
+
       </section>
 
       {/* API Health Live Status */}

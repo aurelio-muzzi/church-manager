@@ -10,8 +10,8 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 |---|---|---|---|---|
 | **01** | Fundação técnica (Laravel, React+TS, Docker, padrões, testes base) | `feature/etapa-01-fundacao` | **Concluída** | `v0.1.0` |
 | **02** | Multi-tenancy e Segurança (Isolamento de tenants, Auth Sanctum, Roles/Policies) | `feature/etapa-02-multitenancy-seguranca` | **Concluída** | `v0.2.0` |
-| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-03-secretaria` | Próxima | `v0.3.0` |
-| **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | Pendente | `v0.4.0` |
+| **03** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-03-secretaria` | **Concluída** | `v0.3.0` |
+| **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | Próxima | `v0.4.0` |
 | **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | Pendente | `v0.5.0` |
 | **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | Pendente | `v0.6.0` |
 | **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Pendente | `v0.7.0` |
@@ -35,6 +35,26 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 - **Data de Conclusão**: 20/10/2026
 - **Status**: **Concluída**
 - **Versão**: `v0.2.0`
+
+### Etapa 03 — Secretaria
+- **Branch**: `feature/etapa-03-secretaria`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.3.0`
+- **Implementações**:
+  - Modelagem e migrations de `congregations`, `families`, `members`, `visitors`, `visitor_visits` e `member_change_requests`.
+  - Isolamento de dados automático com `BelongsToTenant` e `TenantScope` em todas as entidades.
+  - Cálculo automático de menor de idade (`is_minor`) com base na data de nascimento para conformidade com a LGPD.
+  - CRUD completo de congregações (sedes e filiais) com contagem de membros ativos.
+  - Cadastro de membros com filtros avançados (status de vínculo, congregação, menores de idade).
+  - Gestão de visitantes com histórico de visitas e fluxo atômico de conversão em membro oficial.
+  - Fluxo de aprovação cadastral: solicitações de membros ficam pendentes, com comparativo antes/depois, e são aprovadas ou rejeitadas com justificativa pela secretaria.
+  - Frontend completo com abas interativas, skeletons, modais e feedback de validação.
+- **Validação**:
+  - Testes automatizados com PHPUnit: 20 testes, 84 assertions (100% aprovados), cobrindo isolamento estrito de membros entre tenants, cálculo de menor de idade, conversão de visitantes e fluxo de aprovação/rejeição de alterações cadastrais.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
 - **Implementações**:
   - Modelagem e migrations de `tenants`, `tenant_users` e `audit_logs`.
   - Serviço singleton `TenantContext` para autoridade e resolução do tenant ativo.
