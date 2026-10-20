@@ -34,6 +34,8 @@ export interface Member {
   address?: string | null;
   neighborhood?: string | null;
   city?: string | null;
+  state?: string | null;
+  postal_code?: string | null;
   emergency_contact_name?: string | null;
   emergency_contact_phone?: string | null;
   notes?: string | null;

@@ -14,8 +14,8 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **04** | Ministérios e Voluntários (Departamentos, Equipes, Lideranças, Escalas) | `feature/etapa-04-ministerios-voluntarios` | **Concluída** | `v0.4.0` |
 | **05** | Eventos e Presença (Cultos, Eventos, Inscrições, Check-in Manual e QR Code) | `feature/etapa-05-eventos-presenca` | **Concluída** | `v0.5.0` |
 | **06** | Financeiro Avançado (Contas, Categorias, Dízimos/Ofertas, Despesas, Orçamentos, Conciliação) | `feature/etapa-06-financeiro` | **Concluída** | `v0.6.0` |
-| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | Próxima | `v0.7.0` |
-| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Pendente | `v0.8.0` |
+| **07** | Portal do Membro (Perfil, Solicitações, Escalas, Eventos, Avisos, Histórico) | `feature/etapa-07-portal-membro` | **Concluída** | `v0.7.0` |
+| **08** | Dashboard e Relatórios (Métricas administrativas, financeiras, exportações CSV/PDF) | `feature/etapa-08-dashboard-relatorios` | Próxima | `v0.8.0` |
 | **09** | Auditoria e Preparação para Produção (Revisão de segurança, performance, build final) | `feature/etapa-09-auditoria-producao` | Pendente | `v1.0.0` |
 
 ---
@@ -145,3 +145,34 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 - **Validação**:
   - Testes automatizados com PHPUnit: 44 testes, 198 assertions (100% aprovados), cobrindo contas, plano de contas, transações de receitas e despesas com atualização de saldo, exclusão com reversão, bloqueio de exclusão/edição de transações conciliadas, relatório resumo consolidado, extrato de contribuições do membro, orçamentos e isolamento estrito entre tenants.
   - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+
+### Etapa 07 — Portal do Membro
+- **Branch**: `feature/etapa-07-portal-membro`
+- **Data de Início**: 20/10/2026
+- **Data de Conclusão**: 20/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v0.7.0`
+- **Implementações**:
+  - Modelagem e migrations de `prayer_requests` (pedidos de oração e atendimento pastoral com suporte a sigilo/confidencialidade) e `church_notices` (mural de comunicados com avisos fixados, categorias e datas de expiração).
+  - Isolamento multi-tenant estrito com `BelongsToTenant` e `TenantScope` em todas as novas entidades.
+  - `MemberPortalController` com 11 endpoints REST dedicados à experiência do membro:
+    - `/dashboard`: Resumo de escalas pendentes, próximas escalas, inscrições ativas com QR Code e avisos fixados.
+    - `/profile` & `/profile/update-request`: Consulta do perfil com família e congregação, e fluxo formal de solicitação de alteração cadastral enviado à secretaria.
+    - `/schedules` & `/schedules/{scheduleVolunteer}/respond`: Visualização exclusiva de escalas em que o membro está alocado, confirmação de presença e recusa com justificativa obrigatória (bloqueio 403 em escalas alheias).
+    - `/events` & `/events/{event}/register`: Inscrição direta em eventos futuros com geração automática de `qr_code_token` para check-in no culto.
+    - `/contributions`: Extrato pessoal de contribuições financeiras e dízimos nominais com total anual para conformidade do IRPF.
+    - `/prayer-requests`: Envio de pedidos de oração (gerais e confidenciais apenas para a equipe pastoral) com acompanhamento de status (`pending`, `praying`, `answered`).
+    - `/notices`: Mural oficial de avisos da igreja com destaques fixados e filtros por categoria.
+  - Seeders enriquecidos com membro modelo (`membro@batistacentral.local`), escalas pendentes, inscrição ativa na conferência com token de QR Code, pedidos de oração e avisos oficiais no mural.
+  - Frontend completo com `MemberPortalModule.tsx`:
+    - Saudação personalizada e Cartão Digital de Membro com dados oficiais e identificador.
+    - Aba de Minhas Escalas com botões de confirmação instantânea e modal de justificativa de recusa.
+    - Aba de Meus Eventos com Cartão do Participante, Token de Check-in em destaque e botão de cópia rápida.
+    - Aba de Pedidos de Oração com formulário interativo e opção de confidencialidade.
+    - Aba de Mural de Avisos com cards filtráveis por categoria e avisos fixados com badge dourada.
+    - Aba de Extrato de Dízimos com total anual consolidado e tabela transparente.
+    - Aba de Atualização Cadastral simplificada com resumo do perfil e envio para a secretaria.
+- **Validação**:
+  - Testes automatizados com PHPUnit: 53 testes, 238 assertions (100% aprovados), cobrindo dashboard do membro, perfil, envio de solicitação de alteração cadastral, consulta de escalas, confirmação de escala, recusa com motivo, bloqueio contra resposta em escala alheia (403), inscrição em evento com QR Code Token, consulta exclusiva de dízimos do próprio membro, pedidos de oração e mural de avisos.
+  - Frontend: `tsc -b && vite build` aprovado sem erros ou avisos (100% aprovado).
+

@@ -40,8 +40,8 @@ Acesse o sistema em `http://localhost:5173`.
 | **04** | Ministérios e Voluntários | **Concluída (`v0.4.0`)** |
 | **05** | Eventos e Presença (Manual e QR Code) | **Concluída (`v0.5.0`)** |
 | **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
-| **07** | Portal do Membro | Próxima |
-| **08** | Dashboard e Relatórios | Pendente |
+| **07** | Portal do Membro | **Concluída (`v0.7.0`)** |
+| **08** | Dashboard e Relatórios | Próxima |
 | **09** | Auditoria e Preparação para Produção | Pendente |
 
 ---

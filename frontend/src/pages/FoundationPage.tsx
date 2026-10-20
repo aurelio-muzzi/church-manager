@@ -9,6 +9,7 @@ import { SecretaryModule } from '../components/secretary/SecretaryModule';
 import { MinistryModule } from '../components/ministry/MinistryModule';
 import { EventModule } from '../components/event/EventModule';
 import { FinancialModule } from '../components/financial/FinancialModule';
+import { MemberPortalModule } from '../components/member-portal/MemberPortalModule';
 import { 
   Server, 
   Database, 
@@ -24,7 +25,8 @@ import {
   Shield,
   UserCheck,
   Calendar,
-  DollarSign
+  DollarSign,
+  HeartHandshake
 } from 'lucide-react';
 
 interface Stage {
@@ -83,7 +85,7 @@ const STAGES: Stage[] = [
     number: '07',
     name: 'Portal do Membro',
     branch: 'feature/etapa-07-portal-membro',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Área do membro para solicitações, escalas, eventos e perfil restrito.'
   },
   {
@@ -111,7 +113,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'financial' | 'events' | 'ministries' | 'secretary'>('financial');
+  const [churchActiveModule, setChurchActiveModule] = useState<'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('portal');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -246,6 +248,26 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('portal')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'portal' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'portal' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <HeartHandshake size={18} />
+                    Portal do Membro (Etapa 07)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('financial')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -327,7 +349,9 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'financial' ? (
+                {churchActiveModule === 'portal' ? (
+                  <MemberPortalModule />
+                ) : churchActiveModule === 'financial' ? (
                   <FinancialModule />
                 ) : churchActiveModule === 'events' ? (
                   <EventModule />

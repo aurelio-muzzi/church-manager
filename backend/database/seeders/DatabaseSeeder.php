@@ -591,6 +591,81 @@ class DatabaseSeeder extends Seeder
                 ['tenant_id' => $tenant1->id, 'category_id' => $catEnergia->id, 'year' => now()->year],
                 ['planned_amount' => 10000.00, 'notes' => 'Projeção de custos de energia e utilidades']
             );
+
+            // ==========================================
+            // ETAPA 7: PORTAL DO MEMBRO (AVISOS, ORAÇÃO, INSCRIÇÃO)
+            // ==========================================
+
+            // 1. Inscrição do Membro Carlos na Conferência com QR Code
+            \App\Models\EventRegistration::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'event_id' => $conferencia->id, 'member_id' => $membroCarlos->id],
+                [
+                    'name' => $membroCarlos->name,
+                    'email' => $membroCarlos->email,
+                    'phone' => $membroCarlos->phone,
+                    'status' => 'confirmed',
+                    'qr_code_token' => 'CONF-CARLOS-2026',
+                ]
+            );
+
+            // 2. Pedidos de Oração do Membro Carlos
+            \App\Models\PrayerRequest::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'member_id' => $membroCarlos->id, 'title' => 'Restauração da saúde da minha mãe'],
+                [
+                    'requester_name' => $membroCarlos->name,
+                    'description' => 'Peço oração pela minha mãe que passará por exames cardiológicos esta semana. Cremos no poder curador de Deus.',
+                    'is_confidential' => false,
+                    'status' => 'praying',
+                    'pastoral_notes' => 'Apresentado na reunião de intercessão de quarta-feira.',
+                ]
+            );
+
+            \App\Models\PrayerRequest::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'member_id' => $membroCarlos->id, 'title' => 'Orientação pastoral para transição profissional'],
+                [
+                    'requester_name' => $membroCarlos->name,
+                    'description' => 'Solicito aconselhamento pastoral confidencial com o pastor titular referente a uma proposta de trabalho e mudança.',
+                    'is_confidential' => true,
+                    'status' => 'pending',
+                ]
+            );
+
+            // 3. Mural de Avisos da Igreja
+            \App\Models\ChurchNotice::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'title' => 'Retiro Anual de Famílias 2026'],
+                [
+                    'congregation_id' => $sede->id,
+                    'content' => 'Estão abertas as inscrições para o nosso Retiro de Famílias no Recanto das Águas! Vagas limitadas, garanta a participação de sua família no balcão da secretaria.',
+                    'category' => 'general',
+                    'is_pinned' => true,
+                    'published_at' => now()->subDays(2),
+                    'expires_at' => now()->addDays(30),
+                ]
+            );
+
+            \App\Models\ChurchNotice::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'title' => 'Encontro de Conexão Jovem neste Sábado'],
+                [
+                    'congregation_id' => $sede->id,
+                    'content' => 'Neste sábado às 19h teremos um bate-papo especial sobre propósito e carreira cristã com louvor acústico e lual. Traga um amigo!',
+                    'category' => 'youth',
+                    'is_pinned' => false,
+                    'published_at' => now()->subDay(),
+                    'expires_at' => now()->addDays(5),
+                ]
+            );
+
+            \App\Models\ChurchNotice::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'title' => 'Campanha do Quilo: Despensa Solidária'],
+                [
+                    'congregation_id' => $sede->id,
+                    'content' => 'No primeiro domingo do mês arrecadaremos alimentos não-perecíveis para montagem das cestas básicas da Ação Social da igreja.',
+                    'category' => 'urgent',
+                    'is_pinned' => false,
+                    'published_at' => now(),
+                    'expires_at' => now()->addDays(15),
+                ]
+            );
         });
 
         // 3. Tenant 2 - Comunidade da Fé
