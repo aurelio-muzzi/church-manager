@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
+    container_name: churchmanager_backend
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      APP_NAME: "ChurchManager"
+      APP_ENV: local
+      APP_KEY: base64:VnN4b3ZndmpqZ2Rzd2VydGh5dWlvcGFzZGZnaGprbHo=
+      APP_DEBUG: "true"
+      APP_TIMEZONE: "America/Manaus"
+      APP_URL: http://localhost:8000
+      FRONTEND_URL: http://localhost:5173
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: churchmanager
+      DB_USERNAME: church_user
+      DB_PASSWORD: church_password
+      SESSION_DRIVER: cookie
+      QUEUE_CONNECTION: sync
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: churchmanager_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: churchmanager
+      MYSQL_USER: church_user
+      MYSQL_PASSWORD: church_password
+      MYSQL_ROOT_PASSWORD: root_church_password
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_church_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    container_name: churchmanager_frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:8000/api/v1
+    depends_on:
+      - app
+
+volumes:
+  db_data:
+    driver: local
