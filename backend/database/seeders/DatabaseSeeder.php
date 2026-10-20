@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // Secretaria do Tenant 1
-        $tenantContext->runWithTenant($tenant1, function () use ($tenant1, $membroTenant1) {
+        $tenantContext->runWithTenant($tenant1, function () use ($tenant1, $membroTenant1, $pastorTenant1) {
             // Congregações
             $sede = Congregation::firstOrCreate(
                 ['tenant_id' => $tenant1->id, 'slug' => 'templo-central'],
@@ -358,6 +358,98 @@ class DatabaseSeeder extends Seeder
             \App\Models\ScheduleVolunteer::firstOrCreate(
                 ['tenant_id' => $tenant1->id, 'schedule_id' => $escalaDomingo->id, 'member_id' => $membroCarlos->id],
                 ['ministry_role_id' => $roleViolao->id, 'status' => 'pending']
+            );
+
+            // ==========================================
+            // ETAPA 5: EVENTOS, INSCRIÇÕES E CHECK-IN
+            // ==========================================
+
+            // 1. Grande Conferência com Inscrições Obrigatórias e Limite
+            $conferencia = \App\Models\Event::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'slug' => 'conferencia-avivamento-2026'],
+                [
+                    'congregation_id' => $sede->id,
+                    'title' => 'Conferência de Avivamento & Liderança 2026',
+                    'type' => 'conference',
+                    'description' => 'Três noites de louvor, capacitação de líderes e ministração profética.',
+                    'location' => 'Auditório Principal - Sede Central',
+                    'start_date' => now()->addDays(14)->toDateString(),
+                    'end_date' => now()->addDays(16)->toDateString(),
+                    'start_time' => '19:30',
+                    'end_time' => '22:00',
+                    'max_capacity' => 150,
+                    'requires_registration' => true,
+                    'is_free' => true,
+                    'status' => 'published',
+                ]
+            );
+
+            // Inscrição 1: Carlos Alberto
+            $regCarlos = \App\Models\EventRegistration::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'event_id' => $conferencia->id, 'qr_code_token' => 'EVT-CARLOS2026'],
+                [
+                    'member_id' => $membroCarlos->id,
+                    'name' => $membroCarlos->name,
+                    'email' => $membroCarlos->email,
+                    'phone' => $membroCarlos->phone,
+                    'status' => 'confirmed',
+                    'registered_at' => now()->subDays(3),
+                ]
+            );
+
+            // Check-in já efetuado de Carlos Alberto
+            \App\Models\EventAttendance::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'event_id' => $conferencia->id, 'registration_id' => $regCarlos->id],
+                [
+                    'member_id' => $membroCarlos->id,
+                    'name' => $membroCarlos->name,
+                    'check_in_type' => 'qr_code',
+                    'checked_in_at' => now()->subHours(1),
+                    'checked_in_by_user_id' => $pastorTenant1->id,
+                ]
+            );
+
+            // Inscrição 2: Juliana Mendes (Ainda não fez check-in)
+            \App\Models\EventRegistration::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'event_id' => $conferencia->id, 'qr_code_token' => 'EVT-JULIANA2026'],
+                [
+                    'member_id' => $membroJuliana->id,
+                    'name' => $membroJuliana->name,
+                    'email' => $membroJuliana->email,
+                    'phone' => $membroJuliana->phone,
+                    'status' => 'confirmed',
+                    'registered_at' => now()->subDays(2),
+                ]
+            );
+
+            // Inscrição 3: Visitante Mariana Oliveira
+            \App\Models\EventRegistration::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'event_id' => $conferencia->id, 'qr_code_token' => 'EVT-MARIANA2026'],
+                [
+                    'name' => 'Mariana Oliveira (Convidada)',
+                    'email' => 'mariana.visitante@gmail.local',
+                    'phone' => '(92) 98888-7777',
+                    'status' => 'confirmed',
+                    'registered_at' => now()->subDay(),
+                ]
+            );
+
+            // 2. Culto Regular de Domingo (Sem necessidade de inscrição prévia)
+            \App\Models\Event::firstOrCreate(
+                ['tenant_id' => $tenant1->id, 'slug' => 'culto-celebracao-domingo'],
+                [
+                    'congregation_id' => $sede->id,
+                    'title' => 'Culto de Celebração & Santa Ceia',
+                    'type' => 'service',
+                    'description' => 'Culto solene com celebração da Ceia do Senhor.',
+                    'location' => 'Nave Principal',
+                    'start_date' => now()->next('Sunday')->toDateString(),
+                    'start_time' => '18:30',
+                    'end_time' => '20:45',
+                    'requires_registration' => false,
+                    'is_free' => true,
+                    'status' => 'published',
+                ]
             );
         });
 

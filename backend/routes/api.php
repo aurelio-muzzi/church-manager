@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\Event\EventController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
 use App\Http\Controllers\Api\v1\Ministry\MinistryController;
 use App\Http\Controllers\Api\v1\Ministry\ScheduleController;
@@ -83,6 +84,13 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('schedules', ScheduleController::class);
             Route::post('/schedules/{schedule}/respond', [ScheduleController::class, 'respond']);
             Route::post('/schedules/{schedule}/volunteers/{scheduleVolunteer}/respond', [ScheduleController::class, 'respond']);
+
+            // Módulo de Eventos, Inscrições e Presença (Check-in via QR Code e Manual)
+            Route::apiResource('events', EventController::class);
+            Route::get('/events/{event}/registrations', [EventController::class, 'registrations']);
+            Route::post('/events/{event}/registrations', [EventController::class, 'register']);
+            Route::post('/events/{event}/check-in', [EventController::class, 'checkIn']);
+            Route::get('/events/{event}/stats', [EventController::class, 'stats']);
         });
     });
 });
