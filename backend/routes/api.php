@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\PlatformTenantController;
+use App\Http\Controllers\Api\v1\Secretary\CongregationController;
+use App\Http\Controllers\Api\v1\Secretary\FamilyController;
+use App\Http\Controllers\Api\v1\Secretary\MemberChangeRequestController;
+use App\Http\Controllers\Api\v1\Secretary\MemberController;
+use App\Http\Controllers\Api\v1\Secretary\VisitorController;
 use App\Http\Controllers\Api\v1\TenantProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +42,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me']);
         Route::post('/auth/switch-tenant', [AuthController::class, 'switchTenant']);
 
-        // Rotas exclusivas do Administrador da Plataforma (Gerenciamento de Igrejas/Tenants)
+        // Rotas exclusivas do Administrador da Plataforma (Gerenciamento Global de Igrejas)
         Route::middleware('platform.admin')->prefix('platform')->group(function () {
             Route::get('/tenants', [PlatformTenantController::class, 'index']);
             Route::post('/tenants', [PlatformTenantController::class, 'store']);
@@ -45,9 +50,27 @@ Route::prefix('v1')->group(function () {
             Route::patch('/tenants/{tenant}/status', [PlatformTenantController::class, 'updateStatus']);
         });
 
-        // Rotas de Tenant (com isolamento lógico estrito e verificação de suspensão)
+        // Rotas de Tenant (Isolamento Lógico por Tenant)
         Route::middleware('tenant.identify')->prefix('tenant')->group(function () {
+            // Perfil da Igreja
             Route::get('/profile', [TenantProfileController::class, 'show']);
+
+            // Módulo de Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações)
+            Route::apiResource('congregations', CongregationController::class);
+            Route::apiResource('members', MemberController::class);
+            Route::apiResource('families', FamilyController::class);
+
+            // Visitantes
+            Route::get('/visitors', [VisitorController::class, 'index']);
+            Route::post('/visitors', [VisitorController::class, 'store']);
+            Route::post('/visitors/{visitor}/visits', [VisitorController::class, 'recordVisit']);
+            Route::post('/visitors/{visitor}/convert-to-member', [VisitorController::class, 'convertToMember']);
+
+            // Solicitações de Alteração Cadastral
+            Route::get('/change-requests', [MemberChangeRequestController::class, 'index']);
+            Route::post('/change-requests', [MemberChangeRequestController::class, 'store']);
+            Route::post('/change-requests/{changeRequest}/review', [MemberChangeRequestController::class, 'review'])
+                ->middleware('tenant.role:church_admin,secretary');
         });
     });
 });
