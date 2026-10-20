@@ -42,7 +42,7 @@ Acesse o sistema em `http://localhost:5173`.
 | **06** | Financeiro Avançado (Dízimos, Ofertas, Despesas, Orçamento) | **Concluída (`v0.6.0`)** |
 | **07** | Portal do Membro | **Concluída (`v0.7.0`)** |
 | **08** | Dashboard e Relatórios (BI, Métricas, Exportações CSV) | **Concluída (`v0.8.0`)** |
-| **09** | Auditoria e Preparação para Produção | Próxima |
+| **09** | Auditoria e Preparação para Produção (Certificação Final) | **Concluída (`v1.0.0`)** |
 
 ---
 
@@ -51,3 +51,4 @@ Acesse o sistema em `http://localhost:5173`.
 - [Arquitetura do Sistema](docs/ARCHITECTURE.md)
 - [Guia de Instalação](docs/INSTALLATION.md)
 - [Registro de Progresso (PROGRESS.md)](docs/PROGRESS.md)
+- [Checklist de Homologação e Produção](docs/PRODUCTION_CHECKLIST.md)

@@ -11,6 +11,7 @@ import { EventModule } from '../components/event/EventModule';
 import { FinancialModule } from '../components/financial/FinancialModule';
 import { MemberPortalModule } from '../components/member-portal/MemberPortalModule';
 import { ExecutiveDashboardModule } from '../components/dashboard/ExecutiveDashboardModule';
+import { ProductionAuditModule } from '../components/audit/ProductionAuditModule';
 import { 
   Server, 
   Database, 
@@ -101,8 +102,8 @@ const STAGES: Stage[] = [
     number: '09',
     name: 'Auditoria e Produção',
     branch: 'feature/etapa-09-auditoria-producao',
-    status: 'pending',
-    desc: 'Revisão geral, otimizações, testes de carga, isolamento final e checklist.'
+    status: 'concluded',
+    desc: 'Revisão geral, headers de segurança, rate limit, autoteste de isolamento e release v1.0.0.'
   }
 ];
 
@@ -115,7 +116,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'dashboard' | 'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('dashboard');
+  const [churchActiveModule, setChurchActiveModule] = useState<'audit' | 'dashboard' | 'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('audit');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -250,6 +251,26 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('audit')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'audit' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'audit' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <ShieldCheck size={18} />
+                    Auditoria & Produção (Etapa 09)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('dashboard')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -371,7 +392,9 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'dashboard' ? (
+                {churchActiveModule === 'audit' ? (
+                  <ProductionAuditModule />
+                ) : churchActiveModule === 'dashboard' ? (
                   <ExecutiveDashboardModule />
                 ) : churchActiveModule === 'portal' ? (
                   <MemberPortalModule />

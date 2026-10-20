@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\v1\Secretary\FamilyController;
 use App\Http\Controllers\Api\v1\Secretary\MemberChangeRequestController;
 use App\Http\Controllers\Api\v1\Secretary\MemberController;
 use App\Http\Controllers\Api\v1\Secretary\VisitorController;
+use App\Http\Controllers\Api\v1\System\SystemAuditController;
 use App\Http\Controllers\Api\v1\TenantProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,8 +43,11 @@ Route::prefix('v1')->group(function () {
         ]);
     });
 
-    // Autenticação Pública
-    Route::post('/auth/login', [AuthController::class, 'login']);
+    // Auditoria Global e Prontidão de Produção
+    Route::get('/system/readiness', [SystemAuditController::class, 'readiness']);
+
+    // Autenticação Pública (Protegida contra Brute-Force)
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware('throttle:auth');
 
     // Rotas Autenticadas
     Route::middleware('auth:sanctum')->group(function () {
@@ -135,6 +139,9 @@ Route::prefix('v1')->group(function () {
                 Route::get('/export/financial', [DashboardController::class, 'exportFinancial']);
                 Route::get('/export/attendance', [DashboardController::class, 'exportAttendance']);
             });
+
+            // Auditoria e Teste de Isolamento em Tempo Real do Tenant
+            Route::get('/audit/simulate-isolation-test', [SystemAuditController::class, 'simulateIsolationTest']);
         });
     });
 });
