@@ -57,22 +57,15 @@ export const ExecutiveDashboardModule: React.FC = () => {
     setTimeout(() => setNotification(null), 5000);
   };
 
-  const loadAll = async () => {
+  const loadOverview = async () => {
     setLoading(true);
     try {
-      const [over, demo, min, fin, past] = await Promise.all([
+      const [over, fin] = await Promise.all([
         getExecutiveOverviewApi(),
-        getDemographicsApi(),
-        getMinistryStatsApi(),
         getFinancialEvolutionApi(),
-        getPastoralAlertsApi(),
       ]);
-
       setOverview(over);
-      setDemographics(demo);
-      setMinistryStats(min);
       setFinancialEvolution(fin);
-      setPastoralAlerts(past);
     } catch (err: unknown) {
       const error = err as Error;
       notify(error.message || 'Erro ao carregar dados do dashboard executivo.', true);
@@ -81,9 +74,64 @@ export const ExecutiveDashboardModule: React.FC = () => {
     }
   };
 
+  const loadDemographics = async () => {
+    setLoading(true);
+    try {
+      const demo = await getDemographicsApi();
+      setDemographics(demo);
+    } catch (err: unknown) {
+      const error = err as Error;
+      notify(error.message || 'Erro ao carregar dados demográficos.', true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMinistries = async () => {
+    setLoading(true);
+    try {
+      const min = await getMinistryStatsApi();
+      setMinistryStats(min);
+    } catch (err: unknown) {
+      const error = err as Error;
+      notify(error.message || 'Erro ao carregar dados dos ministérios.', true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadPastoral = async () => {
+    setLoading(true);
+    try {
+      const past = await getPastoralAlertsApi();
+      setPastoralAlerts(past);
+    } catch (err: unknown) {
+      const error = err as Error;
+      notify(error.message || 'Erro ao carregar alertas pastorais.', true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    if (activeTab === 'overview') await loadOverview();
+    else if (activeTab === 'demographics') await loadDemographics();
+    else if (activeTab === 'ministries') await loadMinistries();
+    else if (activeTab === 'pastoral') await loadPastoral();
+    else await loadOverview();
+  };
+
   useEffect(() => {
-    loadAll();
-  }, []);
+    if (activeTab === 'overview' && !overview) {
+      loadOverview();
+    } else if (activeTab === 'demographics' && !demographics) {
+      loadDemographics();
+    } else if (activeTab === 'ministries' && !ministryStats) {
+      loadMinistries();
+    } else if (activeTab === 'pastoral' && !pastoralAlerts) {
+      loadPastoral();
+    }
+  }, [activeTab]);
 
   const handleExport = async (type: 'members' | 'financial' | 'attendance', title: string) => {
     setDownloading(type);
@@ -156,7 +204,7 @@ export const ExecutiveDashboardModule: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={loadAll}
+            onClick={handleRefresh}
             disabled={loading}
             className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-2 transition"
           >
