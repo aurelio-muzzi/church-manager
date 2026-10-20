@@ -10,6 +10,7 @@ import { MinistryModule } from '../components/ministry/MinistryModule';
 import { EventModule } from '../components/event/EventModule';
 import { FinancialModule } from '../components/financial/FinancialModule';
 import { MemberPortalModule } from '../components/member-portal/MemberPortalModule';
+import { ExecutiveDashboardModule } from '../components/dashboard/ExecutiveDashboardModule';
 import { 
   Server, 
   Database, 
@@ -26,7 +27,8 @@ import {
   UserCheck,
   Calendar,
   DollarSign,
-  HeartHandshake
+  HeartHandshake,
+  TrendingUp
 } from 'lucide-react';
 
 interface Stage {
@@ -92,7 +94,7 @@ const STAGES: Stage[] = [
     number: '08',
     name: 'Dashboard e Relatórios',
     branch: 'feature/etapa-08-dashboard-relatorios',
-    status: 'pending',
+    status: 'concluded',
     desc: 'Indicadores administrativos, financeiros e exportações seguras em CSV/PDF.'
   },
   {
@@ -113,7 +115,7 @@ export const FoundationPage: React.FC = () => {
   // Tenant profile do usuário comum
   const [tenantProfile, setTenantProfile] = useState<TenantInfo | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [churchActiveModule, setChurchActiveModule] = useState<'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('portal');
+  const [churchActiveModule, setChurchActiveModule] = useState<'dashboard' | 'portal' | 'financial' | 'events' | 'ministries' | 'secretary'>('dashboard');
 
   const fetchHealth = async () => {
     setLoadingHealth(true);
@@ -248,6 +250,26 @@ export const FoundationPage: React.FC = () => {
                 {/* Seletor de Módulos da Igreja */}
                 <div style={{ marginTop: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
                   <button
+                    onClick={() => setChurchActiveModule('dashboard')}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: churchActiveModule === 'dashboard' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: churchActiveModule === 'dashboard' ? '#fff' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <TrendingUp size={18} />
+                    Dashboard & BI (Etapa 08)
+                  </button>
+
+                  <button
                     onClick={() => setChurchActiveModule('portal')}
                     style={{
                       padding: '0.6rem 1.2rem',
@@ -349,7 +371,9 @@ export const FoundationPage: React.FC = () => {
                 </div>
 
                 {/* Renderização do Módulo Ativo */}
-                {churchActiveModule === 'portal' ? (
+                {churchActiveModule === 'dashboard' ? (
+                  <ExecutiveDashboardModule />
+                ) : churchActiveModule === 'portal' ? (
                   <MemberPortalModule />
                 ) : churchActiveModule === 'financial' ? (
                   <FinancialModule />
