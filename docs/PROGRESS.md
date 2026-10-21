@@ -593,3 +593,42 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
   - `npm run build`: Build de produção Vite concluído em 6.60s com bundle otimizado (`dist/`).
 
+---
+
+### Etapa F4-09 — Dashboards e Relatórios
+- **Branch**: `feature/etapa-09-dashboard-relatorios`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.9`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/dashboard/types.ts`)**:
+    - Definição completa das estruturas de dados analíticas: `ExecutiveMetrics`, `MembershipGrowthPoint`, `FinancialCashflowPoint`, `AttendanceTrendPoint`, `DemographicDataPoint`, `CongregationComparisonPoint`, `ReportType`, `ReportColumn`, `ReportFilterParams`, `PaginatedReportResult`.
+  - **Validação de Formulários com Zod (`src/modules/dashboard/schemas.ts`)**:
+    - `reportFilterSchema`: Validação de filtros de relatórios (tipo, datas de início/fim, congregação, paginação e ordenação).
+  - **Serviço Desacoplado da API REST (`src/services/api/dashboardService.ts`)**:
+    - Endpoints `/api/v1/tenant/dashboard/metrics` (cálculo de 10 KPIs executivos com filtro por congregação).
+    - Endpoints `/api/v1/tenant/dashboard/charts/*` (evolução do rol em 12 meses, fluxo de caixa comparativo receitas vs despesas, tendências de frequência presencial vs online e perfil demográfico etário).
+    - Endpoint `/api/v1/tenant/dashboard/congregations` com comparativo operacional consolidado entre Sede Matriz e Filiais.
+    - Motor de geração de relatórios tabulares `/api/v1/tenant/reports/generate` suportando 5 tipos: Rol de Membros, Extrato Caixa, Dízimos & Ofertas, Presença em Cultos e Voluntários & Escalas.
+    - Exportador de relatórios para formato RFC 4180 CSV com download direto de Blob no navegador.
+  - **Gráficos Visuais de Business Intelligence com Recharts (`src/modules/dashboard/components/`)**:
+    - `ExecutiveKpiGrid`: Grade com 6 cartões de indicadores essenciais (Membros Ativos, Dízimos & Ofertas no Mês, Despesas Pagas no Mês, Saldo Operacional, Média de Frequência em Cultos e Voluntários Ativos com taxa de conversão).
+    - `MembershipGrowthChart`: Gráfico AreaChart com gradientes suaves demonstrando crescimento cumulativo de membros e novas admissões em 12 meses.
+    - `FinancialCashflowChart`: Gráfico Composed/BarChart comparando receitas líquidas (verde esmeralda), despesas (rosa rubi) e linha de superávit operacional (índigo).
+    - `AttendanceTrendsChart`: Gráfico LineChart de tendências de público comparando frequência presencial nos cultos com conexões de transmissões online e taxa de ocupação do templo.
+    - `DemographicsPieChart`: Gráfico Donut/PieChart com distribuição por faixas etárias e **Destaque Especial de Proteção à Criança e ao Adolescente (LGPD)** com indicação de termos de consentimento válidos.
+    - `CongregationPerformanceTable`: Tabela consolidada comparando membros, frequência média, arrecadação mensal e voluntários entre o Templo Central (Sede) e as congregações filiais.
+    - `ReportsViewerTab`: Central unificada de relatórios gerenciais com navegação por 5 categorias, barra de busca textual reativa, seletores de congregação e período, ordenação por colunas, paginação configurável, exportação em CSV com 1 clique e botão de impressão/PDF (`window.print()`) com folhas de estilo otimizadas para impressão (`@media print`).
+  - **Páginas Orquestradoras (`src/modules/dashboard/pages/`)**:
+    - `DashboardBiPage`: Painel executivo completo de BI para pastores e administradores, com seletor de congregação no cabeçalho e alertas de solicitações cadastrais e transações pendentes de conciliação.
+    - `ReportsPage`: Central independente de emissão e exportação de relatórios ministeriais com garantia de conformidade LGPD.
+  - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
+    - Rota `/admin/dashboard` vinculada ao `DashboardBiPage`.
+    - Rota `/admin/reports` vinculada ao `ReportsPage`.
+- **Validação**:
+  - `npm run test`: Vitest com 66 testes automatizados em 9 suítes (100% aprovados), cobrindo KPIs executivos, filtro por congregação, gráficos de área, barras, linhas e pizza com LGPD, tabela Sede vs Filiais, alternância de abas de relatórios, filtros de busca, paginação, exportação CSV e acionamento de impressão/PDF.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado com 0 erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 15.54s com bundle otimizado (`dist/`).
+
