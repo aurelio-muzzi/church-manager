@@ -8,9 +8,8 @@ import { MOCK_USERS } from '@/services/adapters/fixtures';
 describe('Etapa 01 — Fundação do Frontend', () => {
   it('deve renderizar a aplicação com o título e alicerces do ChurchManager', () => {
     render(<App />);
-    expect(screen.getByText(/Fundação de Frontend —/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Design System/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/ChurchManager/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Etapa 01: Fundação Ativa/i)).toBeInTheDocument();
   });
 
   it('deve alternar o tema escuro/claro via botão de tema', () => {

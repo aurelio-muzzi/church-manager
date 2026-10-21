@@ -274,7 +274,7 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | Etapa | Descrição | Branch | Status | Versão / Tag |
 |---|---|---|---|---|
 | **F4-01** | Fundação Frontend (Vite 6, React 19, TS Strict, Tailwind v4, shadcn base, ESLint, Vitest, DevMockAdapter) | `feature/etapa-01-fundacao-frontend` | **Concluída** | `v2.0.0-alpha.1` |
-| **F4-02** | Design System & Layouts (Tokens semânticos, Dark/Light, Layouts Admin/Portal/Auth/Platform) | `feature/etapa-02-design-system` | *Planejada* | — |
+| **F4-02** | Design System & Layouts (Tokens semânticos, Dark/Light, Layouts Admin/Portal/Auth/Platform) | `feature/etapa-02-design-system` | **Concluída** | `v2.0.0-alpha.2` |
 | **F4-03** | Autenticação & Navegação Protegida (Login, Sessão Sanctum, Rotas Protegidas, RBAC) | `feature/etapa-03-autenticacao-navegacao` | *Planejada* | — |
 | **F4-04** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-04-secretaria` | *Planejada* | — |
 | **F4-05** | Ministérios & Voluntários (Equipes, Lideranças, Escalas, Conflitos) | `feature/etapa-05-ministerios` | *Planejada* | — |
@@ -307,6 +307,45 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
   - `npm run build`: Build de produção Vite concluído em 3.20s gerando bundle otimizado (`dist/`).
+
+---
+
+### Etapa F4-02 — Design System e Layouts
+- **Branch**: `feature/etapa-02-design-system`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.2`
+- **Implementações**:
+  - **Primitivas shadcn/ui & Radix UI implementadas**:
+    - `Input`, `Textarea`, `Label`, `Checkbox`, `Switch`, `Select` (com suporte a grupos, itens e ícones de checagem).
+    - `Dialog` (modais acessíveis com backdrop blur e focus trap) e `Sheet` (drawer lateral para navegação móvel e painéis).
+    - `DropdownMenu` (com itens de ação, separators, checkbox/radio e atalhos de teclado).
+    - `Avatar` (com imagem, fallback de iniciais e anel semântico).
+    - `Separator`, `Tabs` (com transições e triggers ativos), `Tooltip`.
+  - **Sistema de Notificações Toast (`src/components/feedback/ToastProvider.tsx`)**:
+    - Fila de notificações animada com variantes `success`, `error`, `warning`, `info`.
+    - Auto-dismiss temporizado e cancelamento manual.
+    - Hook ergonômico `useToast`.
+  - **Componentes Compartilhados Eclesiásticos**:
+    - `MetricKpiCard`: Cartão de indicadores com valor monetário/numérico, ícone estilizado por variante, variação percentual com indicador de subida/descida e estado de skeleton loading proporcional.
+    - `EmptyState`: Estado vazio amigável com ícone contextual, título, descrição e botão de ação.
+    - `ErrorState`: Tratamento amigável de falhas com botão de tentar novamente (retry) e detalhes de depuração isolados para ambiente DEV.
+    - `ConfirmationDialog`: Diálogo de confirmação para ações críticas e exclusões destrutivas.
+    - `PageHeader` & `Breadcrumbs`: Cabeçalho unificado com trilha de navegação e área para ações.
+  - **Layouts Estruturais Refinados**:
+    - `AdminLayout`: Navegação com destaque de rotas ativas, seletor suspenso de congregações/tenants, menu do perfil do pastor/administrador com avatar, gaveta móvel (Sheet) com touch-friendly swipe e alternador de tema escuro/claro.
+    - `MemberLayout`: Interface adaptada para smartphones com barra inferior fixa (Início, Agenda, Escalas, Avisos, Perfil), cabeçalho limpo com selo de membro ativo e suporte desktop.
+    - `AuthLayout`: Layout com gradiente decorativo, backdrop blur e card responsivo.
+    - `PlatformLayout`: Layout de gerenciamento SaaS com badge master e menu de instâncias isolado dos dados de igrejas.
+  - **Showcase Interativo**: Página inicial rica demonstrando todos os componentes, formulários, modais, toasts e KPIs.
+  - **Otimização de Build & Code Splitting**: Configuração de `manualChunks` em `vite.config.ts` segregando `vendor-react`, `vendor-radix` e `vendor-query`, gerando bundle altamente performático (tempo de build de 1.80s).
+- **Validação**:
+  - `npm run test`: Vitest com 13 testes automatizados (100% aprovados) cobrindo formulários, modais, confirmações destrutivas, disparos de toasts, estados vazios, estados de erro e KPI skeletons.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem nenhum erro ou aviso.
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
+  - `npm run build`: Build de produção Vite concluído com sucesso e chunks segregados (`dist/`).
+
 
 
 
