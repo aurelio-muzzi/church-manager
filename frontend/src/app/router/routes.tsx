@@ -1,9 +1,31 @@
+import { useState } from 'react';
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
+import { useToast } from '@/hooks/useToast';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   Sun,
   Moon,
@@ -13,11 +35,34 @@ import {
   DollarSign,
   Building2,
   CheckCircle2,
-  Layers,
+  Sparkles,
+  Inbox,
+  AlertTriangle,
+  ArrowRight,
+  TrendingUp,
+  CreditCard,
+  UserCheck,
+  LayoutDashboard,
+  ExternalLink,
 } from 'lucide-react';
+import { AdminLayout } from '@/layouts/AdminLayout';
+import { MemberLayout } from '@/layouts/MemberLayout';
+import { AuthLayout } from '@/layouts/AuthLayout';
+import { PlatformLayout } from '@/layouts/PlatformLayout';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { MetricKpiCard } from '@/components/shared/MetricKpiCard';
+import { EmptyState } from '@/components/shared/EmptyState';
+import { ErrorState } from '@/components/shared/ErrorState';
+import { ConfirmationDialog } from '@/components/shared/ConfirmationDialog';
 
-function HomePage() {
+function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
+  const { success, error, warning, info } = useToast();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [demoSwitch, setDemoSwitch] = useState(true);
+  const [demoCheckbox, setDemoCheckbox] = useState(true);
+  const [selectedRole, setSelectedRole] = useState('pastor');
+  const [showSkeletonKpi, setShowSkeletonKpi] = useState(false);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -33,16 +78,25 @@ function HomePage() {
                 ChurchManager
               </span>
               <span className="hidden sm:inline-block ml-2 text-xs text-muted-foreground border-l border-border pl-2">
-                Frontend Enterprise
+                Design System & Layouts (Etapa 02)
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Badge variant="outline" className="hidden sm:inline-flex gap-1.5 py-1">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              Etapa 01: Fundação Ativa
-            </Badge>
+          <div className="flex items-center gap-2">
+            <Link to="/admin/dashboard">
+              <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                Painel Admin
+              </Button>
+            </Link>
+
+            <Link to="/portal">
+              <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
+                <UserCheck className="h-3.5 w-3.5" />
+                Portal Membro
+              </Button>
+            </Link>
 
             <Button
               variant="outline"
@@ -50,6 +104,7 @@ function HomePage() {
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
               title={isDark ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro'}
               aria-label="Alternar tema visual"
+              className="h-9 w-9"
             >
               {isDark ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-500" />}
             </Button>
@@ -57,161 +112,503 @@ function HomePage() {
         </div>
       </header>
 
-      {/* Hero / Overview */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-        <section className="text-center sm:text-left space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            React 19 + TypeScript Estrito + Tailwind CSS v4 + Vite
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+        {/* Hero Section */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 pb-6 border-b border-border">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Etapa 02: Design System, Componentes Acessíveis & Layouts
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Design System <span className="text-primary">ChurchManager</span>
+            </h1>
+            <p className="text-muted-foreground text-sm sm:text-base max-w-2xl leading-relaxed">
+              Catálogo visual dos componentes semânticos, primitivas acessíveis (Radix UI + shadcn/ui),
+              modais, drawers, toasts interativos e navegações responsivas.
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Fundação de Frontend — <span className="text-primary">ChurchManager</span>
-          </h1>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-3xl">
-            Arquitetura modular de alta performance para gestão eclesiástica multi-tenant,
-            com design system consistente, acessibilidade nativa, tipagem rigorosa e cliente HTTP desacoplado.
-          </p>
-        </section>
 
-        {/* Modules Foundation Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="hover:border-primary/50 transition-all shadow-sm hover:shadow-md">
-            <CardHeader>
-              <div className="h-10 w-10 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-2">
-                <Users className="h-5 w-5" />
-              </div>
-              <CardTitle>Secretaria & Membros</CardTitle>
-              <CardDescription>
-                Gestão de congregações, membros, famílias, visitantes e workflow de aprovação cadastral.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <Badge variant="secondary">Etapa 04</Badge>
-                <Badge variant="outline">Multi-tenant</Badge>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Quick Nav to Dedicated Layouts */}
+          <div className="flex flex-wrap gap-2">
+            <Link to="/admin/dashboard">
+              <Button className="gap-2">
+                <span>Explorar Layout Admin</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/portal">
+              <Button variant="secondary" className="gap-2">
+                <span>Portal do Membro</span>
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/platform">
+              <Button variant="outline" className="gap-2">
+                <span>Admin SaaS</span>
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="ghost" className="gap-2">
+                <span>Login</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-          <Card className="hover:border-primary/50 transition-all shadow-sm hover:shadow-md">
-            <CardHeader>
-              <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-2">
-                <DollarSign className="h-5 w-5" />
-              </div>
-              <CardTitle>Financeiro Avançado</CardTitle>
-              <CardDescription>
-                Contas, movimentações, plano de contas, orçamentos, relatórios contábeis e conciliação bancária.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <Badge variant="secondary">Etapa 07</Badge>
-                <Badge variant="outline">Auditoria</Badge>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Tabbed Interactive Showcase */}
+        <Tabs defaultValue="components" className="space-y-6">
+          <TabsList className="grid grid-cols-3 max-w-md w-full">
+            <TabsTrigger value="components">Componentes</TabsTrigger>
+            <TabsTrigger value="feedback">Feedback & Toasts</TabsTrigger>
+            <TabsTrigger value="kpi">Métricas & KPIs</TabsTrigger>
+          </TabsList>
 
-          <Card className="hover:border-primary/50 transition-all shadow-sm hover:shadow-md">
-            <CardHeader>
-              <div className="h-10 w-10 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center mb-2">
-                <Calendar className="h-5 w-5" />
-              </div>
-              <CardTitle>Cultos & Presença QR Code</CardTitle>
-              <CardDescription>
-                Agenda unificada, inscrições, check-in manual e leitura por câmera de QR Code dinâmico.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <Badge variant="secondary">Etapa 06</Badge>
-                <Badge variant="outline">Tempo Real</Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+          {/* Tab 1: Form & Interactive Components */}
+          <TabsContent value="components" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Form Controls Card */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Controles de Formulário</CardTitle>
+                  <CardDescription>Inputs, Selects, Labels, Checkbox e Switch com foco acessível</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="demo-name">Nome do Membro ou Visitante</Label>
+                    <Input id="demo-name" placeholder="Ex.: Pr. Carlos Eduardo" />
+                  </div>
 
-        {/* Foundation Checklist & Design System Showcase */}
-        <section className="space-y-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <Layers className="h-5 w-5 text-primary" />
-            Componentes e Estado da Fundação (Etapa 01)
-          </h2>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="demo-role">Cargo / Ministério</Label>
+                    <Select value={selectedRole} onValueChange={setSelectedRole}>
+                      <SelectTrigger id="demo-role">
+                        <SelectValue placeholder="Selecione um ministério" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pastor">Pastorado & Docência</SelectItem>
+                        <SelectItem value="louvor">Ministério de Louvor</SelectItem>
+                        <SelectItem value="infantil">Ministério Infantil</SelectItem>
+                        <SelectItem value="diaconato">Diaconato & Recepção</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Critérios de Aceite Verificados</CardTitle>
-                <CardDescription>Validação dos alicerces técnicos do frontend</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>TypeScript 5.7+ configurado em modo estrito (strict)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Tailwind CSS v4 + @theme tokens (Dark Mode inicial padrão)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Primitivas Radix UI + utilitário cn (clsx + tailwind-merge)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Cliente HTTP Axios configurado para Sanctum CSRF e tenant isolation</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  <span>Adaptador de desenvolvimento (DevMockAdapter) desacoplado</span>
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="demo-switch" className="text-sm">Notificações por E-mail</Label>
+                      <p className="text-xs text-muted-foreground">Receber escalas e avisos automaticamente</p>
+                    </div>
+                    <Switch
+                      id="demo-switch"
+                      checked={demoSwitch}
+                      onCheckedChange={setDemoSwitch}
+                    />
+                  </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Demonstração de Estados & Skeletons</CardTitle>
-                <CardDescription>Feedback visual responsivo e transições suaves</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  <Button size="sm">Botão Primário</Button>
-                  <Button size="sm" variant="secondary">Secundário</Button>
-                  <Button size="sm" variant="outline">Contorno</Button>
-                  <Button size="sm" variant="destructive">Destrutivo</Button>
-                </div>
-                <div className="space-y-2 pt-2 border-t border-border">
-                  <span className="text-xs text-muted-foreground block">Exemplo de Skeleton Loading:</span>
-                  <div className="flex items-center space-x-3">
-                    <Skeleton className="h-10 w-10 rounded-full" />
-                    <div className="space-y-2 flex-1">
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-3 w-1/2" />
+                  <div className="flex items-center space-x-2 pt-2">
+                    <Checkbox
+                      id="demo-checkbox"
+                      checked={demoCheckbox}
+                      onCheckedChange={(checked) => setDemoCheckbox(Boolean(checked))}
+                    />
+                    <label
+                      htmlFor="demo-checkbox"
+                      className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                    >
+                      Concordo com os termos de consentimento da congregação (LGPD)
+                    </label>
+                  </div>
+                </CardContent>
+                <CardFooter className="bg-muted/30 border-t border-border flex justify-between py-3">
+                  <span className="text-xs text-muted-foreground">Estado do switch: {demoSwitch ? 'Ativo' : 'Inativo'}</span>
+                  <Button size="sm" variant="default" onClick={() => success('Formulário simulado com sucesso!')}>
+                    Salvar Dados
+                  </Button>
+                </CardFooter>
+              </Card>
+
+              {/* Modals & Dialogs Showcase */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Diálogos e Modais Acessíveis</CardTitle>
+                  <CardDescription>Diálogos normais e de confirmação crítica com Radix Portal</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    Todos os modais possuem bloqueio de rolagem do body, fechamento por ESC,
+                    foco aprisionado e transições suaves de entrada e saída.
+                  </p>
+
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    {/* Standard Dialog */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="gap-2">
+                          <Sparkles className="h-4 w-4" />
+                          Abrir Modal Padrão
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Informações do Ministério</DialogTitle>
+                          <DialogDescription>
+                            Detalhes cadastrais e voluntários associados a este departamento.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-2 space-y-2 text-sm text-muted-foreground">
+                          <p>Ministério de Louvor • Responsável: Pr. Carlos Eduardo</p>
+                          <p>Escala semanal: Domingos às 18:00 (Culto de Celebração)</p>
+                        </div>
+                        <DialogFooter>
+                          <Button variant="default">Entendido</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+
+                    {/* Destructive Confirmation Dialog */}
+                    <Button
+                      variant="destructive"
+                      className="gap-2"
+                      onClick={() => setConfirmOpen(true)}
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                      Ação Crítica (Confirmar)
+                    </Button>
+
+                    <ConfirmationDialog
+                      open={confirmOpen}
+                      onOpenChange={setConfirmOpen}
+                      title="Excluir Registro Eclesiástico"
+                      description="Esta ação removerá o registro selecionado. Esta operação não poderá ser desfeita e será registrada na trilha de auditoria."
+                      isDestructive
+                      confirmLabel="Sim, Excluir"
+                      cancelLabel="Cancelar"
+                      onConfirm={() => warning('Registro excluído com registro de auditoria.')}
+                    />
+                  </div>
+
+                  <div className="pt-4 border-t border-border space-y-2">
+                    <span className="text-xs font-semibold text-muted-foreground block">Badges Semânticos:</span>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="default">Padrão Primário</Badge>
+                      <Badge variant="secondary">Secundário</Badge>
+                      <Badge variant="outline">Contorno</Badge>
+                      <Badge variant="success">Presença Confirmada</Badge>
+                      <Badge variant="warning">Pendente Secretaria</Badge>
+                      <Badge variant="destructive">Divergência</Badge>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Tab 2: Feedback & Toasts */}
+          <TabsContent value="feedback" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Sistema de Notificações Toast</CardTitle>
+                <CardDescription>
+                  Dispare alertas visuais em tempo real para verificar animações e cores semânticas
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    variant="outline"
+                    className="border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10"
+                    onClick={() => success('Presença via QR Code registrada com sucesso!', 'Check-in Aprovado')}
+                  >
+                    Disparar Sucesso
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="border-destructive/40 text-destructive hover:bg-destructive/10"
+                    onClick={() => error('Falha na autenticação ou token expirado.', 'Sessão Inválida')}
+                  >
+                    Disparar Erro
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="border-amber-500/40 text-amber-500 hover:bg-amber-500/10"
+                    onClick={() => warning('Voluntário já escalado em outro ministério no mesmo horário.', 'Conflito de Escala')}
+                  >
+                    Disparar Aviso
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="border-sky-500/40 text-sky-500 hover:bg-sky-500/10"
+                    onClick={() => info('Novo comunicado pastoral publicado para a congregação.', 'Novo Aviso')}
+                  >
+                    Disparar Info
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </section>
+
+            {/* Empty & Error States */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <EmptyState
+                icon={Inbox}
+                title="Nenhum visitante cadastrado hoje"
+                description="Os visitantes cadastrados na recepção ou via formulário digital aparecerão aqui para acompanhamento."
+                actionLabel="Cadastrar Novo Visitante"
+                onAction={() => info('Abre formulário de cadastro de visitante')}
+              />
+
+              <ErrorState
+                title="Falha ao sincronizar agenda"
+                description="Não foi possível consultar os eventos da congregação. Verifique sua conexão com o servidor."
+                onRetry={() => success('Tentativa de reconexão bem-sucedida!')}
+              />
+            </div>
+          </TabsContent>
+
+          {/* Tab 3: KPI Metrics */}
+          <TabsContent value="kpi" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-semibold">Indicadores Eclesiásticos & Financeiros</h3>
+                <p className="text-xs text-muted-foreground">Cards de métrica com indicadores de tendência e skeleton loading</p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSkeletonKpi(!showSkeletonKpi)}
+              >
+                {showSkeletonKpi ? 'Mostrar Valores Reais' : 'Simular Carregamento (Skeleton)'}
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <MetricKpiCard
+                title="Total de Membros Ativos"
+                value="428"
+                icon={Users}
+                trendPercentage={8.4}
+                iconVariant="indigo"
+                isLoading={showSkeletonKpi}
+              />
+              <MetricKpiCard
+                title="Arrecadação do Mês"
+                value="R$ 48.520,00"
+                icon={DollarSign}
+                trendPercentage={12.5}
+                iconVariant="emerald"
+                isLoading={showSkeletonKpi}
+              />
+              <MetricKpiCard
+                title="Média de Presença em Cultos"
+                value="315"
+                icon={TrendingUp}
+                trendPercentage={-2.1}
+                iconVariant="purple"
+                isLoading={showSkeletonKpi}
+              />
+              <MetricKpiCard
+                title="Despesas Realizadas"
+                value="R$ 31.280,00"
+                icon={CreditCard}
+                description="Dentro do previsto"
+                iconVariant="rose"
+                isLoading={showSkeletonKpi}
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground mt-auto">
-        <p>ChurchManager Frontend Enterprise • Fuso Horário Padrão: America/Manaus • React 19 + Tailwind v4</p>
+      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground mt-auto bg-card/30">
+        <p>ChurchManager • Design System & Layouts • React 19 + Tailwind CSS v4 • Fuso Horário: America/Manaus</p>
       </footer>
     </div>
   );
 }
 
-function NotFoundPage() {
+// Sample Pages inside Layouts to demonstrate real functional routes
+function AdminDashboardDemo() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
-      <h1 className="text-6xl font-black text-primary">404</h1>
-      <p className="mt-2 text-xl font-semibold">Página não encontrada</p>
-      <p className="text-muted-foreground text-sm mt-1">O endereço solicitado não existe ou foi movido.</p>
-      <Link to="/" className="mt-6">
-        <Button variant="default">Voltar para o Início</Button>
-      </Link>
+    <div className="space-y-6">
+      <PageHeader
+        title="Dashboard Executivo & BI"
+        description="Métricas consolidadas de congregações, frequência e saúde financeira."
+        breadcrumbs={[{ label: 'Visão Geral', href: '/admin/dashboard' }, { label: 'Dashboard' }]}
+        actions={
+          <Button size="sm" className="gap-2">
+            <Calendar className="h-4 w-4" />
+            Filtrar Período
+          </Button>
+        }
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricKpiCard
+          title="Membros Totais"
+          value="428"
+          icon={Users}
+          trendPercentage={6.2}
+          iconVariant="indigo"
+        />
+        <MetricKpiCard
+          title="Receita do Mês"
+          value="R$ 48.520,00"
+          icon={DollarSign}
+          trendPercentage={14.1}
+          iconVariant="emerald"
+        />
+        <MetricKpiCard
+          title="Presenças Registradas"
+          value="1.240"
+          icon={CheckCircle2}
+          trendPercentage={4.5}
+          iconVariant="purple"
+        />
+        <MetricKpiCard
+          title="Novos Visitantes"
+          value="34"
+          icon={UserCheck}
+          trendPercentage={18.0}
+          iconVariant="amber"
+        />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Visão Geral dos Módulos Administrativos</CardTitle>
+          <CardDescription>Selecione um módulo na sidebar para gerenciar as rotinas da igreja</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            O layout administrativo inclui alternância de tenant, gaveta móvel para smartphones,
+            migalhas de pão e integração desacoplada pronta para a API REST.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function MemberPortalHomeDemo() {
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Bem-vindo(a) ao Portal do Membro"
+        description="Acompanhe suas escalas, eventos, avisos e histórico pessoal de presença."
+        breadcrumbs={[{ label: 'Portal', href: '/portal' }, { label: 'Início' }]}
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="hover:border-primary/50 transition-all">
+          <CardHeader>
+            <Calendar className="h-8 w-8 text-primary mb-2" />
+            <CardTitle className="text-base">Próximos Cultos</CardTitle>
+            <CardDescription>Culto de Celebração — Domingo às 18:00</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link to="/portal/events">
+              <Button size="sm" variant="outline" className="w-full">Ver Agenda Completa</Button>
+            </Link>
+          </CardFooter>
+        </Card>
+
+        <Card className="hover:border-primary/50 transition-all">
+          <CardHeader>
+            <CheckCircle2 className="h-8 w-8 text-emerald-500 mb-2" />
+            <CardTitle className="text-base">Minhas Escalas</CardTitle>
+            <CardDescription>Você está escalado no Ministério de Louvor neste domingo</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link to="/portal/schedules">
+              <Button size="sm" variant="outline" className="w-full">Confirmar Presença</Button>
+            </Link>
+          </CardFooter>
+        </Card>
+
+        <Card className="hover:border-primary/50 transition-all">
+          <CardHeader>
+            <UserCheck className="h-8 w-8 text-indigo-500 mb-2" />
+            <CardTitle className="text-base">Meu Cadastro</CardTitle>
+            <CardDescription>Mantenha seus dados e de sua família atualizados</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Link to="/portal/profile">
+              <Button size="sm" variant="outline" className="w-full">Solicitar Alteração</Button>
+            </Link>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function PlatformHomeDemo() {
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Gestão de Instâncias SaaS (Tenants)"
+        description="Área exclusiva da administração global para acompanhamento de igrejas contratantes."
+        breadcrumbs={[{ label: 'Platform', href: '/platform' }]}
+        actions={
+          <Button size="sm" className="gap-2 bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <Building2 className="h-4 w-4" />
+            Cadastrar Nova Igreja
+          </Button>
+        }
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <MetricKpiCard title="Igrejas Ativas" value="12" icon={Building2} iconVariant="indigo" />
+        <MetricKpiCard title="Igrejas em Trial" value="3" icon={Calendar} iconVariant="amber" />
+        <MetricKpiCard title="Total Membros na Base" value="4.850" icon={Users} iconVariant="emerald" />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Isolamento Multi-Tenant Garantido</CardTitle>
+          <CardDescription>
+            Conforme as regras do ChurchManager, a administração da plataforma não possui acesso
+            aos dados privados de membros nem aos lançamentos financeiros individuais de cada igreja.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    </div>
+  );
+}
+
+function LoginDemo() {
+  return (
+    <div className="space-y-4">
+      <div className="text-center space-y-1">
+        <h2 className="text-xl font-bold">Acesse sua Conta</h2>
+        <p className="text-xs text-muted-foreground">Informe seu e-mail e senha cadastrados</p>
+      </div>
+
+      <div className="space-y-3">
+        <div className="space-y-1">
+          <Label htmlFor="login-email">E-mail</Label>
+          <Input id="login-email" type="email" placeholder="pastor@churchmanager.app" defaultValue="pastor@churchmanager.app" />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="login-password">Senha</Label>
+          <Input id="login-password" type="password" defaultValue="••••••••" />
+        </div>
+
+        <Link to="/admin/dashboard" className="block pt-2">
+          <Button className="w-full" size="lg">Entrar no Sistema</Button>
+        </Link>
+      </div>
+
+      <div className="text-center pt-2">
+        <Link to="/" className="text-xs text-primary hover:underline">
+          Voltar para a página inicial
+        </Link>
+      </div>
     </div>
   );
 }
@@ -219,9 +616,43 @@ function NotFoundPage() {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/404" element={<NotFoundPage />} />
-      <Route path="*" element={<Navigate to="/404" replace />} />
+      {/* Showcase Home */}
+      <Route path="/" element={<ShowcaseHomePage />} />
+
+      {/* Admin Layout Routes */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="dashboard" element={<AdminDashboardDemo />} />
+        <Route path="members" element={<AdminDashboardDemo />} />
+        <Route path="ministries" element={<AdminDashboardDemo />} />
+        <Route path="events" element={<AdminDashboardDemo />} />
+        <Route path="finance" element={<AdminDashboardDemo />} />
+        <Route path="reports" element={<AdminDashboardDemo />} />
+        <Route path="settings" element={<AdminDashboardDemo />} />
+      </Route>
+
+      {/* Member Portal Layout Routes */}
+      <Route path="/portal" element={<MemberLayout />}>
+        <Route index element={<MemberPortalHomeDemo />} />
+        <Route path="events" element={<MemberPortalHomeDemo />} />
+        <Route path="schedules" element={<MemberPortalHomeDemo />} />
+        <Route path="announcements" element={<MemberPortalHomeDemo />} />
+        <Route path="profile" element={<MemberPortalHomeDemo />} />
+      </Route>
+
+      {/* Platform Layout Routes */}
+      <Route path="/platform" element={<PlatformLayout />}>
+        <Route index element={<PlatformHomeDemo />} />
+        <Route path="tenants" element={<PlatformHomeDemo />} />
+      </Route>
+
+      {/* Auth Layout Routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<LoginDemo />} />
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -18,6 +18,30 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-radix': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-switch',
+            '@radix-ui/react-separator',
+            '@radix-ui/react-slot',
+          ],
+          'vendor-query': ['@tanstack/react-query'],
+        },
+      },
+    },
+  },
   // @ts-expect-error vitest config field
   test: {
     globals: true,
