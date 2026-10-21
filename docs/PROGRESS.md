@@ -501,16 +501,95 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
     - Rotas `/admin/events` e `/admin/attendance` vinculadas ao `EventsPage` sob `AdminLayout` protegidas por controle de acesso RBAC.
 - **Validação**:
-    - `npm run test`: Vitest com 42 testes automatizados em 6 suítes (100% aprovados), cobrindo criação de eventos, calendário eclesiástico, inscrições, portaria, check-in manual com bloqueio chamativo de duplicidade e validação de QR Code com alerta de ingresso já conferido.
-    - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
-    - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
-    - `npm run build`: Build de produção Vite concluído com sucesso e chunks segregados (`dist/`).
+  - `npm run test`: Vitest com 42 testes automatizados em 6 suítes (100% aprovados), cobrindo criação de eventos, calendário eclesiástico, inscrições, portaria, check-in manual com bloqueio chamativo de duplicidade e validação de QR Code com alerta de ingresso já conferido.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído com sucesso e chunks segregados (`dist/`).
 
+---
 
+### Etapa F4-07 — Financeiro Avançado
+- **Branch**: `feature/etapa-07-financeiro`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.7`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/finance/types.ts`)**:
+    - Entidades `AccountType`, `FinancialAccount`, `CategoryType`, `FinancialCategory`, `CostCenter`, `PaymentMethod`, `TransactionStatus`, `TransactionCategoryType`, `OfferingType`, `FinancialTransaction`, `DepartmentBudget`, `FinancialSummaryMetrics`, `TransactionFilters`.
+  - **Validação de Formulários com Zod (`src/modules/finance/schemas.ts`)**:
+    - `accountFormSchema`: Cadastro e edição de contas bancárias (corrente, poupança, investimento) e caixas físicos com saldos iniciais.
+    - `titheOfferingFormSchema`: Lançamentos de entradas (dízimos e ofertas com alçadas: geral, missões, construção, campanhas), identificação de membro com preenchimento automático, opção de anonimato e validação condicional.
+    - `expenseFormSchema`: Cadastro de contas a pagar e despesas correntes, fornecedores, centro de custo, datas de vencimento e congregação.
+    - `quickPayExpenseSchema`: Liquidação ágil com 1 clique de despesas pendentes com débito em conta bancária.
+    - `budgetFormSchema`: Planejamento orçamentário anual/mensal por departamento e ministério.
+  - **Serviço Desacoplado da API REST (`src/services/api/financeService.ts`)**:
+    - Endpoints `/api/v1/tenant/finance/accounts`, `/api/v1/tenant/finance/categories`, `/api/v1/tenant/finance/cost-centers`, `/api/v1/tenant/finance/transactions`.
+    - Endpoints `/api/v1/tenant/finance/tithes-offerings` com geração automática de recibo timbrado e crédito na conta de destino.
+    - Endpoints `/api/v1/tenant/finance/expenses` e `/api/v1/tenant/finance/expenses/:id/pay` para liquidação com débito atômico na conta bancária.
+    - Endpoint `/api/v1/tenant/finance/transactions/:id/reconcile` para conciliação bancária com 1 clique e auditoria de tesouraria.
+    - Endpoint `/api/v1/tenant/finance/budgets` e cálculo de métricas consolidadas (`getSummaryMetrics`).
+    - Modo DevMockAdapter com stores reativos em memória e método `resetMockStores()` para isolamento estrito de testes.
+  - **Componentes Especializados de Interface (`src/modules/finance/components/`)**:
+    - `FinanceBadges`: Badges semânticos para status de transação (Pago, Pendente, Atrasado, Cancelado), tipos (Receita, Despesa, Dízimo, Oferta), status de conciliação e métodos de pagamento (PIX, Dinheiro, Boleto, Cartões, Transferência).
+    - `TitheOfferingModal`: Modal intuitivo para lançamento de dízimos e ofertas com alternador rápido de alçada, seleção de membros da secretaria com preenchimento automático de recibo e suporte a ofertas anônimas.
+    - `TitheReceiptModal`: Comprovante oficial eclesiástico digital timbrado com CNPJ da igreja, identificação do dizimista, valor formatado, autenticação do recibo e atalho para impressão/PDF (`window.print()`).
+    - `ExpenseModal`: Modal de contas a pagar com alocação por centro de custo, categoria contábil e conta de débito.
+    - `QuickPayExpenseModal`: Modal rápido para liquidação de duplicatas e contas com débito imediato em conta.
+    - `AccountModal`: Criação e edição de contas bancárias e caixas da igreja.
+    - `TransactionsTab`: Livro caixa completo e auditável com busca textual avançada e filtros combinados por tipo, status, conta e conciliação.
+    - `TithesOfferingsTab`: Visão dedicada para a tesouraria com arrecadações de dízimos e ofertas, métricas rápidas e atalho para reimpressão de recibo.
+    - `ExpensesTab`: Gestão de contas a pagar com destaque para contas vencidas e liquidação com 1 clique.
+    - `AccountsTab`: Visão geral de contas correntes e caixas com saldo consolidado e cartões bancários individuais.
+    - `BudgetsTab`: Comparativo orçamentário por departamento com medidor visual de progresso e **Alerta Chamativo de Estouro de Verba Orçamentária (> 100%)**.
+    - `ReconciliationTab`: Conciliação bancária com 1 clique e fechamento de caixa com auditoria de data e operador.
+  - **Página Orquestradora (`src/modules/finance/pages/FinancePage.tsx`)**:
+    - 6 cartões de KPI integrados no topo (Saldo Consolidado, Receitas no Mês, Despesas Pagas, Saldo Operacional/Superávit, Contas a Pagar em Aberto, Taxa de Conciliação Bancária).
+    - Navegação com 6 abas especializadas, integração TanStack Query e notificações Toast.
+  - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
+    - Rota `/admin/finance` configurada como rota filha do `AdminLayout` protegida por papéis autorizados (`church_admin`, `pastor`, `treasurer`).
+- **Validação**:
+  - `npm run test`: Vitest com 50 testes automatizados em 7 suítes (100% aprovados), cobrindo KPIs, listagem e filtros do livro caixa, emissão de recibo de dízimo oficial timbrado, lançamento de despesas, liquidação/pagamento de contas a pagar, conciliação com 1 clique, alerta chamativo de estouro de orçamento por departamento e saldos de contas e caixas.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado com 0 erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 6.45s com bundle otimizado (`dist/`).
 
+---
 
-
-
-
-
+### Etapa F4-08 — Portal do Membro
+- **Branch**: `feature/etapa-08-portal-membro`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.8`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/portal/types.ts`)**:
+    - Entidades `MemberCredential`, `MemberContributionSummary`, `MonthlyTaxItem`, `MemberAnnualTaxStatement`, `MemberScheduleItem`, `MemberRegistrationItem`, `MemberFamilyNucleus`, `MemberAnnouncement`, `MemberPortalSummary`.
+  - **Validação de Formulários com Zod (`src/modules/portal/schemas.ts`)**:
+    - `memberUpdateRegistrationSchema`: Atualização cadastral de dados de contato (telefone, e-mail), estado civil, endereço completo e justificativa obrigatória para análise da secretaria.
+    - `memberScheduleResponseSchema`: Confirmação ou recusa de escala ministerial com justificativa de ausência obrigatória (mínimo de 5 caracteres) para recusa.
+  - **Serviço Desacoplado da API REST (`src/services/api/portalService.ts`)**:
+    - Endpoints `/api/v1/tenant/portal/summary`, `/api/v1/tenant/portal/credential`, `/api/v1/tenant/portal/contributions`, `/api/v1/tenant/portal/tax-statement`, `/api/v1/tenant/portal/schedules`, `/api/v1/tenant/portal/schedules/:id/respond`, `/api/v1/tenant/portal/registrations`, `/api/v1/tenant/portal/family`, `/api/v1/tenant/portal/announcements`, `/api/v1/tenant/portal/change-requests`.
+    - Lógica de geração de informe anual IRPF com discriminação dos 12 meses do ano e autenticação digital.
+    - DevMockAdapter em memória com método `resetMockStores()` para testes atômicos e determinísticos.
+  - **Componentes Especializados de Interface (`src/modules/portal/components/`)**:
+    - `DigitalMembershipCard`: Cartão de credencial eclesiástica digital moderno com botão de rotação para visualização de frente e verso, foto/avatar do membro, número de rol (matrícula), status com pulso visual, dados mascarados (CPF e RG) e **QR Code de validação oficial** (`qrcode.react`).
+    - `AnnualTaxStatementModal`: Modal oficial timbrado de Declaração de Quitação Anual de Contribuições (IRPF) com CNPJ da igreja, tabela dos 12 meses discriminando dízimos e ofertas, totais acumulados, código autenticador e botão para impressão/PDF (`window.print()`).
+    - `MemberContributionsView`: Extrato pessoal de dízimos e ofertas com KPIs do ano/mês, tabela detalhada de transações, modal de comprovante e atalho para o informe de IRPF.
+    - `MemberSchedulesView`: Visualização em linha do tempo das escalas ministeriais do membro com confirmação de presença em 1 clique e modal de justificativa obrigatória para recusa.
+    - `MemberRegistrationsView`: Ingressos digitais para conferências e eventos da igreja com exibição de código de ingresso e **QR Code em alta resolução para check-in ágil na portaria**.
+    - `MemberFamilyView`: Núcleo familiar completo com chefe da família, cônjuge e dependentes, exibindo datas de batismo e **selo de proteção especial para menores de idade (LGPD)**.
+    - `MemberProfileUpdateModal`: Modal para solicitação de alteração cadastral enviado diretamente para validação da Secretaria Geral com histórico de pedidos (pendente, aprovado, indeferido).
+    - `MemberAnnouncementsView`: Mural de comunicados pastorais, convocações e avisos urgentes com filtros e categorização por badges semânticos.
+  - **Página Orquestradora (`src/modules/portal/pages/MemberPortalPage.tsx`)**:
+    - Banner superior com saudação personalizada, status de comunhão ativa e alerta reativo quando houver escala aguardando resposta.
+    - Interface organizada em 6 abas dinâmicas sincronizadas com as rotas do portal.
+  - **Layout e Roteamento Integrados (`src/layouts/MemberLayout.tsx` e `src/app/router/routes.tsx`)**:
+    - Subnavegação desktop e barra inferior mobile-first atualizadas com ícones e links diretos para todas as áreas do portal.
+    - Rotas `/portal/*` protegidas por controle de acesso e vinculadas à página do portal do membro.
+- **Validação**:
+  - `npm run test`: Vitest com 58 testes automatizados em 8 suítes (100% aprovados), cobrindo credencial digital com flip e QR Code, extrato de dízimos, informe IRPF, confirmação e recusa justificada de escalas, ingressos com QR Code, núcleo familiar com LGPD e pedidos de alteração cadastral.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado com 0 erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 6.60s com bundle otimizado (`dist/`).
 

@@ -64,6 +64,8 @@ import { AccessDeniedPage } from '@/modules/authentication/pages/AccessDeniedPag
 import { SecretariaPage } from '@/modules/members';
 import { MinistriesPage } from '@/modules/ministries';
 import { EventsPage } from '@/modules/events';
+import { FinancePage } from '@/modules/finance';
+import { MemberPortalPage } from '@/modules/portal';
 
 function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
@@ -525,59 +527,6 @@ function AdminDashboardDemo() {
   );
 }
 
-function MemberPortalHomeDemo() {
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Bem-vindo(a) ao Portal do Membro"
-        description="Acompanhe suas escalas, eventos, avisos e histórico pessoal de presença."
-        breadcrumbs={[{ label: 'Portal', href: '/portal' }, { label: 'Início' }]}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="hover:border-primary/50 transition-all">
-          <CardHeader>
-            <Calendar className="h-8 w-8 text-primary mb-2" />
-            <CardTitle className="text-base">Próximos Cultos</CardTitle>
-            <CardDescription>Culto de Celebração — Domingo às 18:00</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link to="/portal/events">
-              <Button size="sm" variant="outline" className="w-full">Ver Agenda Completa</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        <Card className="hover:border-primary/50 transition-all">
-          <CardHeader>
-            <CheckCircle2 className="h-8 w-8 text-emerald-500 mb-2" />
-            <CardTitle className="text-base">Minhas Escalas</CardTitle>
-            <CardDescription>Você está escalado no Ministério de Louvor neste domingo</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link to="/portal/schedules">
-              <Button size="sm" variant="outline" className="w-full">Confirmar Presença</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        <Card className="hover:border-primary/50 transition-all">
-          <CardHeader>
-            <UserCheck className="h-8 w-8 text-indigo-500 mb-2" />
-            <CardTitle className="text-base">Meu Cadastro</CardTitle>
-            <CardDescription>Mantenha seus dados e de sua família atualizados</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link to="/portal/profile">
-              <Button size="sm" variant="outline" className="w-full">Solicitar Alteração</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
-    </div>
-  );
-}
-
 function PlatformHomeDemo() {
   return (
     <div className="space-y-6">
@@ -639,7 +588,7 @@ export function AppRoutes() {
         <Route path="ministries" element={<MinistriesPage />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="attendance" element={<EventsPage />} />
-        <Route path="finance" element={<AdminDashboardDemo />} />
+        <Route path="finance" element={<FinancePage />} />
         <Route path="reports" element={<AdminDashboardDemo />} />
         <Route path="settings" element={<AdminDashboardDemo />} />
       </Route>
@@ -653,11 +602,13 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<MemberPortalHomeDemo />} />
-        <Route path="events" element={<MemberPortalHomeDemo />} />
-        <Route path="schedules" element={<MemberPortalHomeDemo />} />
-        <Route path="announcements" element={<MemberPortalHomeDemo />} />
-        <Route path="profile" element={<MemberPortalHomeDemo />} />
+        <Route index element={<MemberPortalPage />} />
+        <Route path="schedules" element={<MemberPortalPage />} />
+        <Route path="events" element={<MemberPortalPage />} />
+        <Route path="contributions" element={<MemberPortalPage />} />
+        <Route path="family" element={<MemberPortalPage />} />
+        <Route path="announcements" element={<MemberPortalPage />} />
+        <Route path="profile" element={<MemberPortalPage />} />
       </Route>
 
       {/* Platform Layout Routes (Protegidas EXCLUSIVAMENTE para Platform Admin) */}
