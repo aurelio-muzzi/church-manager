@@ -424,6 +424,47 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
   - `npm run build`: Build de produção Vite concluído em 4.05s com bundle otimizado (`dist/`).
 
+---
+
+### Etapa F4-05 — Ministérios & Voluntários
+- **Branch**: `feature/etapa-05-ministerios`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.5`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/ministries/types.ts`)**:
+    - Entidades `Ministry`, `MinistryRole`, `MinistryVolunteer`, `Schedule`, `ScheduleVolunteer`, `ScheduleConflict`, `MinistrySummaryMetrics`, `ScheduleFilters`.
+  - **Validação de Formulários e Prevenção de Conflitos (`src/modules/ministries/schemas.ts`)**:
+    - `ministryFormSchema`: Validação de nome, descrição, cor de identificação e líder ministerial.
+    - `ministryRoleFormSchema`: Cadastro de papéis e funções especializadas por ministério (ex: Baterista, Professora de Classe).
+    - `volunteerAssignFormSchema`: Alocação de membro e definição de status e data de ingresso.
+    - `scheduleFormSchema`: Escala de serviço com array dinâmico de voluntários e funções para a data.
+    - `scheduleResponseSchema`: Resposta do voluntário (confirmar, recusar com justificativa obrigatória ou solicitar substituição indicando outro membro).
+    - `isTimeIntervalOverlapping`: Algoritmo matemático para detecção de interseção de intervalos de horário `(startA < endB && endA > startB)`.
+  - **Serviço Desacoplado da API REST (`src/services/api/ministryService.ts`)**:
+    - Endpoints `/api/v1/tenant/ministries`, `/api/v1/tenant/schedules`, `/api/v1/tenant/schedules/check-conflicts`, publicação de escalas e confirmação/recusa de presença.
+    - Modo DevMockAdapter com stores reativos em memória e método `resetMockStores()` para isolamento de testes automatizados.
+  - **Componentes Especializados de Interface (`src/modules/ministries/components/`)**:
+    - `ScheduleConflictAlert`: Alerta visual, chamativo e em tempo real exibido no modal de escala caso haja sobreposição de horário para qualquer um dos voluntários selecionados na mesma data.
+    - `ScheduleFormModal`: Formulário de criação/edição de escala com `useWatch` e `useFieldArray`, cálculo reativo em tempo real de conflitos de horário e alerta preventivo.
+    - `VolunteerResponseModal`: Modal de resposta do voluntário com confirmação de presença, recusa com justificativa obrigatória e indicação de substituto.
+    - `SchedulesTab`: Grade de cartões de escalas com timeline, badges de confirmação de voluntários, filtros de busca/ministério e ações de publicar ou excluir.
+    - `MinistriesTab`: Cartões de ministérios com banner na cor do departamento, dados do líder e modal de novas funções/papéis.
+    - `VolunteersTab`: Tabela de voluntários com filtro por departamento e modal de alocação de novos voluntários.
+    - `PresenceResponsesTab`: Central de confirmações de escalas com ação direta de confirmação e modal para alteração de resposta.
+  - **Página Orquestradora (`src/modules/ministries/pages/MinistriesPage.tsx`)**:
+    - Painel integrado com 5 cartões de KPI (Total de Ministérios, Voluntários Ativos, Escalas Publicadas, Confirmações Pendentes, Presenças Confirmadas).
+    - Navegação com 4 abas (`schedules`, `ministries`, `volunteers`, `responses`), integração com TanStack Query e notificações Toast.
+  - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
+    - Rota `/admin/ministries` configurada como rota filha do `AdminLayout` protegida por papéis autorizados (`church_admin`, `pastor`, `secretary`, `leader`).
+- **Validação**:
+  - `npm run test`: Vitest com 34 testes automatizados em 5 suítes (100% aprovados), cobrindo KPIs, listagem de escalas, departamentos e funções, alerta chamativo de conflito de horário em tempo real, filtro de voluntários, confirmação de presença e recusa com justificativa obrigatória.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 4.75s com bundle otimizado (`dist/`).
+
+
 
 
 
