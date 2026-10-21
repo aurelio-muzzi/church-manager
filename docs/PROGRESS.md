@@ -384,6 +384,47 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
   - `npm run build`: Build de produção Vite concluído em 3.87s com bundle otimizado (`dist/`).
 
+---
+
+### Etapa F4-04 — Secretaria & Gestão de Membresia
+- **Branch**: `feature/etapa-04-secretaria`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.4`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/members/types.ts`)**:
+    - Entidades `Member`, `Congregation`, `Family`, `Visitor`, `VisitorVisit`, `MemberChangeRequest`, `SecretariaSummaryMetrics`, `MemberFilters`.
+  - **Validação de Formulários com Zod (`src/modules/members/schemas.ts`)**:
+    - `memberFormSchema`: Validação de dados pessoais, eclesiásticos, vínculos familiares e tutela legal de menores (< 18 anos) em estrita conformidade com a LGPD.
+    - `congregationFormSchema`: Validação de sede/filial, liderança pastoral, endereço e dados de contato.
+    - `familyFormSchema`: Criação de núcleos familiares com vinculação de responsáveis e membros.
+    - `visitorFormSchema` & `visitorVisitFormSchema`: Cadastro de visitantes, canal de contato, histórico e frequência de visitas aos cultos.
+    - `reviewChangeRequestSchema`: Validação de aprovação ou rejeição com justificativa obrigatória.
+  - **Serviço Desacoplado da API REST (`src/services/api/secretariaService.ts`)**:
+    - Endpoints `/api/v1/tenant/members`, `/api/v1/tenant/congregations`, `/api/v1/tenant/families`, `/api/v1/tenant/visitors`, `/api/v1/tenant/change-requests`.
+    - Modo DevMockAdapter com stores reativos em memória para desenvolvimento local isolado e testes automatizados.
+    - Operação atômica de conversão de visitante em membro oficial preservando o histórico eclesiástico.
+  - **Componentes Especializados de Interface (`src/modules/members/components/`)**:
+    - `MemberDetailDialog`: Modal com dados cadastrais e eclesiásticos, filiação, histórico de batismo e badge LGPD com alerta de tutela legal para menores de 18 anos.
+    - `MemberFormModal`: Formulário modular com detecção reativa em tempo real de data de nascimento de menores de idade, exibindo dinamicamente campos obrigatórios de responsável legal (`legalGuardianName`, `legalGuardianPhone`).
+    - `MembersTab`: Barra de filtros inteligentes (busca textual, congregação, status de membresia e alternador de menores LGPD), tabela responsiva com avatares e iniciais, status badges e diálogo de confirmação de exclusão segura.
+    - `FamiliesTab`: Cartões de núcleos familiares, indicação do chefe de família, badges dos integrantes e modal de cadastro de famílias.
+    - `VisitorsTab`: Gestão de visitantes, registro de visitas subsequentes e conversão atômica de visitante em membro oficial com feedback comemorativo Toast.
+    - `CongregationsTab`: Listagem hierárquica distinguindo Congregação Sede (badge dourado/destaque) e Filiais, contagem de membros ativos, dados de contato e modal de nova congregação.
+    - `ChangeRequestsTab`: Gestão de solicitações de alteração cadastral enviadas pelo Portal do Membro com comparativo visual antes/depois (diff de alterações com destaque verde e tachado) e aprovação/rejeição com justificativa obrigatória.
+  - **Página Orquestradora (`src/modules/members/pages/SecretariaPage.tsx`)**:
+    - Painel integrado com 6 cartões de KPI (Total de Membros, Membros Ativos, Menores de Idade LGPD, Congregações, Visitantes Ativos, Solicitações Pendentes).
+    - Navegação fluida via Radix Tabs (`members`, `congregations`, `families`, `visitors`, `requests`), gerenciamento de mutações com invalidação atômica de cache via TanStack Query e notificações Toast.
+  - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
+    - Rota `/admin/members` configurada como rota filha do `AdminLayout` protegida por papéis autorizados (`church_admin`, `pastor`, `secretary`).
+- **Validação**:
+  - `npm run test`: Vitest com 27 testes automatizados em 4 suítes (100% aprovados) cobrindo renderização, filtros, formulários com detecção LGPD de menores, conversão atômica de visitantes, comparativo antes/depois e aprovação cadastral.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 4.05s com bundle otimizado (`dist/`).
+
+
 
 
 

@@ -61,6 +61,7 @@ import { ProtectedRoute } from '@/components/shared/ProtectedRoute';
 import { LoginPage } from '@/modules/authentication/pages/LoginPage';
 import { ForgotPasswordPage } from '@/modules/authentication/pages/ForgotPasswordPage';
 import { AccessDeniedPage } from '@/modules/authentication/pages/AccessDeniedPage';
+import { SecretariaPage } from '@/modules/members';
 
 function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
@@ -632,7 +633,7 @@ export function AppRoutes() {
       >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboardDemo />} />
-        <Route path="members" element={<AdminDashboardDemo />} />
+        <Route path="members" element={<SecretariaPage />} />
         <Route path="ministries" element={<AdminDashboardDemo />} />
         <Route path="events" element={<AdminDashboardDemo />} />
         <Route path="finance" element={<AdminDashboardDemo />} />
