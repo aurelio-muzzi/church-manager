@@ -553,3 +553,43 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado com 0 erros (100% strict).
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
   - `npm run build`: Build de produção Vite concluído em 6.45s com bundle otimizado (`dist/`).
+
+---
+
+### Etapa F4-08 — Portal do Membro
+- **Branch**: `feature/etapa-08-portal-membro`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.8`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/portal/types.ts`)**:
+    - Entidades `MemberCredential`, `MemberContributionSummary`, `MonthlyTaxItem`, `MemberAnnualTaxStatement`, `MemberScheduleItem`, `MemberRegistrationItem`, `MemberFamilyNucleus`, `MemberAnnouncement`, `MemberPortalSummary`.
+  - **Validação de Formulários com Zod (`src/modules/portal/schemas.ts`)**:
+    - `memberUpdateRegistrationSchema`: Atualização cadastral de dados de contato (telefone, e-mail), estado civil, endereço completo e justificativa obrigatória para análise da secretaria.
+    - `memberScheduleResponseSchema`: Confirmação ou recusa de escala ministerial com justificativa de ausência obrigatória (mínimo de 5 caracteres) para recusa.
+  - **Serviço Desacoplado da API REST (`src/services/api/portalService.ts`)**:
+    - Endpoints `/api/v1/tenant/portal/summary`, `/api/v1/tenant/portal/credential`, `/api/v1/tenant/portal/contributions`, `/api/v1/tenant/portal/tax-statement`, `/api/v1/tenant/portal/schedules`, `/api/v1/tenant/portal/schedules/:id/respond`, `/api/v1/tenant/portal/registrations`, `/api/v1/tenant/portal/family`, `/api/v1/tenant/portal/announcements`, `/api/v1/tenant/portal/change-requests`.
+    - Lógica de geração de informe anual IRPF com discriminação dos 12 meses do ano e autenticação digital.
+    - DevMockAdapter em memória com método `resetMockStores()` para testes atômicos e determinísticos.
+  - **Componentes Especializados de Interface (`src/modules/portal/components/`)**:
+    - `DigitalMembershipCard`: Cartão de credencial eclesiástica digital moderno com botão de rotação para visualização de frente e verso, foto/avatar do membro, número de rol (matrícula), status com pulso visual, dados mascarados (CPF e RG) e **QR Code de validação oficial** (`qrcode.react`).
+    - `AnnualTaxStatementModal`: Modal oficial timbrado de Declaração de Quitação Anual de Contribuições (IRPF) com CNPJ da igreja, tabela dos 12 meses discriminando dízimos e ofertas, totais acumulados, código autenticador e botão para impressão/PDF (`window.print()`).
+    - `MemberContributionsView`: Extrato pessoal de dízimos e ofertas com KPIs do ano/mês, tabela detalhada de transações, modal de comprovante e atalho para o informe de IRPF.
+    - `MemberSchedulesView`: Visualização em linha do tempo das escalas ministeriais do membro com confirmação de presença em 1 clique e modal de justificativa obrigatória para recusa.
+    - `MemberRegistrationsView`: Ingressos digitais para conferências e eventos da igreja com exibição de código de ingresso e **QR Code em alta resolução para check-in ágil na portaria**.
+    - `MemberFamilyView`: Núcleo familiar completo com chefe da família, cônjuge e dependentes, exibindo datas de batismo e **selo de proteção especial para menores de idade (LGPD)**.
+    - `MemberProfileUpdateModal`: Modal para solicitação de alteração cadastral enviado diretamente para validação da Secretaria Geral com histórico de pedidos (pendente, aprovado, indeferido).
+    - `MemberAnnouncementsView`: Mural de comunicados pastorais, convocações e avisos urgentes com filtros e categorização por badges semânticos.
+  - **Página Orquestradora (`src/modules/portal/pages/MemberPortalPage.tsx`)**:
+    - Banner superior com saudação personalizada, status de comunhão ativa e alerta reativo quando houver escala aguardando resposta.
+    - Interface organizada em 6 abas dinâmicas sincronizadas com as rotas do portal.
+  - **Layout e Roteamento Integrados (`src/layouts/MemberLayout.tsx` e `src/app/router/routes.tsx`)**:
+    - Subnavegação desktop e barra inferior mobile-first atualizadas com ícones e links diretos para todas as áreas do portal.
+    - Rotas `/portal/*` protegidas por controle de acesso e vinculadas à página do portal do membro.
+- **Validação**:
+  - `npm run test`: Vitest com 58 testes automatizados em 8 suítes (100% aprovados), cobrindo credencial digital com flip e QR Code, extrato de dízimos, informe IRPF, confirmação e recusa justificada de escalas, ingressos com QR Code, núcleo familiar com LGPD e pedidos de alteração cadastral.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado com 0 erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+  - `npm run build`: Build de produção Vite concluído em 6.60s com bundle otimizado (`dist/`).
+
