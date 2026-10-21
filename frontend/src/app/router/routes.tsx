@@ -63,6 +63,7 @@ import { ForgotPasswordPage } from '@/modules/authentication/pages/ForgotPasswor
 import { AccessDeniedPage } from '@/modules/authentication/pages/AccessDeniedPage';
 import { SecretariaPage } from '@/modules/members';
 import { MinistriesPage } from '@/modules/ministries';
+import { EventsPage } from '@/modules/events';
 
 function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
@@ -636,7 +637,8 @@ export function AppRoutes() {
         <Route path="dashboard" element={<AdminDashboardDemo />} />
         <Route path="members" element={<SecretariaPage />} />
         <Route path="ministries" element={<MinistriesPage />} />
-        <Route path="events" element={<AdminDashboardDemo />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="attendance" element={<EventsPage />} />
         <Route path="finance" element={<AdminDashboardDemo />} />
         <Route path="reports" element={<AdminDashboardDemo />} />
         <Route path="settings" element={<AdminDashboardDemo />} />

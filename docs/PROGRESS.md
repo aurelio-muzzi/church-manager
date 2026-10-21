@@ -276,9 +276,9 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 | **F4-01** | Fundação Frontend (Vite 6, React 19, TS Strict, Tailwind v4, shadcn base, ESLint, Vitest, DevMockAdapter) | `feature/etapa-01-fundacao-frontend` | **Concluída** | `v2.0.0-alpha.1` |
 | **F4-02** | Design System & Layouts (Tokens semânticos, Dark/Light, Layouts Admin/Portal/Auth/Platform) | `feature/etapa-02-design-system` | **Concluída** | `v2.0.0-alpha.2` |
 | **F4-03** | Autenticação & Navegação Protegida (Login, Sessão Sanctum, Rotas Protegidas, RBAC) | `feature/etapa-03-autenticacao-navegacao` | **Concluída** | `v2.0.0-alpha.3` |
-| **F4-04** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-04-secretaria` | *Planejada* | — |
-| **F4-05** | Ministérios & Voluntários (Equipes, Lideranças, Escalas, Conflitos) | `feature/etapa-05-ministerios` | *Planejada* | — |
-| **F4-06** | Eventos & Presença (Agenda, Inscrições, Check-in Manual e QR Code) | `feature/etapa-06-eventos-presenca` | *Planejada* | — |
+| **F4-04** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-04-secretaria` | **Concluída** | `v2.0.0-alpha.4` |
+| **F4-05** | Ministérios & Voluntários (Equipes, Lideranças, Escalas, Conflitos) | `feature/etapa-05-ministerios` | **Concluída** | `v2.0.0-alpha.5` |
+| **F4-06** | Eventos & Presença (Agenda, Inscrições, Check-in Manual e QR Code) | `feature/etapa-06-eventos-presenca` | **Concluída** | `v2.0.0-alpha.6` |
 | **F4-07** | Financeiro Avançado (Dízimos, Ofertas, Contas, Lançamentos, Orçamentos, Conciliação) | `feature/etapa-07-financeiro` | *Planejada* | — |
 | **F4-08** | Portal do Membro (Autoatendimento Mobile-First, Perfil, Escalas, Avisos) | `feature/etapa-08-portal-membro` | *Planejada* | — |
 | **F4-09** | Dashboards Executivos & Relatórios (BI Recharts, Exportações CSV/PDF) | `feature/etapa-09-dashboard-relatorios` | *Planejada* | — |
@@ -463,6 +463,49 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
   - `npm run build`: Build de produção Vite concluído em 4.75s com bundle otimizado (`dist/`).
+
+---
+
+### Etapa F4-06 — Eventos & Presença
+- **Branch**: `feature/etapa-06-eventos-presenca`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.6`
+- **Implementações**:
+  - **Tipagem e Contratos de Domínio (`src/modules/events/types.ts`)**:
+    - Entidades `ChurchEvent`, `EventSession`, `EventRegistration`, `EventAttendanceRecord`, `EventSummaryMetrics`, `EventFilters`, `CheckInResult`.
+  - **Validação de Formulários com Zod (`src/modules/events/schemas.ts`)**:
+    - `eventFormSchema`: Validação de título, categoria (culto, conferência, vigília, congresso, ensaio, etc.), formato (presencial, online, híbrido), congregação, datas, horários, capacidade máxima e método de credenciamento.
+    - `eventRegistrationFormSchema`: Inscrição com nome, e-mail, telefone, vínculo com a igreja, lote/ingresso e restrições.
+    - `manualAttendanceFormSchema`: Registro de presença na portaria com seleção rápida de participante (membro ou visitante).
+    - `qrCodeCheckInSchema`: Leitura e validação instantânea de ingresso via código de QR Code ou scanner físico USB.
+  - **Serviço Desacoplado da API REST (`src/services/api/eventService.ts`)**:
+    - Endpoints `/api/v1/tenant/events`, `/api/v1/tenant/events/:id/cancel`, `/api/v1/tenant/events/:id/reschedule`, `/api/v1/tenant/events/:id/registrations`.
+    - Endpoint `/api/v1/tenant/events/:id/check-in/manual` com validação matemática e bloqueio de duplicidade para o mesmo evento.
+    - Endpoint `/api/v1/tenant/events/:id/check-in/qr` com resolução do código do ingresso/token, validação de status e detecção estrita de revalidação de QR Code já conferido.
+    - Modo DevMockAdapter com stores reativos em memória e método `resetMockStores()` para isolamento de testes automatizados.
+  - **Componentes Especializados de Interface (`src/modules/events/components/`)**:
+    - `EventBadges`: Badges semânticos para status do evento (Agendado, Em Andamento, Concluído, Cancelado) e categorias de eventos.
+    - `EventFormModal`: Modal moderno para cadastro e reagendamento de eventos e cultos.
+    - `EventsListView`: Grade de cartões de eventos com barra de progresso visual de lotação (ocupação x capacidade máxima), status e atalhos rápidos.
+    - `EventsCalendarView`: Calendário eclesiástico mensal construído com `date-fns` no fuso horário canônico `America/Manaus`, alternador de meses e visualizador de agenda lateral para o dia selecionado.
+    - `TicketPreviewModal`: Modal com renderização do ingresso digital contendo QR Code gerado em tempo real com `qrcode.react` (`QRCodeSVG`), dados do evento, lote e atalho para impressão.
+    - `EventRegistrationsTab`: Gestão de participantes inscritos, filtro por status, modal de inscrição e visualização/reimpressão de QR Code.
+    - `ManualAttendanceModal`: Portaria ágil com busca instantânea por nome ou telefone em tempo real entre membros e visitantes cadastrados, e **banner chamativo de advertência em caso de duplicidade de check-in**.
+    - `QRCodeScannerModal`: Leitor de QR Code com simulação visual de scanner a laser de câmera, suporte a entrada via pistola leitora de código de barras/QR Code USB e validação em tempo real com feedback sonoro/visual.
+    - `EventAttendanceTab`: Painel de controle de portaria em tempo real com contador dinâmico de presenças, métricas de capacidade e feed ao vivo dos últimos check-ins com horário, método (Manual vs QR Code) e operador.
+  - **Página Orquestradora (`src/modules/events/pages/EventsPage.tsx`)**:
+    - 5 cartões de KPI integrados (Eventos Ativos no Mês, Presença Geral em Cultos, Inscrições Confirmadas, Taxa Média de Lotação, Check-ins na Portaria Hoje).
+    - 4 abas de navegação fluida (`list`, `calendar`, `registrations`, `attendance`), integração com TanStack Query e notificações Toast.
+  - **Roteamento Conectado (`src/app/router/routes.tsx`)**:
+    - Rotas `/admin/events` e `/admin/attendance` vinculadas ao `EventsPage` sob `AdminLayout` protegidas por controle de acesso RBAC.
+- **Validação**:
+    - `npm run test`: Vitest com 42 testes automatizados em 6 suítes (100% aprovados), cobrindo criação de eventos, calendário eclesiástico, inscrições, portaria, check-in manual com bloqueio chamativo de duplicidade e validação de QR Code com alerta de ingresso já conferido.
+    - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+    - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros (`--max-warnings 0`).
+    - `npm run build`: Build de produção Vite concluído com sucesso e chunks segregados (`dist/`).
+
 
 
 
