@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -55,11 +56,24 @@ const navItems: NavItem[] = [
 
 export function AdminLayout() {
   const { isDark, setTheme } = useTheme();
+  const { user, logout, switchTenant } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const activeUser = devMockAdapter.getActiveUser();
   const tenants = devMockAdapter.getTenants();
-  const [activeTenant, setActiveTenant] = useState(tenants[0]?.name || 'Igreja Central de Manaus');
+  const activeTenantName =
+    tenants.find((t) => t.id === user?.tenantId)?.name ||
+    user?.tenantName ||
+    'Igreja Central de Manaus';
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login', { replace: true });
+  };
+
+  const handleSwitchTenant = async (tenantId: string) => {
+    await switchTenant(tenantId);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row">
@@ -91,7 +105,7 @@ export function AdminLayout() {
                       Congregação Ativa
                     </span>
                     <span className="text-xs font-medium text-foreground truncate block">
-                      {activeTenant}
+                      {activeTenantName}
                     </span>
                   </div>
                   <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
@@ -103,11 +117,11 @@ export function AdminLayout() {
                 {tenants.map((t) => (
                   <DropdownMenuItem
                     key={t.id}
-                    onClick={() => setActiveTenant(t.name)}
-                    className="flex items-center justify-between text-xs"
+                    onClick={() => handleSwitchTenant(t.id)}
+                    className="flex items-center justify-between text-xs cursor-pointer"
                   >
                     <span className="truncate">{t.name}</span>
-                    {activeTenant === t.name && (
+                    {user?.tenantId === t.id && (
                       <CheckCheck className="h-3.5 w-3.5 text-primary shrink-0" />
                     )}
                   </DropdownMenuItem>
@@ -151,15 +165,15 @@ export function AdminLayout() {
                 <button className="flex items-center gap-2.5 text-left p-1 rounded-lg hover:bg-accent transition-colors flex-1 min-w-0 mr-1">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
-                      {activeUser?.name?.slice(0, 2).toUpperCase() || 'AD'}
+                      {user?.name?.slice(0, 2).toUpperCase() || 'AD'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="truncate flex-1 min-w-0">
                     <p className="text-xs font-semibold text-foreground truncate">
-                      {activeUser?.name || 'Administrador'}
+                      {user?.name || 'Administrador'}
                     </p>
                     <p className="text-[11px] text-muted-foreground truncate">
-                      {activeUser?.role === 'church_admin' ? 'Pastor / Administrador' : activeUser?.role}
+                      {user?.role === 'church_admin' ? 'Pastor / Administrador' : user?.role || 'Liderança'}
                     </p>
                   </div>
                 </button>
@@ -180,7 +194,10 @@ export function AdminLayout() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:text-destructive flex items-center gap-2">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-destructive focus:text-destructive flex items-center gap-2 cursor-pointer"
+                >
                   <LogOut className="h-4 w-4" />
                   <span>Encerrar Sessão</span>
                 </DropdownMenuItem>
@@ -237,7 +254,7 @@ export function AdminLayout() {
             </nav>
           </div>
 
-          <div className="border-t border-border pt-4">
+          <div className="border-t border-border pt-4 space-y-2">
             <Button
               variant="outline"
               className="w-full justify-start gap-2"
@@ -245,6 +262,14 @@ export function AdminLayout() {
             >
               {isDark ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-500" />}
               <span>{isDark ? 'Modo Claro' : 'Modo Escuro'}</span>
+            </Button>
+            <Button
+              variant="destructive"
+              className="w-full justify-start gap-2"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Encerrar Sessão</span>
             </Button>
           </div>
         </SheetContent>
