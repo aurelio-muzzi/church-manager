@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
 import { useToast } from '@/hooks/useToast';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -44,6 +45,8 @@ import {
   UserCheck,
   LayoutDashboard,
   ExternalLink,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { MemberLayout } from '@/layouts/MemberLayout';
@@ -54,10 +57,15 @@ import { MetricKpiCard } from '@/components/shared/MetricKpiCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { ConfirmationDialog } from '@/components/shared/ConfirmationDialog';
+import { ProtectedRoute } from '@/components/shared/ProtectedRoute';
+import { LoginPage } from '@/modules/authentication/pages/LoginPage';
+import { ForgotPasswordPage } from '@/modules/authentication/pages/ForgotPasswordPage';
+import { AccessDeniedPage } from '@/modules/authentication/pages/AccessDeniedPage';
 
 function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
   const { success, error, warning, info } = useToast();
+  const { user, isAuthenticated, logout } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [demoSwitch, setDemoSwitch] = useState(true);
   const [demoCheckbox, setDemoCheckbox] = useState(true);
@@ -78,25 +86,44 @@ function ShowcaseHomePage() {
                 ChurchManager
               </span>
               <span className="hidden sm:inline-block ml-2 text-xs text-muted-foreground border-l border-border pl-2">
-                Design System & Layouts (Etapa 02)
+                Autenticação & RBAC (Etapa 03)
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Link to="/admin/dashboard">
-              <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                Painel Admin
-              </Button>
-            </Link>
-
-            <Link to="/portal">
-              <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
-                <UserCheck className="h-3.5 w-3.5" />
-                Portal Membro
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link to="/admin/dashboard">
+                  <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    Painel Admin
+                  </Button>
+                </Link>
+                <Link to="/portal">
+                  <Button size="sm" variant="outline" className="hidden md:inline-flex gap-1.5 text-xs">
+                    <UserCheck className="h-3.5 w-3.5" />
+                    Portal Membro
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={logout}
+                  className="gap-1.5 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Sair ({user?.name.split(' ')[0]})</span>
+                </Button>
+              </>
+            ) : (
+              <Link to="/login">
+                <Button size="sm" className="gap-1.5 text-xs">
+                  <LogIn className="h-3.5 w-3.5" />
+                  Fazer Login
+                </Button>
+              </Link>
+            )}
 
             <Button
               variant="outline"
@@ -119,14 +146,14 @@ function ShowcaseHomePage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
               <ShieldCheck className="h-3.5 w-3.5" />
-              Etapa 02: Design System, Componentes Acessíveis & Layouts
+              Etapa 03: Autenticação, Sessão Sanctum, RBAC & Rotas Protegidas
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Design System <span className="text-primary">ChurchManager</span>
+              Design System & Autenticação <span className="text-primary">ChurchManager</span>
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base max-w-2xl leading-relaxed">
-              Catálogo visual dos componentes semânticos, primitivas acessíveis (Radix UI + shadcn/ui),
-              modais, drawers, toasts interativos e navegações responsivas.
+              Camada de controle de acesso rigorosa com suporte a Laravel Sanctum (cookies + CSRF)
+              ou DevMockAdapter, proteção visual por papéis e gerenciamento seguro de sessões.
             </p>
           </div>
 
@@ -134,7 +161,7 @@ function ShowcaseHomePage() {
           <div className="flex flex-wrap gap-2">
             <Link to="/admin/dashboard">
               <Button className="gap-2">
-                <span>Explorar Layout Admin</span>
+                <span>Painel Admin</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -151,7 +178,7 @@ function ShowcaseHomePage() {
             </Link>
             <Link to="/login">
               <Button variant="ghost" className="gap-2">
-                <span>Login</span>
+                <span>Tela de Login</span>
               </Button>
             </Link>
           </div>
@@ -425,7 +452,7 @@ function ShowcaseHomePage() {
 
       {/* Footer */}
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground mt-auto bg-card/30">
-        <p>ChurchManager • Design System & Layouts • React 19 + Tailwind CSS v4 • Fuso Horário: America/Manaus</p>
+        <p>ChurchManager • Autenticação & Design System • React 19 + Tailwind CSS v4 • Fuso Horário: America/Manaus</p>
       </footer>
     </div>
   );
@@ -480,13 +507,14 @@ function AdminDashboardDemo() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Visão Geral dos Módulos Administrativos</CardTitle>
-          <CardDescription>Selecione um módulo na sidebar para gerenciar as rotinas da igreja</CardDescription>
+          <CardTitle className="text-base">Acesso Protegido por Papel (RBAC)</CardTitle>
+          <CardDescription>Área restrita a administradores e liderança eclesiástica</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            O layout administrativo inclui alternância de tenant, gaveta móvel para smartphones,
-            migalhas de pão e integração desacoplada pronta para a API REST.
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Esta rota está protegida via <code>ProtectedRoute</code> com papéis autorizados
+            (<code>church_admin</code>, <code>pastor</code>, <code>secretary</code>, <code>treasurer</code>, <code>leader</code>).
+            Membros que tentarem acessar diretamente são redirecionados para a tela de Acesso Negado (403).
           </p>
         </CardContent>
       </Card>
@@ -581,46 +609,27 @@ function PlatformHomeDemo() {
   );
 }
 
-function LoginDemo() {
-  return (
-    <div className="space-y-4">
-      <div className="text-center space-y-1">
-        <h2 className="text-xl font-bold">Acesse sua Conta</h2>
-        <p className="text-xs text-muted-foreground">Informe seu e-mail e senha cadastrados</p>
-      </div>
-
-      <div className="space-y-3">
-        <div className="space-y-1">
-          <Label htmlFor="login-email">E-mail</Label>
-          <Input id="login-email" type="email" placeholder="pastor@churchmanager.app" defaultValue="pastor@churchmanager.app" />
-        </div>
-        <div className="space-y-1">
-          <Label htmlFor="login-password">Senha</Label>
-          <Input id="login-password" type="password" defaultValue="••••••••" />
-        </div>
-
-        <Link to="/admin/dashboard" className="block pt-2">
-          <Button className="w-full" size="lg">Entrar no Sistema</Button>
-        </Link>
-      </div>
-
-      <div className="text-center pt-2">
-        <Link to="/" className="text-xs text-primary hover:underline">
-          Voltar para a página inicial
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export function AppRoutes() {
   return (
     <Routes>
-      {/* Showcase Home */}
+      {/* Showcase Home (Pública) */}
       <Route path="/" element={<ShowcaseHomePage />} />
 
-      {/* Admin Layout Routes */}
-      <Route path="/admin" element={<AdminLayout />}>
+      {/* Auth Public Routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/recuperar-senha" element={<ForgotPasswordPage />} />
+      </Route>
+
+      {/* Admin Layout Routes (Protegidas para Liderança / Administradores) */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={['church_admin', 'pastor', 'secretary', 'treasurer', 'leader']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboardDemo />} />
         <Route path="members" element={<AdminDashboardDemo />} />
@@ -631,8 +640,15 @@ export function AppRoutes() {
         <Route path="settings" element={<AdminDashboardDemo />} />
       </Route>
 
-      {/* Member Portal Layout Routes */}
-      <Route path="/portal" element={<MemberLayout />}>
+      {/* Member Portal Layout Routes (Protegidas para Membros & Líderes) */}
+      <Route
+        path="/portal"
+        element={
+          <ProtectedRoute allowedRoles={['member', 'church_admin', 'pastor', 'secretary', 'treasurer', 'leader']}>
+            <MemberLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<MemberPortalHomeDemo />} />
         <Route path="events" element={<MemberPortalHomeDemo />} />
         <Route path="schedules" element={<MemberPortalHomeDemo />} />
@@ -640,16 +656,21 @@ export function AppRoutes() {
         <Route path="profile" element={<MemberPortalHomeDemo />} />
       </Route>
 
-      {/* Platform Layout Routes */}
-      <Route path="/platform" element={<PlatformLayout />}>
+      {/* Platform Layout Routes (Protegidas EXCLUSIVAMENTE para Platform Admin) */}
+      <Route
+        path="/platform"
+        element={
+          <ProtectedRoute allowedRoles={['platform_admin']}>
+            <PlatformLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<PlatformHomeDemo />} />
         <Route path="tenants" element={<PlatformHomeDemo />} />
       </Route>
 
-      {/* Auth Layout Routes */}
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<LoginDemo />} />
-      </Route>
+      {/* Status / Error Pages */}
+      <Route path="/403" element={<AccessDeniedPage />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

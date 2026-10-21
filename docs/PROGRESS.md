@@ -275,7 +275,7 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
 |---|---|---|---|---|
 | **F4-01** | Fundação Frontend (Vite 6, React 19, TS Strict, Tailwind v4, shadcn base, ESLint, Vitest, DevMockAdapter) | `feature/etapa-01-fundacao-frontend` | **Concluída** | `v2.0.0-alpha.1` |
 | **F4-02** | Design System & Layouts (Tokens semânticos, Dark/Light, Layouts Admin/Portal/Auth/Platform) | `feature/etapa-02-design-system` | **Concluída** | `v2.0.0-alpha.2` |
-| **F4-03** | Autenticação & Navegação Protegida (Login, Sessão Sanctum, Rotas Protegidas, RBAC) | `feature/etapa-03-autenticacao-navegacao` | *Planejada* | — |
+| **F4-03** | Autenticação & Navegação Protegida (Login, Sessão Sanctum, Rotas Protegidas, RBAC) | `feature/etapa-03-autenticacao-navegacao` | **Concluída** | `v2.0.0-alpha.3` |
 | **F4-04** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-04-secretaria` | *Planejada* | — |
 | **F4-05** | Ministérios & Voluntários (Equipes, Lideranças, Escalas, Conflitos) | `feature/etapa-05-ministerios` | *Planejada* | — |
 | **F4-06** | Eventos & Presença (Agenda, Inscrições, Check-in Manual e QR Code) | `feature/etapa-06-eventos-presenca` | *Planejada* | — |
@@ -345,6 +345,45 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem nenhum erro ou aviso.
   - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
   - `npm run build`: Build de produção Vite concluído com sucesso e chunks segregados (`dist/`).
+
+---
+
+### Etapa F4-03 — Autenticação e Navegação Protegida
+- **Branch**: `feature/etapa-03-autenticacao-navegacao`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.3`
+- **Implementações**:
+  - **Validação de Formulários com Zod (`src/modules/authentication/schemas.ts`)**:
+    - `loginSchema`: Validação de e-mail obrigatório com formato RFC e senha mínima de 6 caracteres.
+    - `forgotPasswordSchema`: Validação estrita de e-mail para envio de link de recuperação.
+    - `resetPasswordSchema`: Validação de nova senha mínima de 8 caracteres com confirmação idêntica.
+  - **Serviço de Autenticação (`src/services/api/authService.ts`)**:
+    - Suporte a cookies de sessão e proteção CSRF Sanctum com injeção de `X-Tenant-Id`.
+    - Modo DevMockAdapter isolado e dinâmico selecionando perfis reais por e-mail ou botões de acesso rápido.
+    - Gerenciamento de tokens, alternância de tenant (`switchTenant`) e limpeza de sessão no logout.
+  - **Contexto Global de Sessão (`src/modules/authentication/AuthProvider.tsx`)**:
+    - Gerenciamento dos estados `user`, `isAuthenticated`, `isLoading`, `error`.
+    - Listener do evento global `churchmanager:unauthorized` (HTTP 401) para expiração graciosa da sessão com aviso visual Toast.
+    - Invalidação atômica de cache do TanStack Query no logout e na troca de congregação ativa para prevenir vazamento de dados privados entre tenants.
+    - Métodos de autorização de interface: `hasRole(roles)` e `hasPermission(permission)`.
+  - **Guarda de Rotas e RBAC (`src/components/shared/ProtectedRoute.tsx`)**:
+    - Bloqueio de acessos não autenticados com redirecionamento para `/login` (preservando o caminho de destino no state da navegação).
+    - Verificação de papéis autorizados (`allowedRoles`) com redirecionamento imediato para tela de Acesso Negado (`/403`).
+    - Skeleton corporativo durante a verificação assíncrona da sessão.
+  - **Telas de Autenticação**:
+    - `LoginPage`: Formulário com toggle de exibição de senha, bloqueio de submissões duplicadas, feedback de carregamento e painel de atalhos rápidos para contas de teste (Pastor, Secretaria, Tesouraria, Membro).
+    - `ForgotPasswordPage`: Formulário com feedback de confirmação de envio e instruções de verificação de caixa postal.
+    - `AccessDeniedPage` (403): Explicação clara do motivo do bloqueio, perfil atual do usuário e botão de retorno seguro ao módulo permitido.
+  - **Layouts Conectados**:
+    - `AdminLayout` e `MemberLayout` integrados com logout real, nome e iniciais do usuário autenticado no avatar e troca dinâmica de congregação.
+- **Validação**:
+  - `npm run test`: Vitest com 20 testes automatizados em 3 suítes (100% aprovados) cobrindo login, validação Zod, alternância de senha, formulário de recuperação, página 403, ProtectedRoute com papéis concedidos e bloqueio de papéis não autorizados.
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
+  - `npm run build`: Build de produção Vite concluído em 3.87s com bundle otimizado (`dist/`).
+
 
 
 
