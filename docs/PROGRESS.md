@@ -267,5 +267,47 @@ Documento de acompanhamento da evolução do projeto **ChurchManager**, seguindo
   - Frontend: `tsc -b && vite build` aprovado sem erros (dist final gerado em 264ms).
   - Validação via navegador com subagente automatizado: login limpo e navegação interna inspecionados com sucesso.
 
+---
+
+## Fase 4 — Frontend Enterprise (React 19 + TypeScript + Tailwind CSS v4)
+
+| Etapa | Descrição | Branch | Status | Versão / Tag |
+|---|---|---|---|---|
+| **F4-01** | Fundação Frontend (Vite 6, React 19, TS Strict, Tailwind v4, shadcn base, ESLint, Vitest, DevMockAdapter) | `feature/etapa-01-fundacao-frontend` | **Concluída** | `v2.0.0-alpha.1` |
+| **F4-02** | Design System & Layouts (Tokens semânticos, Dark/Light, Layouts Admin/Portal/Auth/Platform) | `feature/etapa-02-design-system` | *Planejada* | — |
+| **F4-03** | Autenticação & Navegação Protegida (Login, Sessão Sanctum, Rotas Protegidas, RBAC) | `feature/etapa-03-autenticacao-navegacao` | *Planejada* | — |
+| **F4-04** | Secretaria (Membros, Famílias, Visitantes, Congregações, Aprovações) | `feature/etapa-04-secretaria` | *Planejada* | — |
+| **F4-05** | Ministérios & Voluntários (Equipes, Lideranças, Escalas, Conflitos) | `feature/etapa-05-ministerios` | *Planejada* | — |
+| **F4-06** | Eventos & Presença (Agenda, Inscrições, Check-in Manual e QR Code) | `feature/etapa-06-eventos-presenca` | *Planejada* | — |
+| **F4-07** | Financeiro Avançado (Dízimos, Ofertas, Contas, Lançamentos, Orçamentos, Conciliação) | `feature/etapa-07-financeiro` | *Planejada* | — |
+| **F4-08** | Portal do Membro (Autoatendimento Mobile-First, Perfil, Escalas, Avisos) | `feature/etapa-08-portal-membro` | *Planejada* | — |
+| **F4-09** | Dashboards Executivos & Relatórios (BI Recharts, Exportações CSV/PDF) | `feature/etapa-09-dashboard-relatorios` | *Planejada* | — |
+| **F4-10** | Qualidade, Acessibilidade & Finalização (Testes E2E, Auditoria WCAG, Bundle Optimization) | `feature/etapa-10-testes-finalizacao` | *Planejada* | — |
+
+---
+
+### Etapa F4-01 — Fundação Técnica do Frontend
+- **Branch**: `feature/etapa-01-fundacao-frontend`
+- **Data de Início**: 21/10/2026
+- **Data de Conclusão**: 21/10/2026
+- **Status**: **Concluída**
+- **Versão**: `v2.0.0-alpha.1`
+- **Implementações**:
+  - Setup do projeto frontend com Vite 6.4+, React 19.0+ e TypeScript 5.7+ em modo estrito (`strict: true`, `noUnusedLocals`, `noFallthroughCasesInSwitch`).
+  - Configuração do Tailwind CSS v4 moderna utilizando `@tailwindcss/vite` e variáveis CSS semânticas `@theme` no padrão HSL.
+  - Implementação das primitivas de acessibilidade Radix UI (`Slot`, `Dialog`, `Dropdown`, `Tabs`) integradas ao utilitário `cn` (`clsx` + `tailwind-merge`).
+  - Criação dos componentes base de interface: `Button`, `Card`, `Badge` e `Skeleton`.
+  - Configuração de Providers centrais: `ThemeProvider` (Dark mode padrão inicial com persistência e toggle para Light mode) e `QueryProvider` (TanStack Query com política de cache desacoplada).
+  - Estruturação do cliente HTTP Axios com suporte a cookies stateful do Laravel Sanctum (`withCredentials: true`), proteção CSRF, injeção de `X-Tenant-Id` e interceptores de erro (`ApiError`).
+  - Criação do `DevMockAdapter` e fixtures tipadas (`MOCK_USERS`, `MOCK_TENANTS`) ativadas de forma explícita via `VITE_USE_DEV_MOCK=true`.
+  - Estruturação modular completa com layouts dedicados: `AdminLayout`, `AuthLayout`, `MemberLayout` e `PlatformLayout`.
+  - Documentações técnicas criadas: `frontend/README.md`, `docs/DESIGN-SYSTEM.md`, `docs/API-CONTRACTS.md`, `docs/ROUTES.md`, `docs/TESTING.md`, `docs/DEPLOYMENT.md`.
+- **Validação**:
+  - `npm run test`: Vitest 2.1+ com 6 testes automatizados cobrindo renderização, alternância de tema, formatadores monetários/data e DevMockAdapter (100% aprovado).
+  - `npm run typecheck`: TypeScript `tsc -b --noEmit` aprovado sem erros (100% strict).
+  - `npm run lint`: ESLint 9 aprovado com 0 avisos e 0 erros.
+  - `npm run build`: Build de produção Vite concluído em 3.20s gerando bundle otimizado (`dist/`).
+
+
 
 
