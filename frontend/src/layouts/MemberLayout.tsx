@@ -13,6 +13,8 @@ import {
   LogOut,
   Home,
   User,
+  DollarSign,
+  Users,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -24,10 +26,12 @@ interface NavItem {
 
 const memberNav: NavItem[] = [
   { label: 'Início', href: '/portal', icon: Home },
-  { label: 'Agenda & Cultos', href: '/portal/events', icon: Calendar },
   { label: 'Minhas Escalas', href: '/portal/schedules', icon: CheckSquare },
+  { label: 'Eventos & Ingressos', href: '/portal/events', icon: Calendar },
+  { label: 'Dízimos & IRPF', href: '/portal/contributions', icon: DollarSign },
+  { label: 'Família', href: '/portal/family', icon: Users },
   { label: 'Comunicados', href: '/portal/announcements', icon: Bell },
-  { label: 'Meu Perfil', href: '/portal/profile', icon: User },
+  { label: 'Meu Cadastro', href: '/portal/profile', icon: User },
 ];
 
 export function MemberLayout() {
