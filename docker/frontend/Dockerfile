@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+CMD ["sh", "-c", "if [ ! -d node_modules/@tailwindcss ]; then echo 'Instalando dependencias do Node...' && npm install; fi && npm run dev -- --host 0.0.0.0 --port 5173"]
