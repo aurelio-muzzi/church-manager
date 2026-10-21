@@ -22,4 +22,4 @@ WORKDIR /var/www/html
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "if [ ! -f vendor/autoload.php ]; then echo 'Instalando dependencias do Composer...' && composer install --no-interaction --prefer-dist; fi && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "if [ ! -f vendor/autoload.php ]; then echo 'Instalando dependencias do Composer...' && composer install --no-interaction --prefer-dist; fi && php artisan serve --host=0.0.0.0 --port=8000 --no-reload"]
