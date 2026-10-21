@@ -1,5 +1,6 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/hooks/useTheme';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -14,7 +15,6 @@ import {
   User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { devMockAdapter } from '@/services/adapters/devMockAdapter';
 
 interface NavItem {
   label: string;
@@ -32,8 +32,14 @@ const memberNav: NavItem[] = [
 
 export function MemberLayout() {
   const { isDark, setTheme } = useTheme();
+  const { user, logout } = useAuth();
   const location = useLocation();
-  const member = devMockAdapter.getActiveUser();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login', { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -47,7 +53,7 @@ export function MemberLayout() {
             <div>
               <span className="font-bold text-sm tracking-tight block">Portal do Membro</span>
               <span className="text-[11px] text-muted-foreground block truncate max-w-[180px] sm:max-w-none">
-                {member?.tenantName || 'Igreja Central'}
+                {user?.tenantName || 'Igreja Central'}
               </span>
             </div>
           </Link>
@@ -70,12 +76,19 @@ export function MemberLayout() {
             <Link to="/portal/profile">
               <Avatar className="h-8 w-8 hover:ring-2 hover:ring-primary transition-all">
                 <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
-                  {member?.name?.slice(0, 2).toUpperCase() || 'MB'}
+                  {user?.name?.slice(0, 2).toUpperCase() || 'MB'}
                 </AvatarFallback>
               </Avatar>
             </Link>
 
-            <Button variant="ghost" size="icon" aria-label="Sair" className="h-9 w-9 text-muted-foreground hover:text-destructive">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              aria-label="Sair"
+              className="h-9 w-9 text-muted-foreground hover:text-destructive"
+              title="Encerrar Sessão"
+            >
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
