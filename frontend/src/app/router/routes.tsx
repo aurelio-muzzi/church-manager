@@ -66,6 +66,7 @@ import { MinistriesPage } from '@/modules/ministries';
 import { EventsPage } from '@/modules/events';
 import { FinancePage } from '@/modules/finance';
 import { MemberPortalPage } from '@/modules/portal';
+import { DashboardBiPage, ReportsPage } from '@/modules/dashboard';
 
 function ShowcaseHomePage() {
   const { setTheme, isDark } = useTheme();
@@ -583,13 +584,13 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<AdminDashboardDemo />} />
+        <Route path="dashboard" element={<DashboardBiPage />} />
         <Route path="members" element={<SecretariaPage />} />
         <Route path="ministries" element={<MinistriesPage />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="attendance" element={<EventsPage />} />
         <Route path="finance" element={<FinancePage />} />
-        <Route path="reports" element={<AdminDashboardDemo />} />
+        <Route path="reports" element={<ReportsPage />} />
         <Route path="settings" element={<AdminDashboardDemo />} />
       </Route>
 
