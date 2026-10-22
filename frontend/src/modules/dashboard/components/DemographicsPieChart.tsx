@@ -35,11 +35,11 @@ export const DemographicsPieChart: React.FC<DemographicsPieChartProps> = ({
   return (
     <div
       data-testid="demographics-pie-chart"
-      className="flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+      className="h-full flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="rounded-lg bg-purple-50 p-2 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg bg-purple-50 p-2 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400 shrink-0">
             <Users2 className="h-5 w-5" />
           </div>
           <div>
@@ -53,8 +53,8 @@ export const DemographicsPieChart: React.FC<DemographicsPieChartProps> = ({
         </div>
       </div>
 
-      <div className="relative h-56 w-full">
-        <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
+      <div className="relative h-44 sm:h-48 w-full flex-1 flex items-center justify-center my-1">
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Tooltip
               contentStyle={{
@@ -74,8 +74,8 @@ export const DemographicsPieChart: React.FC<DemographicsPieChartProps> = ({
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={55}
-              outerRadius={85}
+              innerRadius={50}
+              outerRadius={75}
               paddingAngle={3}
               dataKey="count"
               nameKey="group"
@@ -89,17 +89,19 @@ export const DemographicsPieChart: React.FC<DemographicsPieChartProps> = ({
       </div>
 
       {/* Custom Legend Grid */}
-      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-xs">
         {data.map((item) => (
-          <div key={item.group} className="flex items-center justify-between py-1">
-            <div className="flex items-center gap-2 min-w-0">
+          <div key={item.group} className="flex items-center justify-between py-0.5">
+            <div className="flex items-center gap-1.5 min-w-0 pr-1">
               <span
                 className="h-2.5 w-2.5 shrink-0 rounded-full"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="truncate text-slate-600 dark:text-slate-300">{item.group}</span>
+              <span className="truncate text-slate-600 dark:text-slate-300 text-[11px]" title={item.group}>
+                {item.group.replace(' • LGPD', '')}
+              </span>
             </div>
-            <span className="font-semibold text-slate-900 dark:text-slate-100 ml-2">
+            <span className="font-semibold text-slate-900 dark:text-slate-100 text-[11px] shrink-0">
               {item.percentage}%
             </span>
           </div>
@@ -107,16 +109,16 @@ export const DemographicsPieChart: React.FC<DemographicsPieChartProps> = ({
       </div>
 
       {/* LGPD Minors Spotlight */}
-      <div className="mt-4 rounded-lg border border-purple-100 bg-purple-50/70 p-3 text-xs dark:border-purple-900/40 dark:bg-purple-950/30">
+      <div className="mt-3 rounded-lg border border-purple-100 bg-purple-50/70 p-2.5 text-xs dark:border-purple-900/40 dark:bg-purple-950/30">
         <div className="flex items-start gap-2">
           <ShieldCheck className="h-4 w-4 shrink-0 text-purple-600 dark:text-purple-400 mt-0.5" />
-          <div>
+          <div className="text-[11px] leading-tight">
             <span className="font-semibold text-purple-900 dark:text-purple-200">
               Proteção de Menores (LGPD):
             </span>{' '}
             <span className="text-purple-700 dark:text-purple-300">
               {minorsCount} menores ({minorsPercent}%) sob custódia e termos de consentimento
-              validados pelos responsáveis legais.
+              validados.
             </span>
           </div>
         </div>

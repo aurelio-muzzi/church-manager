@@ -118,7 +118,12 @@ export const dashboardService = {
    */
   async getMembershipGrowthChart(congregationId?: string): Promise<MembershipGrowthPoint[]> {
     if (IS_MOCK) {
-      return [
+      const factor =
+        congregationId === 'cong-01' ? 0.65 :
+        congregationId === 'cong-02' ? 0.22 :
+        congregationId === 'cong-03' ? 0.13 : 1.0;
+
+      const baseGrowth = [
         { month: '2025-11', monthName: 'Nov/25', totalMembers: 410, newAdmissions: 6, transfers: 1 },
         { month: '2025-12', monthName: 'Dez/25', totalMembers: 422, newAdmissions: 14, transfers: 2 },
         { month: '2026-01', monthName: 'Jan/26', totalMembers: 430, newAdmissions: 10, transfers: 2 },
@@ -132,6 +137,13 @@ export const dashboardService = {
         { month: '2026-09', monthName: 'Set/26', totalMembers: 485, newAdmissions: 8, transfers: 3 },
         { month: '2026-10', monthName: 'Out/26', totalMembers: 492, newAdmissions: 11, transfers: 4 },
       ];
+
+      return baseGrowth.map((g) => ({
+        ...g,
+        totalMembers: Math.max(1, Math.round(g.totalMembers * factor)),
+        newAdmissions: Math.max(0, Math.round(g.newAdmissions * factor)),
+        transfers: Math.max(0, Math.round(g.transfers * factor)),
+      }));
     }
 
     return http.get<MembershipGrowthPoint[]>('/api/v1/tenant/dashboard/charts/membership', {
@@ -144,7 +156,12 @@ export const dashboardService = {
    */
   async getFinancialCashflowChart(congregationId?: string): Promise<FinancialCashflowPoint[]> {
     if (IS_MOCK) {
-      return [
+      const factor =
+        congregationId === 'cong-01' ? 0.65 :
+        congregationId === 'cong-02' ? 0.22 :
+        congregationId === 'cong-03' ? 0.13 : 1.0;
+
+      const baseCashflow = [
         { month: '2025-11', monthName: 'Nov/25', income: 38500, tithes: 31000, offerings: 7500, expenses: 31200, net: 7300 },
         { month: '2025-12', monthName: 'Dez/25', income: 52000, tithes: 41000, offerings: 11000, expenses: 38500, net: 13500 },
         { month: '2026-01', monthName: 'Jan/26', income: 41000, tithes: 33000, offerings: 8000, expenses: 32000, net: 9000 },
@@ -158,6 +175,15 @@ export const dashboardService = {
         { month: '2026-09', monthName: 'Set/26', income: 50500, tithes: 40500, offerings: 10000, expenses: 38200, net: 12300 },
         { month: '2026-10', monthName: 'Out/26', income: 54800, tithes: 44200, offerings: 10600, expenses: 39500, net: 15300 },
       ];
+
+      return baseCashflow.map((c) => ({
+        ...c,
+        income: Math.round(c.income * factor),
+        tithes: Math.round(c.tithes * factor),
+        offerings: Math.round(c.offerings * factor),
+        expenses: Math.round(c.expenses * factor),
+        net: Math.round(c.net * factor),
+      }));
     }
 
     return http.get<FinancialCashflowPoint[]>('/api/v1/tenant/dashboard/charts/cashflow', {
@@ -170,7 +196,12 @@ export const dashboardService = {
    */
   async getAttendanceChart(congregationId?: string): Promise<AttendanceTrendPoint[]> {
     if (IS_MOCK) {
-      return [
+      const factor =
+        congregationId === 'cong-01' ? 0.65 :
+        congregationId === 'cong-02' ? 0.22 :
+        congregationId === 'cong-03' ? 0.13 : 1.0;
+
+      const baseAttendance = [
         { date: '15/09', serviceName: 'Culto Domingo Noite', inPerson: 380, online: 220, total: 600, capacityPercent: 95 },
         { date: '22/09', serviceName: 'Culto Domingo Noite', inPerson: 365, online: 210, total: 575, capacityPercent: 91 },
         { date: '25/09', serviceName: 'Quarta de Ensino', inPerson: 195, online: 160, total: 355, capacityPercent: 49 },
@@ -180,6 +211,13 @@ export const dashboardService = {
         { date: '16/10', serviceName: 'Quarta Doutrina', inPerson: 210, online: 180, total: 390, capacityPercent: 53 },
         { date: '20/10', serviceName: 'Culto da Família', inPerson: 395, online: 250, total: 645, capacityPercent: 99 },
       ];
+
+      return baseAttendance.map((a) => ({
+        ...a,
+        inPerson: Math.round(a.inPerson * factor),
+        online: Math.round(a.online * factor),
+        total: Math.round(a.total * factor),
+      }));
     }
 
     return http.get<AttendanceTrendPoint[]>('/api/v1/tenant/dashboard/charts/attendance', {
@@ -192,12 +230,22 @@ export const dashboardService = {
    */
   async getDemographicsChart(congregationId?: string): Promise<DemographicDataPoint[]> {
     if (IS_MOCK) {
-      return [
+      const factor =
+        congregationId === 'cong-01' ? 0.65 :
+        congregationId === 'cong-02' ? 0.22 :
+        congregationId === 'cong-03' ? 0.13 : 1.0;
+
+      const baseDemographics = [
         { group: 'Crianças e Juniores (< 18) • LGPD', count: 88, percentage: 18, color: '#ec4899' },
         { group: 'Jovens e Universitários (18 a 29)', count: 137, percentage: 28, color: '#8b5cf6' },
         { group: 'Adultos e Famílias (30 a 59)', count: 206, percentage: 42, color: '#3b82f6' },
         { group: 'Melhor Idade (60+)', count: 59, percentage: 12, color: '#10b981' },
       ];
+
+      return baseDemographics.map((d) => ({
+        ...d,
+        count: Math.max(1, Math.round(d.count * factor)),
+      }));
     }
 
     return http.get<DemographicDataPoint[]>('/api/v1/tenant/dashboard/charts/demographics', {

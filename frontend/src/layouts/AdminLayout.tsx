@@ -29,14 +29,11 @@ import {
   Settings,
   LogOut,
   Menu,
-  ChevronDown,
   Layers,
   HeartHandshake,
-  CheckCheck,
   User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { devMockAdapter } from '@/services/adapters/devMockAdapter';
 
 interface NavItem {
   label: string;
@@ -56,13 +53,11 @@ const navItems: NavItem[] = [
 
 export function AdminLayout() {
   const { isDark, setTheme } = useTheme();
-  const { user, logout, switchTenant } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const tenants = devMockAdapter.getTenants();
   const activeTenantName =
-    tenants.find((t) => t.id === user?.tenantId)?.name ||
     user?.tenantName ||
     'Igreja Central de Manaus';
 
@@ -71,18 +66,14 @@ export function AdminLayout() {
     navigate('/login', { replace: true });
   };
 
-  const handleSwitchTenant = async (tenantId: string) => {
-    await switchTenant(tenantId);
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row">
       {/* Sidebar Desktop */}
-      <aside className="hidden md:flex flex-col w-64 border-r border-border bg-card/50 backdrop-blur-md p-4 shrink-0 justify-between">
-        <div className="space-y-6">
-          {/* Logo & Tenant Context */}
-          <div className="px-2 space-y-3">
-            <Link to="/" className="flex items-center gap-3">
+      <aside className="hidden md:flex flex-col w-64 border-r border-border bg-card/60 backdrop-blur-md p-4 shrink-0 h-screen sticky top-0 justify-between z-20">
+        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto pr-1 space-y-5">
+          {/* Logo & Identificação */}
+          <div className="px-2 space-y-3 shrink-0">
+            <Link to="/admin/dashboard" className="flex items-center gap-3">
               <div className="h-9 w-9 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold shadow-inner">
                 <Building2 className="h-5 w-5" />
               </div>
@@ -91,47 +82,30 @@ export function AdminLayout() {
                   ChurchManager
                 </h2>
                 <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
-                  SaaS Eclesiástico
+                  Gestão Eclesiástica
                 </span>
               </div>
             </Link>
 
-            {/* Tenant Selector Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="w-full flex items-center justify-between p-2 rounded-lg border border-border bg-background/50 hover:bg-accent text-left transition-colors">
-                  <div className="truncate pr-1">
-                    <span className="text-[10px] text-muted-foreground uppercase block font-semibold">
-                      Congregação Ativa
-                    </span>
-                    <span className="text-xs font-medium text-foreground truncate block">
-                      {activeTenantName}
-                    </span>
-                  </div>
-                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="start">
-                <DropdownMenuLabel className="text-xs">Alternar Congregação</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {tenants.map((t) => (
-                  <DropdownMenuItem
-                    key={t.id}
-                    onClick={() => handleSwitchTenant(t.id)}
-                    className="flex items-center justify-between text-xs cursor-pointer"
-                  >
-                    <span className="truncate">{t.name}</span>
-                    {user?.tenantId === t.id && (
-                      <CheckCheck className="h-3.5 w-3.5 text-primary shrink-0" />
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Identificação Institucional da Igreja */}
+            <div className="p-2.5 rounded-lg border border-border bg-background/50 flex items-center justify-between shadow-xs">
+              <div className="truncate pr-2">
+                <span className="text-[10px] text-muted-foreground uppercase block font-semibold">
+                  Igreja & Congregação
+                </span>
+                <span className="text-xs font-semibold text-foreground truncate block" title={activeTenantName}>
+                  {activeTenantName}
+                </span>
+              </div>
+              <span className="inline-flex items-center gap-1 text-[10px] text-emerald-500 font-medium bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 shrink-0">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Ativa
+              </span>
+            </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1 px-1">
+          <nav className="space-y-1 px-1 flex-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -157,38 +131,44 @@ export function AdminLayout() {
           </nav>
         </div>
 
-        {/* User Card & Settings */}
-        <div className="border-t border-border pt-4 px-2 space-y-3">
-          <div className="flex items-center justify-between">
+        {/* User Card & Settings (Sempre Visível na Base) */}
+        <div className="border-t border-border pt-3 px-1 shrink-0 mt-3">
+          <div className="flex items-center justify-between gap-1 p-1 rounded-xl bg-background/60 border border-border/50">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2.5 text-left p-1 rounded-lg hover:bg-accent transition-colors flex-1 min-w-0 mr-1">
-                  <Avatar className="h-8 w-8">
+                <button
+                  className="flex items-center gap-2.5 text-left p-1.5 rounded-lg hover:bg-accent transition-colors flex-1 min-w-0"
+                  title="Configurações e perfil do usuário logado"
+                >
+                  <Avatar className="h-8 w-8 shrink-0 ring-1 ring-border">
                     <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
-                      {user?.name?.slice(0, 2).toUpperCase() || 'AD'}
+                      {user?.name?.slice(0, 2).toUpperCase() || 'PR'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="truncate flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-foreground truncate">
-                      {user?.name || 'Administrador'}
+                    <p className="text-xs font-semibold text-foreground truncate" title={user?.name || 'Pr. Carlos Eduardo'}>
+                      {user?.name || 'Pr. Carlos Eduardo'}
                     </p>
-                    <p className="text-[11px] text-muted-foreground truncate">
+                    <p className="text-[10px] text-muted-foreground truncate">
                       {user?.role === 'church_admin' ? 'Pastor / Administrador' : user?.role || 'Liderança'}
                     </p>
                   </div>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="w-56 mb-2">
+                <DropdownMenuLabel className="text-xs">
+                  <span className="block font-semibold">{user?.name || 'Pr. Carlos Eduardo'}</span>
+                  <span className="text-[10px] text-muted-foreground font-normal">{user?.email || 'pastor@churchmanager.app'}</span>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/portal/profile" className="flex items-center gap-2">
+                  <Link to="/portal/profile" className="flex items-center gap-2 text-xs cursor-pointer">
                     <User className="h-4 w-4" />
                     <span>Meu Perfil</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/admin/settings" className="flex items-center gap-2">
+                  <Link to="/admin/settings" className="flex items-center gap-2 text-xs cursor-pointer">
                     <Settings className="h-4 w-4" />
                     <span>Configurações</span>
                   </Link>
@@ -196,7 +176,7 @@ export function AdminLayout() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="text-destructive focus:text-destructive flex items-center gap-2 cursor-pointer"
+                  className="text-destructive focus:text-destructive flex items-center gap-2 text-xs cursor-pointer"
                 >
                   <LogOut className="h-4 w-4" />
                   <span>Encerrar Sessão</span>
@@ -210,7 +190,7 @@ export function AdminLayout() {
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
               title={isDark ? 'Modo Claro' : 'Modo Escuro'}
               aria-label="Alternar tema"
-              className="h-8 w-8 shrink-0"
+              className="h-8 w-8 shrink-0 hover:bg-accent text-muted-foreground hover:text-foreground"
             >
               {isDark ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-500" />}
             </Button>
@@ -254,10 +234,27 @@ export function AdminLayout() {
             </nav>
           </div>
 
-          <div className="border-t border-border pt-4 space-y-2">
+          <div className="border-t border-border pt-4 space-y-3">
+            {/* Perfil do Usuário Logado no Mobile */}
+            <div className="flex items-center gap-3 p-2 rounded-lg bg-background/50 border border-border">
+              <Avatar className="h-9 w-9 shrink-0 ring-1 ring-border">
+                <AvatarFallback className="bg-primary/20 text-primary font-bold text-xs">
+                  {user?.name?.slice(0, 2).toUpperCase() || 'PR'}
+                </AvatarFallback>
+              </Avatar>
+              <div className="truncate flex-1 min-w-0">
+                <p className="text-xs font-semibold text-foreground truncate">
+                  {user?.name || 'Pr. Carlos Eduardo'}
+                </p>
+                <p className="text-[10px] text-muted-foreground truncate">
+                  {user?.role === 'church_admin' ? 'Pastor / Administrador' : user?.role || 'Liderança'}
+                </p>
+              </div>
+            </div>
+
             <Button
               variant="outline"
-              className="w-full justify-start gap-2"
+              className="w-full justify-start gap-2 text-xs"
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
             >
               {isDark ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4 text-indigo-500" />}
@@ -265,7 +262,7 @@ export function AdminLayout() {
             </Button>
             <Button
               variant="destructive"
-              className="w-full justify-start gap-2"
+              className="w-full justify-start gap-2 text-xs"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4" />

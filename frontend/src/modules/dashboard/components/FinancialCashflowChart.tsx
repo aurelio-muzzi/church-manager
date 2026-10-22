@@ -51,41 +51,39 @@ export const FinancialCashflowChart: React.FC<FinancialCashflowChartProps> = ({
   return (
     <div
       data-testid="financial-cashflow-chart"
-      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+      className="h-full flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-emerald-50 p-2 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
-              <DollarSign className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-                Fluxo de Caixa Consolidado
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Comparativo mensal de receitas, despesas e resultado operacional
-              </p>
-            </div>
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg bg-emerald-50 p-2 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 shrink-0">
+            <DollarSign className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              Fluxo de Caixa Consolidado
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Comparativo mensal de receitas, despesas e resultado operacional
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 dark:border-emerald-800 dark:bg-emerald-950/40">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 dark:border-emerald-800 dark:bg-emerald-950/40">
             <ArrowUpRight className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             <span className="text-slate-600 dark:text-slate-300">Entradas:</span>
             <span className="font-semibold text-emerald-700 dark:text-emerald-300">
               {formatCurrency(totalIncome)}
             </span>
           </div>
-          <div className="flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 dark:border-rose-800 dark:bg-rose-950/40">
+          <div className="flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 dark:border-rose-800 dark:bg-rose-950/40">
             <ArrowDownRight className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" />
             <span className="text-slate-600 dark:text-slate-300">Saídas:</span>
             <span className="font-semibold text-rose-700 dark:text-rose-300">
               {formatCurrency(totalExpenses)}
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 dark:border-indigo-800 dark:bg-indigo-950/40">
+          <div className="flex items-center gap-1 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1 dark:border-indigo-800 dark:bg-indigo-950/40">
             <span className="text-slate-600 dark:text-slate-300">Superávit:</span>
             <span className="font-semibold text-indigo-700 dark:text-indigo-300">
               {formatCurrency(totalNet)}
@@ -95,19 +93,26 @@ export const FinancialCashflowChart: React.FC<FinancialCashflowChartProps> = ({
       </div>
 
       <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
-          <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={data}
+            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            barCategoryGap="16%"
+            barGap={2}
+          >
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
             <XAxis
               dataKey="monthName"
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
+              tickFormatter={(val: string) => val.split('/')[0]}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              width={54}
+              tick={{ fontSize: 10, fill: '#64748b' }}
               tickFormatter={(val) => `R$ ${(val / 1000).toFixed(0)}k`}
             />
             <Tooltip
@@ -125,12 +130,13 @@ export const FinancialCashflowChart: React.FC<FinancialCashflowChartProps> = ({
                 if (name === 'net') return [formatCurrency(Number(value)), 'Resultado Líquido'];
                 return [String(value), String(name)];
               }}
+              labelFormatter={(label) => `Competência: ${label}`}
             />
             <Legend
               verticalAlign="top"
               align="right"
               iconType="circle"
-              wrapperStyle={{ fontSize: 11, paddingBottom: 12 }}
+              wrapperStyle={{ fontSize: 11, paddingBottom: 10 }}
               formatter={(value) => {
                 if (value === 'income') return 'Receitas';
                 if (value === 'expenses') return 'Despesas';
@@ -138,14 +144,14 @@ export const FinancialCashflowChart: React.FC<FinancialCashflowChartProps> = ({
                 return value;
               }}
             />
-            <Bar dataKey="income" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={32} />
-            <Bar dataKey="expenses" fill="#f43f5e" radius={[4, 4, 0, 0]} maxBarSize={32} />
+            <Bar dataKey="income" fill="#10b981" radius={[3, 3, 0, 0]} maxBarSize={16} />
+            <Bar dataKey="expenses" fill="#f43f5e" radius={[3, 3, 0, 0]} maxBarSize={16} />
             <Line
               type="monotone"
               dataKey="net"
               stroke="#6366f1"
               strokeWidth={2}
-              dot={{ r: 3, fill: '#6366f1' }}
+              dot={{ r: 2.5, fill: '#6366f1' }}
             />
           </BarChart>
         </ResponsiveContainer>

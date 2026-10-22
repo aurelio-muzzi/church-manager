@@ -138,7 +138,7 @@ export const TitheReceiptModal: React.FC<TitheReceiptModalProps> = ({
           <div className="pt-4 border-t border-border flex justify-between items-end text-[11px] text-muted-foreground">
             <div>
               <span>Emitido digitalmente pelo</span>
-              <p className="font-medium text-foreground">ChurchManager SaaS</p>
+              <p className="font-medium text-foreground">ChurchManager • Gestão Eclesiástica</p>
             </div>
             <div className="text-right">
               <div className="w-32 border-b border-muted-foreground/60 mb-1" />

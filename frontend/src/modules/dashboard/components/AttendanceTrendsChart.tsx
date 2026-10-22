@@ -42,53 +42,51 @@ export const AttendanceTrendsChart: React.FC<AttendanceTrendsChartProps> = ({
   return (
     <div
       data-testid="attendance-trends-chart"
-      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+      className="h-full flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-sky-50 p-2 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400">
-              <Church className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-                Tendências de Frequência nos Cultos
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Comparativo de participação presencial e transmissões online
-              </p>
-            </div>
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg bg-sky-50 p-2 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400 shrink-0">
+            <Church className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              Tendências de Frequência nos Cultos
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Comparativo de participação presencial e transmissões online
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/60">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-slate-700 dark:bg-slate-800/60">
             <MapPin className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
             <span className="text-slate-600 dark:text-slate-300">Presencial Total:</span>
             <span className="font-semibold text-slate-900 dark:text-white">{totalInPerson}</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/60">
+          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-slate-700 dark:bg-slate-800/60">
             <Monitor className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
             <span className="text-slate-600 dark:text-slate-300">Online Total:</span>
             <span className="font-semibold text-slate-900 dark:text-white">{totalOnline}</span>
           </div>
           {latest && (
-            <div className="hidden lg:flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-1.5 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-              <span className="text-[11px] font-medium">Capacidade: {latest.capacityPercent}%</span>
+            <div className="flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+              <span className="text-xs font-medium">Capacidade: {latest.capacityPercent}%</span>
             </div>
           )}
         </div>
       </div>
 
-      <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
-          <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+      <div className="flex-1 w-full min-h-[250px] my-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
               tickFormatter={(date) => {
                 const parts = date.split('-');
                 return parts.length >= 3 ? `${parts[2]}/${parts[1]}` : date;
@@ -97,7 +95,9 @@ export const AttendanceTrendsChart: React.FC<AttendanceTrendsChartProps> = ({
             <YAxis
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              width={38}
+              tick={{ fontSize: 10, fill: '#64748b' }}
+              allowDecimals={false}
             />
             <Tooltip
               contentStyle={{
@@ -123,7 +123,7 @@ export const AttendanceTrendsChart: React.FC<AttendanceTrendsChartProps> = ({
               verticalAlign="top"
               align="right"
               iconType="circle"
-              wrapperStyle={{ fontSize: 11, paddingBottom: 12 }}
+              wrapperStyle={{ fontSize: 11, paddingBottom: 10 }}
               formatter={(value) => {
                 if (value === 'inPerson') return 'Presencial';
                 if (value === 'online') return 'Online';
@@ -156,6 +156,19 @@ export const AttendanceTrendsChart: React.FC<AttendanceTrendsChartProps> = ({
             />
           </LineChart>
         </ResponsiveContainer>
+      </div>
+
+      {/* Rodapé Informativo de Frequência */}
+      <div className="pt-3 mt-auto border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between text-xs text-muted-foreground gap-2">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+          <span>Média por culto: <strong className="text-foreground">{Math.round((totalInPerson + totalOnline) / (data.length || 1))} participantes</strong></span>
+        </span>
+        {latest && (
+          <span className="text-[11px]">
+            Último culto ({latest.date.split('-').reverse().slice(0, 2).join('/')}): <strong className="text-foreground">{latest.total} pessoas</strong> ({latest.capacityPercent}% da nave)
+          </span>
+        )}
       </div>
     </div>
   );

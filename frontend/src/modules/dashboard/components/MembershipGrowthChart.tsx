@@ -43,32 +43,30 @@ export const MembershipGrowthChart: React.FC<MembershipGrowthChartProps> = ({
   return (
     <div
       data-testid="membership-growth-chart"
-      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+      className="h-full flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-indigo-50 p-2 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
-                Evolução do Rol de Membros
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Crescimento cumulativo e novas admissões nos últimos 12 meses
-              </p>
-            </div>
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="rounded-lg bg-indigo-50 p-2 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400 shrink-0">
+            <Users className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+              Evolução do Rol de Membros
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Crescimento cumulativo e novas admissões nos últimos 12 meses
+            </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 dark:border-slate-700 dark:bg-slate-800/60">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-slate-700 dark:bg-slate-800/60">
             <UserPlus className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             <span className="text-slate-600 dark:text-slate-300">Total Admissões:</span>
             <span className="font-semibold text-slate-900 dark:text-white">+{totalAdmissions}</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 dark:border-slate-700 dark:bg-slate-800/60">
+          <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 dark:border-slate-700 dark:bg-slate-800/60">
             <TrendingUp className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
             <span className="text-slate-600 dark:text-slate-300">Saldo Líquido:</span>
             <span className="font-semibold text-slate-900 dark:text-white">+{totalNetGrowth}</span>
@@ -77,8 +75,8 @@ export const MembershipGrowthChart: React.FC<MembershipGrowthChartProps> = ({
       </div>
 
       <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorMembers" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
@@ -94,13 +92,16 @@ export const MembershipGrowthChart: React.FC<MembershipGrowthChartProps> = ({
               dataKey="monthName"
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
+              tick={{ fontSize: 10, fill: '#64748b' }}
+              tickFormatter={(val: string) => val.split('/')[0]}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: '#64748b' }}
-              domain={['dataMin - 20', 'dataMax + 20']}
+              width={38}
+              tick={{ fontSize: 10, fill: '#64748b' }}
+              domain={[0, 'auto']}
+              allowDecimals={false}
             />
             <Tooltip
               contentStyle={{
@@ -116,12 +117,13 @@ export const MembershipGrowthChart: React.FC<MembershipGrowthChartProps> = ({
                 if (name === 'newAdmissions') return [`+${String(value)} novos`, 'Admissões no Mês'];
                 return [String(value), String(name)];
               }}
+              labelFormatter={(label) => `Período: ${label}`}
             />
             <Legend
               verticalAlign="top"
               align="right"
               iconType="circle"
-              wrapperStyle={{ fontSize: 11, paddingBottom: 12 }}
+              wrapperStyle={{ fontSize: 11, paddingBottom: 10 }}
               formatter={(value) => {
                 if (value === 'totalMembers') return 'Total de Membros';
                 if (value === 'newAdmissions') return 'Novas Admissões';

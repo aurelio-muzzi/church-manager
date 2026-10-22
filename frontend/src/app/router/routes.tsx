@@ -177,14 +177,9 @@ function ShowcaseHomePage() {
                 <ExternalLink className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/platform">
-              <Button variant="outline" className="gap-2">
-                <span>Admin SaaS</span>
-              </Button>
-            </Link>
             <Link to="/login">
-              <Button variant="ghost" className="gap-2">
-                <span>Tela de Login</span>
+              <Button variant="outline" className="gap-2">
+                <span>Fazer Login</span>
               </Button>
             </Link>
           </div>
@@ -562,11 +557,35 @@ function PlatformHomeDemo() {
   );
 }
 
+function RootRedirect() {
+  const { isAuthenticated, user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (isAuthenticated && user) {
+    if (user.role === 'member') {
+      return <Navigate to="/portal" replace />;
+    }
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
+}
+
 export function AppRoutes() {
   return (
     <Routes>
-      {/* Showcase Home (Pública) */}
-      <Route path="/" element={<ShowcaseHomePage />} />
+      {/* Rota Raiz Principal: Redireciona para login do sistema */}
+      <Route path="/" element={<RootRedirect />} />
+
+      {/* Vitrine de Componentes (Ambiente de Demonstração / Design System) */}
+      <Route path="/showcase" element={<ShowcaseHomePage />} />
 
       {/* Auth Public Routes */}
       <Route element={<AuthLayout />}>
@@ -586,6 +605,7 @@ export function AppRoutes() {
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardBiPage />} />
         <Route path="members" element={<SecretariaPage />} />
+        <Route path="secretary" element={<Navigate to="/admin/members" replace />} />
         <Route path="ministries" element={<MinistriesPage />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="attendance" element={<EventsPage />} />
